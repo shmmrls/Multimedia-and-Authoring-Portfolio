@@ -403,12 +403,22 @@ main {
   bottom: 2rem;
   left: 50%;
   transform: translateX(-50%);
+  background: transparent;
+  border: none;
+  padding: 0.4rem 0.8rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
+  cursor: pointer;
+  touch-action: manipulation;
   opacity: 0;
   animation: fadeUp 1s var(--ease) 1.2s forwards;
+}
+
+.hero__scroll:focus-visible {
+  outline: 1px solid var(--gold);
+  outline-offset: 4px;
 }
 
 .hero__scroll span {
@@ -792,7 +802,8 @@ main {
   border-radius: var(--radius);
 }
 
-.video-wrap iframe {
+.video-wrap iframe,
+.video-wrap video {
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 100%;
@@ -859,6 +870,18 @@ main {
   letter-spacing: 0.08em;
 }
 
+.step-card__img video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.step-card__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .step-card__body {
   padding: 1.25rem;
 }
@@ -907,7 +930,21 @@ main {
 }
 
 .week-item__video {
-  /* embed inside */
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  background: var(--bg3);
+}
+
+.week-item__video iframe,
+.week-item__video video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 
 .week-item__na {
@@ -978,6 +1015,17 @@ main {
   color: var(--gold);
   flex-shrink: 0;
   font-family: var(--mono);
+}
+
+.detail-list a,
+.disclaimer a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+.detail-list a:hover,
+.disclaimer a:hover {
+  text-decoration: underline;
 }
 
 /* ============================================================
@@ -1385,8 +1433,28 @@ footer {
     grid-template-columns: 1fr;
   }
 
+  .hero {
+    min-height: calc(100svh - 64px);
+    padding: 2.5rem 0 4rem;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .hero__content {
+    width: 100%;
+  }
+
   .hero__links {
     flex-direction: column;
     align-items: center;
+  }
+
+  .hero__scroll {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    transform: none;
+    margin: 0.5rem auto 0;
   }
 }

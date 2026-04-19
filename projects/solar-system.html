@@ -90,6 +90,37 @@
     .py-cm  { color: var(--muted); font-style: italic; }
     .py-st  { color: #c8a0dc; }
     .py-nm  { color: #7ab4d4; }
+
+    .planet-media {
+      margin-top: 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 0;
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      background: rgba(255,255,255,0.01);
+    }
+
+    .planet-media video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .planet-media__placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0.85rem 0.9rem;
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
   </style>
 </head>
 <body>
@@ -140,11 +171,11 @@
         <h1 style="font-size:clamp(2.2rem, 5vw, 4rem);">3D Solar System</h1>
         <div class="divider--gold"></div>
         <p class="section-desc">
-          A fully modeled and animated solar system built in Blender 4.2, featuring every planet,
+          A fully modeled and animated solar system built in Blender 5.1, featuring every planet,
           the Sun, and Pluto — with orbital motion, textures, and Python scripting.
         </p>
         <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1.5rem;">
-          <span class="tool-tag">Blender 4.2</span>
+          <span class="tool-tag">Blender 5.1</span>
           <span class="tool-tag">Python</span>
           <span class="tool-tag">3D Modeling</span>
           <span class="tool-tag">Cycles Render</span>
@@ -162,7 +193,7 @@
           <div class="divider--gold"></div>
 
           <p style="color:var(--muted); line-height:1.9; font-size:0.95rem; margin-bottom:1.25rem;">
-            This project is a 3D simulation of our solar system created entirely within Blender 4.2.
+            This project is a 3D simulation of our solar system created entirely within Blender 5.1.
             The goal was to model each celestial body with accurate relative sizing, apply realistic
             PBR texture materials, and script the orbital motion programmatically using Python.
           </p>
@@ -186,7 +217,7 @@
           <div class="detail-section">
             <p class="detail-section__title">Tools Used</p>
             <ul class="detail-list">
-              <li>Blender 4.2 — primary 3D modeling and animation software</li>
+              <li>Blender 5.1 — primary 3D modeling and animation software</li>
               <li>Python 3.11 — scripting orbital mechanics and automation</li>
               <li>NASA texture maps — surface material references</li>
               <li>Cycles renderer — photorealistic rendering engine</li>
@@ -257,39 +288,42 @@
     <!-- ── 4. ANIMATION TIMELINE ─────────────────────────────── -->
     <section class="section--sm">
       <div class="container--narrow">
-        <div class="space-divider"><span>Animation Sequence</span></div>
+        <div class="space-divider"><span>Planned Animation Sequence</span></div>
         <div class="fade-in">
           <p class="section-label" style="margin-bottom:0.5rem;">Timeline</p>
           <h2 style="font-size:1.6rem; margin-bottom:2rem;">Scene Breakdown</h2>
+          <p style="color:var(--muted); font-size:0.9rem; line-height:1.8; margin-bottom:1.5rem;">
+            This is the planned animation sequence for the project. It outlines the intended flow, but it is not the final rendered order yet.
+          </p>
 
           <div class="timeline">
             <div class="timeline__item">
-              <p class="timeline__date">Frame 0 – 60 &nbsp;|&nbsp; 0:00 – 0:02</p>
+              <p class="timeline__date">Planned: Frame 0 – 60 &nbsp;|&nbsp; 0:00 – 0:02</p>
               <h4 class="timeline__title">Opening — Deep Space Approach</h4>
               <p class="timeline__desc">Camera begins in deep space, slowly approaching the solar system. Stars and the HDRI background establish the setting.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Frame 60 – 240 &nbsp;|&nbsp; 0:02 – 0:10</p>
+              <p class="timeline__date">Planned: Frame 60 – 240 &nbsp;|&nbsp; 0:02 – 0:10</p>
               <h4 class="timeline__title">The Sun — Center of the System</h4>
               <p class="timeline__desc">Camera orbits the sun, showcasing the emission shader, volumetric glow, and surface texture detail.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Frame 240 – 480 &nbsp;|&nbsp; 0:10 – 0:20</p>
+              <p class="timeline__date">Planned: Frame 240 – 480 &nbsp;|&nbsp; 0:10 – 0:20</p>
               <h4 class="timeline__title">Inner Planets — Mercury to Mars</h4>
               <p class="timeline__desc">Cut-through sequence showing Mercury, Venus, Earth (with moon), and Mars with individual orbital paths visible.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Frame 480 – 720 &nbsp;|&nbsp; 0:20 – 0:30</p>
+              <p class="timeline__date">Planned: Frame 480 – 720 &nbsp;|&nbsp; 0:20 – 0:30</p>
               <h4 class="timeline__title">Gas Giants — Jupiter &amp; Saturn</h4>
               <p class="timeline__desc">Close flyby of Jupiter's banded atmosphere and Saturn with full ring system highlighted.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Frame 720 – 900 &nbsp;|&nbsp; 0:30 – 0:37</p>
+              <p class="timeline__date">Planned: Frame 720 – 900 &nbsp;|&nbsp; 0:30 – 0:37</p>
               <h4 class="timeline__title">Ice Giants &amp; Pluto — Outer System</h4>
               <p class="timeline__desc">Uranus and Neptune shown with tinted atmosphere. Final shot pulls back to show the full solar system in motion.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Frame 900 – 960 &nbsp;|&nbsp; 0:37 – 0:40</p>
+              <p class="timeline__date">Planned: Frame 900 – 960 &nbsp;|&nbsp; 0:37 – 0:40</p>
               <h4 class="timeline__title">Closing — Wide Shot</h4>
               <p class="timeline__desc">Camera pulls back to full system view, all planets orbiting simultaneously. Title card and credits.</p>
             </div>
@@ -320,7 +354,7 @@
                 <label for="calc-bday">Or Enter Birthdate</label>
                 <input type="date" id="calc-bday" />
               </div>
-              <button id="calc-btn" class="btn btn--gold">Calculate</button>
+              <button id="calc-btn" class="btn btn--gold" style="display:flex; align-items:center; justify-content:center;">Calculate</button>
             </div>
             <p style="color:var(--muted); font-size:0.78rem; font-family:var(--mono);">
               Age is based on each planet's orbital period relative to Earth's 365.25-day year.
@@ -331,7 +365,7 @@
     </section>
 
     <!-- ── 6. PLANET CARDS ───────────────────────────────────── -->
-    <section class="section--sm">
+    <section class="section--sm" id="planet-data">
       <div class="container">
         <div class="space-divider"><span>Planet Data</span></div>
         <div class="fade-in">
@@ -354,6 +388,9 @@
                 <div class="planet-stat"><span>Surface Temp</span> <strong>5,500&deg;C</strong></div>
                 <div class="planet-stat"><span>Age</span> <strong>4.6 Billion yrs</strong></div>
                 <p class="planet-card__desc">The star at the center of our solar system. Its gravity holds all planets in orbit.</p>
+                <div class="planet-media">
+                  <div class="planet-media__placeholder">No video yet</div>
+                </div>
               </div>
             </div>
 
@@ -371,6 +408,9 @@
                 <div class="planet-stat"><span>Moons</span> <strong>0</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>0.2408</strong></div>
                 <p class="planet-card__desc">The smallest planet and closest to the Sun, with extreme temperature swings between day and night.</p>
+                <div class="planet-media">
+                  <div class="planet-media__placeholder">No video yet</div>
+                </div>
               </div>
             </div>
 
@@ -388,6 +428,9 @@
                 <div class="planet-stat"><span>Moons</span> <strong>0</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>0.6152</strong></div>
                 <p class="planet-card__desc">The hottest planet in the solar system, covered by thick clouds of sulfuric acid.</p>
+                <div class="planet-media">
+                  <div class="planet-media__placeholder">No video yet</div>
+                </div>
               </div>
             </div>
 
@@ -405,6 +448,12 @@
                 <div class="planet-stat"><span>Moons</span> <strong>1</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>1.000</strong></div>
                 <p class="planet-card__desc">The only known planet with life, featuring liquid water, a breathable atmosphere, and a protective magnetic field.</p>
+                <div class="planet-media">
+                  <video autoplay muted loop playsinline>
+                    <source src="./videos/earth.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
               </div>
             </div>
 
@@ -422,6 +471,9 @@
                 <div class="planet-stat"><span>Moons</span> <strong>2</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>1.8808</strong></div>
                 <p class="planet-card__desc">Known as the Red Planet due to iron oxide on its surface. Mars has the largest volcano in the solar system.</p>
+                <div class="planet-media">
+                  <div class="planet-media__placeholder">No video yet</div>
+                </div>
               </div>
             </div>
 
@@ -439,6 +491,9 @@
                 <div class="planet-stat"><span>Moons</span> <strong>95</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>11.8626</strong></div>
                 <p class="planet-card__desc">The largest planet in the solar system. Its Great Red Spot is a storm that has lasted for centuries.</p>
+                <div class="planet-media">
+                  <div class="planet-media__placeholder">No video yet</div>
+                </div>
               </div>
             </div>
 
@@ -456,6 +511,9 @@
                 <div class="planet-stat"><span>Moons</span> <strong>146</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>29.4475</strong></div>
                 <p class="planet-card__desc">Defined by its spectacular ring system made of ice and rock particles. Less dense than water.</p>
+                <div class="planet-media">
+                  <div class="planet-media__placeholder">No video yet</div>
+                </div>
               </div>
             </div>
 
@@ -473,6 +531,9 @@
                 <div class="planet-stat"><span>Moons</span> <strong>28</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>84.0168</strong></div>
                 <p class="planet-card__desc">An ice giant tilted on its side, rotating nearly perpendicular to its orbital plane.</p>
+                <div class="planet-media">
+                  <div class="planet-media__placeholder">No video yet</div>
+                </div>
               </div>
             </div>
 
@@ -490,6 +551,9 @@
                 <div class="planet-stat"><span>Moons</span> <strong>16</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>164.791</strong></div>
                 <p class="planet-card__desc">The windiest planet, with supersonic storms and a deep blue color from methane in its atmosphere.</p>
+                <div class="planet-media">
+                  <div class="planet-media__placeholder">No video yet</div>
+                </div>
               </div>
             </div>
 
@@ -507,6 +571,9 @@
                 <div class="planet-stat"><span>Moons</span> <strong>5</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>247.921</strong></div>
                 <p class="planet-card__desc">Reclassified as a dwarf planet in 2006, Pluto is located in the Kuiper Belt beyond Neptune.</p>
+                <div class="planet-media">
+                  <div class="planet-media__placeholder">No video yet</div>
+                </div>
               </div>
             </div>
 
@@ -528,66 +595,7 @@
           </p>
 
           <div class="code-block">
-            <pre><span class="py-cm"># solar_system.py — Blender Python Orbital Animation Script
-# Multimedia and Authoring — TUP Taguig</span>
-
-<span class="py-kw">import</span> bpy
-<span class="py-kw">import</span> math
-
-<span class="py-cm"># Planet data: (name, distance_au, orbital_period_days, radius)</span>
-PLANETS = [
-    (<span class="py-st">"Mercury"</span>, <span class="py-nm">0.39</span>, <span class="py-nm">87.97</span>,  <span class="py-nm">0.38</span>),
-    (<span class="py-st">"Venus"</span>,   <span class="py-nm">0.72</span>, <span class="py-nm">224.70</span>, <span class="py-nm">0.95</span>),
-    (<span class="py-st">"Earth"</span>,   <span class="py-nm">1.00</span>, <span class="py-nm">365.25</span>, <span class="py-nm">1.00</span>),
-    (<span class="py-st">"Mars"</span>,    <span class="py-nm">1.52</span>, <span class="py-nm">686.97</span>, <span class="py-nm">0.53</span>),
-    (<span class="py-st">"Jupiter"</span>, <span class="py-nm">5.20</span>, <span class="py-nm">4332.59</span>,<span class="py-nm">11.21</span>),
-    (<span class="py-st">"Saturn"</span>,  <span class="py-nm">9.58</span>, <span class="py-nm">10759.22</span>,<span class="py-nm">9.45</span>),
-    (<span class="py-st">"Uranus"</span>,  <span class="py-nm">19.2</span>, <span class="py-nm">30688.5</span>, <span class="py-nm">4.01</span>),
-    (<span class="py-st">"Neptune"</span>, <span class="py-nm">30.1</span>, <span class="py-nm">60182.0</span>, <span class="py-nm">3.88</span>),
-    (<span class="py-st">"Pluto"</span>,   <span class="py-nm">39.5</span>, <span class="py-nm">90560.0</span>, <span class="py-nm">0.19</span>),
-]
-
-<span class="py-cm"># Scale factors for Blender scene units</span>
-AU_SCALE     = <span class="py-nm">5.0</span>   <span class="py-cm"># 1 AU = 5 Blender units</span>
-RADIUS_SCALE = <span class="py-nm">0.4</span>   <span class="py-cm"># planet radius multiplier</span>
-FRAME_SCALE  = <span class="py-nm">0.05</span>  <span class="py-cm"># days per frame (compress time)</span>
-TOTAL_FRAMES = <span class="py-nm">960</span>   <span class="py-cm"># 40 seconds at 24 fps</span>
-
-
-<span class="py-kw">def</span> <span class="py-fn">create_planet</span>(name, distance, radius):
-    <span class="py-st">"""Create a UV sphere for a planet at the given distance."""</span>
-    bpy.ops.mesh.primitive_uv_sphere_add(
-        radius=radius * RADIUS_SCALE,
-        location=(distance * AU_SCALE, <span class="py-nm">0</span>, <span class="py-nm">0</span>)
-    )
-    obj = bpy.context.object
-    obj.name = name
-    <span class="py-kw">return</span> obj
-
-
-<span class="py-kw">def</span> <span class="py-fn">animate_orbit</span>(obj, distance, period_days, total_frames):
-    <span class="py-st">"""Keyframe circular orbit around the origin."""</span>
-    r = distance * AU_SCALE
-    <span class="py-kw">for</span> frame <span class="py-kw">in</span> <span class="py-fn">range</span>(<span class="py-nm">0</span>, total_frames + <span class="py-nm">1</span>):
-        angle = (<span class="py-nm">2</span> * math.pi) * (frame * FRAME_SCALE) / period_days
-        x = r * math.<span class="py-fn">cos</span>(angle)
-        y = r * math.<span class="py-fn">sin</span>(angle)
-        obj.location = (x, y, <span class="py-nm">0</span>)
-        obj.keyframe_insert(data_path=<span class="py-st">"location"</span>, frame=frame)
-    <span class="py-cm"># Set linear interpolation for smooth orbits</span>
-    <span class="py-kw">for</span> fcurve <span class="py-kw">in</span> obj.animation_data.action.fcurves:
-        <span class="py-kw">for</span> kp <span class="py-kw">in</span> fcurve.keyframe_points:
-            kp.interpolation = <span class="py-st">'LINEAR'</span>
-
-
-<span class="py-cm"># ── Main execution ─────────────────────────────────────────</span>
-<span class="py-kw">for</span> name, dist, period, radius <span class="py-kw">in</span> PLANETS:
-    planet_obj = <span class="py-fn">create_planet</span>(name, dist, radius)
-    <span class="py-fn">animate_orbit</span>(planet_obj, dist, period, TOTAL_FRAMES)
-    <span class="py-fn">print</span>(<span class="py-fn">f</span><span class="py-st">"Animated: {name}"</span>)
-
-<span class="py-fn">print</span>(<span class="py-st">"Solar system animation complete."</span>)
-</pre>
+            <pre><span class="py-cm"># Still working on progress</span></pre>
           </div>
         </div>
       </div>
@@ -604,7 +612,7 @@ TOTAL_FRAMES = <span class="py-nm">960</span>   <span class="py-cm"># 40 seconds
           in the Subject Multimedia and Authoring
         </div>
         <div class="footer__copy">
-          &copy; 2026 by <span>[Your Name]</span> &nbsp;|&nbsp; BSIT 2nd Year
+          &copy; 2026 by <span>Morales, Trisha Mia G.</span> &nbsp;|&nbsp; BSIT 2nd Year
         </div>
       </div>
     </div>

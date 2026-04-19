@@ -101,7 +101,7 @@
         </p>
         <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1.5rem;">
           <span class="tool-tag">FlipaClip</span>
-          <span class="tool-tag">CapCut</span>
+          <span class="tool-tag">Microsoft Clipchamp</span>
           <span class="tool-tag">1080p</span>
           <span class="tool-tag">10 FPS</span>
           <span class="tool-tag">Frame-by-Frame</span>
@@ -134,9 +134,10 @@
             <p class="detail-section__title">Project Info</p>
             <ul class="detail-list">
               <li>Subject: Multimedia and Authoring — TUP Taguig</li>
-              <li>Reference video: Used for academic tracing purposes only (credited below)</li>
+              <li>Reference video (original): <a href="https://www.youtube.com/watch?v=f6YX3W85vsw" target="_blank" rel="noopener noreferrer">https://www.youtube.com/watch?v=f6YX3W85vsw</a></li>
+              <li>Embedding note: The original YouTube source is linked only and not embedded due to copyright restrictions.</li>
               <li>Rotoscoping tool: FlipaClip (1080p landscape, 10 FPS export)</li>
-              <li>Editing tool: CapCut (assembly, color grading, audio sync)</li>
+              <li>Editing tool: Microsoft Clipchamp (assembly, color grading, audio sync)</li>
               <li>Technique: Separate layers — outline, skin, details, background</li>
             </ul>
           </div>
@@ -173,25 +174,21 @@
             </div>
 
             <!-- Reference video -->
-<div>
-  <p class="video-label">Reference Video</p>
-  <div class="video-wrap">
-    <iframe 
-      width="560" 
-      height="315" 
-      src="https://youtube.com" 
-      title="YouTube video player" 
-      frameborder="0" 
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-      referrerpolicy="strict-origin-when-cross-origin" 
-      allowfullscreen>
-    </iframe>
-  </div>
-</div>
-
+            <div>
+              <p class="video-label">Reference Video</p>
+              <div class="video-wrap">
+                <video controls preload="metadata" title="Reference Video">
+                  <source src="videos/reference.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </div>
+          </div>
 
           <p class="disclaimer">
-            Disclaimer: The reference video above was used for academic purposes only.
+            Disclaimer: The original source used for reference is
+            <a href="https://www.youtube.com/watch?v=f6YX3W85vsw" target="_blank" rel="noopener noreferrer">https://www.youtube.com/watch?v=f6YX3W85vsw</a>.
+            It is linked for attribution and academic reference only and is not embedded on this page due to copyright restrictions.
             All rights to the original content belong to the respective creator.
           </p>
         </div>
@@ -211,7 +208,10 @@
             <!-- Step 1 -->
             <div class="step-card fade-in">
               <div class="step-card__img">
-                <span>No image yet</span>
+                <video controls muted loop playsinline preload="metadata" aria-label="Step 1 reference video preview">
+                  <source src="videos/reference.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
               </div>
               <div class="step-card__body">
                 <p class="step-card__num">Step 01</p>
@@ -228,7 +228,7 @@
             <!-- Step 2 -->
             <div class="step-card fade-in">
               <div class="step-card__img">
-                <span>No image yet</span>
+                <img src="pictures/rotoscope/step_2.jpg" alt="Step 2 in FlipaClip" />
               </div>
               <div class="step-card__body">
                 <p class="step-card__num">Step 02</p>
@@ -245,7 +245,7 @@
             <!-- Step 3 -->
             <div class="step-card fade-in">
               <div class="step-card__img">
-                <span>No image yet</span>
+                <img src="pictures/rotoscope/step_3.jpg" alt="Step 3 tracing outlines and fill colors" />
               </div>
               <div class="step-card__body">
                 <p class="step-card__num">Step 03</p>
@@ -264,7 +264,7 @@
             <!-- Step 4 -->
             <div class="step-card fade-in">
               <div class="step-card__img">
-                <span>No image yet</span>
+                <img src="pictures/rotoscope/step_4.jpg" alt="Step 4 continuing tracing remaining segments" />
               </div>
               <div class="step-card__body">
                 <p class="step-card__num">Step 04</p>
@@ -284,9 +284,9 @@
               </div>
               <div class="step-card__body">
                 <p class="step-card__num">Step 05</p>
-                <h4 class="step-card__title">Assemble &amp; Edit in CapCut</h4>
+                <h4 class="step-card__title">Assemble &amp; Edit in Microsoft Clipchamp</h4>
                 <p class="step-card__desc">
-                  Export all traced frames and import them into CapCut. Sequence
+                  Export all traced frames and import them into Microsoft Clipchamp. Sequence
                   the clips, adjust timing, add background music or sound effects,
                   apply color grading to the overall output, and synchronize any
                   audio elements.
@@ -303,7 +303,7 @@
                 <p class="step-card__num">Step 06</p>
                 <h4 class="step-card__title">Export &amp; Review Final Output</h4>
                 <p class="step-card__desc">
-                  Export the final video from CapCut in 1080p. Review the output
+                  Export the final video from Microsoft Clipchamp in 1080p. Review the output
                   against the reference to check for consistency in motion, coloring,
                   and timing. Make any final adjustments before submission.
                 </p>
@@ -328,7 +328,9 @@
             <!-- Week 1 -->
             <div class="week-item">
               <div class="week-item__label">Week 01</div>
-              <div class="week-item__na">Still not available</div>
+              <div class="week-item__video">
+                <iframe src="https://www.youtube.com/embed/Zn82n8FmgRA" title="Week 01 Progress Video" allowfullscreen loading="lazy"></iframe>
+              </div>
             </div>
 
             <!-- Week 2 -->
@@ -399,7 +401,7 @@
 
           </div>
 
-          <p style="color:var(--muted); font-size:0.78rem; margin-top:1.5rem; font-family:var(--mono); letter-spacing:0.04em;">
+          <p style="color:var(--muted); font-size:0.78rem; margin-top:1.5rem; font-family:var(--mono); letter-spacing:0.04em; text-align:center;">
             Weekly video progress will be embedded here as they become available throughout the semester.
           </p>
         </div>
@@ -417,7 +419,7 @@
           in the Subject Multimedia and Authoring
         </div>
         <div class="footer__copy">
-          &copy; 2026 by <span>[Your Name]</span> &nbsp;|&nbsp; BSIT 2nd Year
+          &copy; 2026 by <span>Morales, Trisha Mia G.</span> &nbsp;|&nbsp; BSIT 2nd Year
         </div>
       </div>
     </div>

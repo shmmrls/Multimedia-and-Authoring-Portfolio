@@ -99,12 +99,15 @@ function initStars() {
 
   const ctx = canvas.getContext('2d');
   let stars = [];
+  let currentPointer = { x: 0, y: 0 };
+  let targetPointer = { x: 0, y: 0 };
 
   function resize() {
-    canvas.width  = window.innerWidth;
+    canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    currentPointer = { x: canvas.width / 2, y: canvas.height / 2 };
+    targetPointer = { x: canvas.width / 2, y: canvas.height / 2 };
     generateStars();
-    drawStars();
   }
 
   function generateStars() {
@@ -118,29 +121,64 @@ function initStars() {
         o: Math.random() * 0.6 + 0.2,
         speed: Math.random() * 0.3 + 0.05,
         phase: Math.random() * Math.PI * 2,
+        depth: Math.random() * 0.85 + 0.15,
       });
     }
   }
 
+  function setPointerFromEvent(event) {
+    targetPointer = {
+      x: event.clientX,
+      y: event.clientY,
+    };
+  }
+
+  function getStarColor() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    return isDark ? 'rgba(232, 228, 220' : 'rgba(40, 40, 60';
+  }
+
   function drawStars(t) {
+    const driftX = ((currentPointer.x - canvas.width / 2) / canvas.width) * 70;
+    const driftY = ((currentPointer.y - canvas.height / 2) / canvas.height) * 70;
+    const starColor = getStarColor();
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    stars.forEach(s => {
-      const flicker = s.o + Math.sin((t || 0) * s.speed + s.phase) * 0.15;
+    stars.forEach((s) => {
+      const flicker = s.o + Math.sin(t * s.speed + s.phase) * 0.15;
+      const x = (s.x + driftX * s.depth + canvas.width) % canvas.width;
+      const y = (s.y + driftY * s.depth + canvas.height) % canvas.height;
+
       ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(232, 228, 220, ${Math.max(0, Math.min(1, flicker))})`;
+      ctx.arc(x, y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `${starColor}, ${Math.max(0, Math.min(1, flicker))})`;
       ctx.fill();
     });
   }
 
-  let animFrame;
   function animate(t) {
+    currentPointer.x += (targetPointer.x - currentPointer.x) * 0.08;
+    currentPointer.y += (targetPointer.y - currentPointer.y) * 0.08;
     drawStars(t * 0.001);
-    animFrame = requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
   }
 
   resize();
   window.addEventListener('resize', resize);
+  window.addEventListener('mousemove', setPointerFromEvent);
+  window.addEventListener('pointerleave', () => {
+    targetPointer = { x: canvas.width / 2, y: canvas.height / 2 };
+  });
+  
+  // Update stars when theme changes
+  const themeToggle = document.getElementById('theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      // Regenerate stars to update their colors for new theme
+      setTimeout(generateStars, 10);
+    });
+  }
+  
   animate(0);
 }
 
@@ -191,6 +229,19 @@ function initAgeCalculator() {
 
     const ages = computePlanetAges(earthYears);
     updatePlanetCards(ages, earthYears);
+
+    const planetDataSection = document.getElementById('planet-data');
+    if (planetDataSection) {
+      const nav = document.querySelector('.nav');
+      const navHeight = nav ? nav.offsetHeight : 0;
+      const top = planetDataSection.getBoundingClientRect().top + window.scrollY - navHeight - 8;
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      window.scrollTo({
+        top,
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      });
+    }
   });
 
   // Sync inputs — clear one when the other is typed in
@@ -198,6 +249,28 @@ function initAgeCalculator() {
     ageInput.addEventListener('input',  () => { if (ageInput.value)  bdayInput.value = ''; });
     bdayInput.addEventListener('input', () => { if (bdayInput.value) ageInput.value  = ''; });
   }
+}
+
+// ── Hero Scroll CTA (Index Page) ────────────────────────────
+function initHeroScrollCta() {
+  const scrollCta = document.querySelector('.hero__scroll[data-scroll-target]');
+  if (!scrollCta) return;
+
+  scrollCta.addEventListener('click', () => {
+    const selector = scrollCta.getAttribute('data-scroll-target');
+    const target = selector ? document.querySelector(selector) : null;
+    if (!target) return;
+
+    const nav = document.querySelector('.nav');
+    const navHeight = nav ? nav.offsetHeight : 0;
+    const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 8;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    window.scrollTo({
+      top,
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+    });
+  });
 }
 
 function updatePlanetCards(ages, earthYears) {
@@ -217,6 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileNav();
   initScrollReveal();
   initActiveNav();
+  initHeroScrollCta();
   initStars();
   initAgeCalculator();
 
