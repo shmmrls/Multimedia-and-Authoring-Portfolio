@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ── NAV ─────────────────────────────────────────────────── -->
+  <nav class="nav">
+    <a href="index.html" class="nav__logo">Port<span>.</span></a>
+    <div class="nav__links">
+      <a href="index.html"    class="nav__link">Home</a>
+      <a href="about.html"    class="nav__link">About</a>
+      <a href="projects.html" class="nav__link">Projects</a>
+      <a href="contact.html"  class="nav__link">Contact</a>
+    </div>
+    <div class="nav__right">
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="display:none">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+      <button class="nav__hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav__mobile">
+    <a href="index.html"    class="nav__link">Home</a>
+    <a href="about.html"    class="nav__link">About</a>
+    <a href="projects.html" class="nav__link">Projects</a>
+    <a href="contact.html"  class="nav__link">Contact</a>
+  </div>
+
+  <main>
+
+    <!-- ── PAGE HERO ────────────────────────────────────────── -->
+    <div class="page-hero">
+      <div class="container--narrow">
+        <p class="section-label">About</p>
+        <h1 style="font-size: clamp(2rem, 5vw, 3.5rem);">The Person<br><em style="color:var(--gold)">Behind the Work</em></h1>
+      </div>
+    </div>
+
+    <!-- ── INTRO SPLIT ──────────────────────────────────────── -->
+    <section class="section">
+      <div class="container">
+        <div class="about-split fade-in">
+
+          <!-- Portrait placeholder -->
+          <div>
+            <div class="about-portrait">
+              <span class="about-portrait__initials">YN</span>
+            </div>
+          </div>
+
+          <!-- Text side -->
+          <div>
+            <p class="section-label">Introduction</p>
+            <h2 class="section-title" style="font-size:1.8rem;">Learning Multimedia,<br>One Frame at a Time</h2>
+            <div class="divider--gold"></div>
+
+            <p style="color:var(--muted); line-height:1.9; margin-bottom:1.5rem; font-size:0.95rem;">
+              I am a 2nd-year Bachelor of Science in Information Technology student at the
+              Technological University of the Philippines &mdash; Taguig Campus. My academic journey has
+              led me into the intersection of technology and creative media through the subject
+              Multimedia and Authoring.
+            </p>
+
+            <p style="color:var(--muted); line-height:1.9; margin-bottom:1.5rem; font-size:0.95rem;">
+              Through this course, I have explored rotoscoping animation, 3D modeling in Blender,
+              video editing, and web design. Each project in this portfolio represents a step forward
+              in understanding how technology can be used as a medium for visual storytelling.
+            </p>
+
+            <p style="color:var(--muted); line-height:1.9; font-size:0.95rem;">
+              Outside of multimedia, I write code in various languages and enjoy problem-solving
+              through programming. I believe that the union of technical skill and creative thinking
+              produces the most meaningful digital work.
+            </p>
+
+            <div style="height:2rem;"></div>
+
+            <div style="display:flex; gap:2rem; flex-wrap:wrap;">
+              <div>
+                <p class="section-label" style="margin-bottom:0.3rem;">Program</p>
+                <p style="font-size:0.9rem;">BSIT</p>
+              </div>
+              <div>
+                <p class="section-label" style="margin-bottom:0.3rem;">Year</p>
+                <p style="font-size:0.9rem;">2nd Year</p>
+              </div>
+              <div>
+                <p class="section-label" style="margin-bottom:0.3rem;">School</p>
+                <p style="font-size:0.9rem;">TUP Taguig</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container"><div class="divider"></div></div>
+
+    <!-- ── SKILLS ────────────────────────────────────────────── -->
+    <section class="section--sm">
+      <div class="container">
+        <div class="fade-in">
+          <p class="section-label">Technical Skills</p>
+          <h2 class="section-title" style="font-size:1.8rem;">Languages &amp; Tools</h2>
+          <div class="divider--gold"></div>
+          <p class="section-desc" style="margin-bottom:2.5rem;">
+            A mix of web technologies, system programming languages, and domain-specific tools
+            acquired through coursework and self-study.
+          </p>
+
+          <div style="margin-bottom:1.5rem;">
+            <p class="mono muted" style="font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.75rem;">Web &amp; Frameworks</p>
+            <div class="skills-grid">
+              <span class="skill-item">HTML</span>
+              <span class="skill-item">CSS</span>
+              <span class="skill-item">JavaScript</span>
+              <span class="skill-item">Laravel</span>
+            </div>
+          </div>
+
+          <div style="margin-bottom:1.5rem;">
+            <p class="mono muted" style="font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.75rem;">Programming Languages</p>
+            <div class="skills-grid">
+              <span class="skill-item">Java (Greenfoot)</span>
+              <span class="skill-item">C</span>
+              <span class="skill-item">C++</span>
+              <span class="skill-item">VB.NET</span>
+            </div>
+          </div>
+
+          <div>
+            <p class="mono muted" style="font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.75rem;">Database &amp; Tools</p>
+            <div class="skills-grid">
+              <span class="skill-item">MySQL</span>
+              <span class="skill-item">Blender 4.2</span>
+              <span class="skill-item">FlipaClip</span>
+              <span class="skill-item">CapCut</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container"><div class="divider"></div></div>
+
+    <!-- ── MULTIMEDIA JOURNEY ────────────────────────────────── -->
+    <section class="section--sm">
+      <div class="container--narrow fade-in">
+        <p class="section-label">Journey</p>
+        <h2 class="section-title" style="font-size:1.8rem;">Multimedia Learning Path</h2>
+        <div class="divider--gold"></div>
+
+        <div class="timeline" style="margin-top:2rem;">
+          <div class="timeline__item">
+            <p class="timeline__date">Phase 01 — Rotoscoping</p>
+            <h4 class="timeline__title">Animation Foundations</h4>
+            <p class="timeline__desc">
+              Learned the art of rotoscoping by tracing reference footage frame by frame,
+              developing patience, attention to detail, and an understanding of movement and timing.
+            </p>
+          </div>
+          <div class="timeline__item">
+            <p class="timeline__date">Phase 02 — 3D Modeling</p>
+            <h4 class="timeline__title">Blender &amp; Python Scripting</h4>
+            <p class="timeline__desc">
+              Constructed a full solar system simulation in Blender 4.2, applying Python scripts
+              to automate orbital motion, materials, and rendering workflows.
+            </p>
+          </div>
+          <div class="timeline__item">
+            <p class="timeline__date">Phase 03 — Web Portfolio</p>
+            <h4 class="timeline__title">Presenting the Work</h4>
+            <p class="timeline__desc">
+              Designed and built this portfolio website using semantic HTML, CSS custom properties,
+              and vanilla JavaScript — bringing together technical and creative skills.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── FOOTER ─────────────────────────────────────────────── -->
+  <footer>
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__academic">
+          For Academic Purpose Only — Requirement for Submission<br>
+          in the Subject Multimedia and Authoring
+        </div>
+        <div class="footer__copy">
+          &copy; 2026 by <span>[Your Name]</span> &nbsp;|&nbsp; BSIT 2nd Year
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

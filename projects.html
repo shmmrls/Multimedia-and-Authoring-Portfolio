@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ── NAV ─────────────────────────────────────────────────── -->
+  <nav class="nav">
+    <a href="index.html" class="nav__logo">Port<span>.</span></a>
+    <div class="nav__links">
+      <a href="index.html"    class="nav__link">Home</a>
+      <a href="about.html"    class="nav__link">About</a>
+      <a href="projects.html" class="nav__link">Projects</a>
+      <a href="contact.html"  class="nav__link">Contact</a>
+    </div>
+    <div class="nav__right">
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="display:none">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+      <button class="nav__hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav__mobile">
+    <a href="index.html"    class="nav__link">Home</a>
+    <a href="about.html"    class="nav__link">About</a>
+    <a href="projects.html" class="nav__link">Projects</a>
+    <a href="contact.html"  class="nav__link">Contact</a>
+  </div>
+
+  <main>
+
+    <!-- ── PAGE HERO ────────────────────────────────────────── -->
+    <div class="page-hero">
+      <div class="container">
+        <p class="section-label">Projects</p>
+        <h1 style="font-size: clamp(2rem, 5vw, 3.5rem);">Multimedia<br><em style="color:var(--gold)">Coursework</em></h1>
+        <div class="divider--gold"></div>
+        <p class="section-desc">
+          Two projects completed under the subject Multimedia and Authoring,
+          exploring the breadth of digital media production.
+        </p>
+      </div>
+    </div>
+
+    <!-- ── PROJECT CARDS ────────────────────────────────────── -->
+    <section class="section">
+      <div class="container">
+        <div class="grid-2">
+
+          <!-- Project 1: Rotoscoping -->
+          <article class="project-card fade-in">
+            <div class="project-card__thumb">
+              <span class="project-card__num">01</span>
+              <div class="project-card__thumb-inner">&#x2725;</div>
+            </div>
+            <div class="project-card__body">
+              <p class="project-card__type">Animation</p>
+              <h2 class="project-card__title">Rotoscoping</h2>
+              <p class="project-card__desc">
+                A frame-by-frame animation project tracing over reference video footage.
+                Each frame is hand-traced, colored, and layered to produce a fluid
+                animated sequence that translates live motion into an illustrated aesthetic.
+              </p>
+              <div class="project-card__tools">
+                <span class="tool-tag">FlipaClip</span>
+                <span class="tool-tag">CapCut</span>
+                <span class="tool-tag">Digital Art</span>
+                <span class="tool-tag">Frame-by-Frame</span>
+              </div>
+              <a href="projects/rotoscoping.html" class="project-card__link">
+                View Project
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- Project 2: Solar System -->
+          <article class="project-card fade-in">
+            <div class="project-card__thumb" style="background: radial-gradient(ellipse at 60% 40%, rgba(212,168,83,0.08) 0%, var(--bg3) 70%);">
+              <span class="project-card__num">02</span>
+              <div class="project-card__thumb-inner" style="font-size:3rem; opacity:0.2;">&#x2B55;</div>
+            </div>
+            <div class="project-card__body">
+              <p class="project-card__type">3D Modeling &amp; Animation</p>
+              <h2 class="project-card__title">3D Solar System</h2>
+              <p class="project-card__desc">
+                A complete 3D solar system simulation built in Blender 4.2. Features all planets,
+                the Sun, and Pluto with realistic orbital motion automated through Python scripting,
+                textured materials, and a cinematic render.
+              </p>
+              <div class="project-card__tools">
+                <span class="tool-tag">Blender 4.2</span>
+                <span class="tool-tag">Python</span>
+                <span class="tool-tag">3D Modeling</span>
+                <span class="tool-tag">Rendering</span>
+              </div>
+              <a href="projects/solar-system.html" class="project-card__link">
+                View Project
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── NOTE ──────────────────────────────────────────────── -->
+    <section class="section--sm">
+      <div class="container--narrow fade-in">
+        <div class="contact-note">
+          All projects presented here are submitted as coursework for the subject
+          Multimedia and Authoring at Technological University of the Philippines &mdash; Taguig.
+          They are intended for academic review and documentation purposes only.
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── FOOTER ─────────────────────────────────────────────── -->
+  <footer>
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__academic">
+          For Academic Purpose Only — Requirement for Submission<br>
+          in the Subject Multimedia and Authoring
+        </div>
+        <div class="footer__copy">
+          &copy; 2026 by <span>[Your Name]</span> &nbsp;|&nbsp; BSIT 2nd Year
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
