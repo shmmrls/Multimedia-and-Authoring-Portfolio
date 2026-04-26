@@ -1,0 +1,848 @@
+import bpy
+import math
+import os
+from mathutils import Vector
+
+
+# Blender LTS 3.6 full Solar System cinematic
+# Sequence:
+# 1) Opening deep-space approach
+# 2) Focus each body (Sun -> Pluto) with fading labels
+# 3) Final wide shot where Pluto completes one full revolution
+
+
+# -----------------------------
+# CONFIG
+# -----------------------------
+FPS = 24
+OPENING_START = 1
+OPENING_END = 240
+FOCUS_START = OPENING_END + 1
+FOCUS_DURATION = 170
+FADE_FRAMES = 20
+
+# World scale (artistic, not physical scale)
+DIST_SCALE = 5.0
+SIZE_SCALE = 1.35
+SUN_RADIUS = 7.5
+
+# Orbit timing:
+# During focus phase, all planets move slowly.
+# During final wide shot, speed ramps so Pluto reaches exactly 1 revolution total.
+SLOW_PLUTO_DEG = 22.0
+SPEED_COMPRESSION = 0.35
+
+
+# -----------------------------
+# TEXTURES
+# -----------------------------
+DEFAULT_TEXTURE_DIR = r"C:\COLLEGE\THIRD TERM\MAA\Planets\textures\\"
+
+
+def candidate_texture_dirs():
+    dirs = []
+
+    if os.path.isdir(DEFAULT_TEXTURE_DIR):
+        dirs.append(DEFAULT_TEXTURE_DIR)
+
+    script_dir = ""
+    if "__file__" in globals():
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        local_tex = os.path.join(script_dir, "textures")
+        if os.path.isdir(local_tex):
+            dirs.append(local_tex)
+
+    if bpy.data.filepath:
+        blend_dir = os.path.dirname(bpy.data.filepath)
+        blend_tex = os.path.join(blend_dir, "textures")
+        if os.path.isdir(blend_tex):
+            dirs.append(blend_tex)
+
+    return dirs
+
+
+def build_texture_index():
+    index = {}
+    valid_ext = {".jpg", ".jpeg", ".png", ".tif", ".tiff", ".exr", ".hdr"}
+
+    for base in candidate_texture_dirs():
+        for root, _, files in os.walk(base):
+            for f in files:
+                ext = os.path.splitext(f)[1].lower()
+                if ext not in valid_ext:
+                    continue
+                key = os.path.splitext(f)[0].lower()
+                full = os.path.join(root, f)
+                if key not in index:
+                    index[key] = full
+    return index
+
+
+TEXTURE_INDEX = build_texture_index()
+
+
+def load_texture(*names):
+    for name in names:
+        key = name.lower()
+        if key in TEXTURE_INDEX:
+            try:
+                return bpy.data.images.load(TEXTURE_INDEX[key], check_existing=True)
+            except RuntimeError:
+                pass
+    return None
+
+
+# -----------------------------
+# HELPERS
+# -----------------------------
+def clear_scene():
+    bpy.ops.object.select_all(action="SELECT")
+    bpy.ops.object.delete(use_global=False)
+
+
+def set_linear_keys(obj):
+    if not obj.animation_data or not obj.animation_data.action:
+        return
+    for fc in obj.animation_data.action.fcurves:
+        for kp in fc.keyframe_points:
+            kp.interpolation = "LINEAR"
+
+
+def make_planet_material(name, texture_names, rough=0.7, emission_strength=0.0):
+    mat = bpy.data.materials.new(name=f"Mat_{name}")
+    mat.use_nodes = True
+    nodes = mat.node_tree.nodes
+    links = mat.node_tree.links
+    nodes.clear()
+
+    out = nodes.new("ShaderNodeOutputMaterial")
+    bsdf = nodes.new("ShaderNodeBsdfPrincipled")
+    tex = nodes.new("ShaderNodeTexImage")
+    img = load_texture(*texture_names)
+
+    if img:
+        tex.image = img
+        try:
+            tex.image.colorspace_settings.name = "sRGB"
+        except Exception:
+            pass
+        links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
+    else:
+        bsdf.inputs["Base Color"].default_value = (0.6, 0.6, 0.6, 1.0)
+
+    bsdf.inputs["Roughness"].default_value = rough
+    bsdf.inputs["Specular"].default_value = 0.2
+
+    if emission_strength > 0:
+        try:
+            if img:
+                links.new(tex.outputs["Color"], bsdf.inputs["Emission"])
+            else:
+                bsdf.inputs["Emission"].default_value = (0.9, 0.6, 0.2, 1.0)
+            bsdf.inputs["Emission Strength"].default_value = emission_strength
+        except Exception:
+            pass
+
+    links.new(bsdf.outputs["BSDF"], out.inputs["Surface"])
+    return mat
+
+
+def create_label_for_camera(title, subtitle, camera, start_frame, end_frame):
+    bpy.ops.object.text_add(location=(0, 0, 0))
+    txt = bpy.context.object
+    txt.name = f"Label_{title}"
+
+    # ── NAME ONLY — no subtitle/description ──────────────────────────────────
+    txt.data.body = title
+    txt.data.align_x = "LEFT"
+    txt.data.size = 0.13        # Small: won't crowd the planet in frame
+    txt.data.extrude = 0.004
+
+    # Parent to the per-planet camera so it follows it
+    txt.parent = camera
+
+    # Position in camera-local space at z = -4.6 (in front of lens).
+    # For a 60mm lens on a 36mm sensor the horizontal FOV ≈ 32°.
+    # At depth 4.6 the half-width is ~1.32 units → x=-1.05 is safely left of centre.
+    # y=-0.72 sits near the bottom quarter of the frame.
+    txt.location = (-1.05, -0.72, -4.6)
+    txt.rotation_euler = (0.0, 0.0, 0.0)
+
+    mat = bpy.data.materials.new(name=f"Mat_Label_{title}")
+    mat.use_nodes = True
+    mat.blend_method = "BLEND"
+    mat.shadow_method = "NONE"
+    txt.data.materials.append(mat)
+
+    nodes = mat.node_tree.nodes
+    links = mat.node_tree.links
+    nodes.clear()
+
+    out      = nodes.new("ShaderNodeOutputMaterial")
+    transparent = nodes.new("ShaderNodeBsdfTransparent")
+    emission = nodes.new("ShaderNodeEmission")
+    mix      = nodes.new("ShaderNodeMixShader")
+
+    # Pure white, low strength — readable but NOT glowing/blooming
+    emission.inputs["Color"].default_value    = (1.0, 1.0, 1.0, 1.0)
+    emission.inputs["Strength"].default_value = 1.0   # was 4.0
+
+    links.new(transparent.outputs["BSDF"],   mix.inputs[1])
+    links.new(emission.outputs["Emission"],  mix.inputs[2])
+    links.new(mix.outputs["Shader"],         out.inputs["Surface"])
+
+    # Fade in / hold / fade out
+    in_end     = min(start_frame + FADE_FRAMES, end_frame)
+    out_start  = max(start_frame, end_frame - FADE_FRAMES)
+
+    mix.inputs["Fac"].default_value = 0.0
+    mix.inputs["Fac"].keyframe_insert(data_path="default_value", frame=start_frame)
+    mix.inputs["Fac"].default_value = 1.0
+    mix.inputs["Fac"].keyframe_insert(data_path="default_value", frame=in_end)
+    mix.inputs["Fac"].default_value = 1.0
+    mix.inputs["Fac"].keyframe_insert(data_path="default_value", frame=out_start)
+    mix.inputs["Fac"].default_value = 0.0
+    mix.inputs["Fac"].keyframe_insert(data_path="default_value", frame=end_frame)
+
+
+def add_focus_lights(anchor, target, radius, name):
+    key_energy = max(120.0, radius * 180.0)
+    fill_energy = max(18.0, radius * 28.0)
+
+    bpy.ops.object.light_add(type="AREA", location=(-radius * 4.0, -radius * 1.2, radius * 0.9))
+    key = bpy.context.object
+    key.name = f"{name}_FocusKey"
+    key.parent = anchor
+    key.data.energy = key_energy
+    key.data.shape = "RECTANGLE"
+    key.data.size = max(4.0, radius * 1.8)
+    key.data.size_y = max(4.0, radius * 1.2)
+    key.data.color = (1.0, 0.96, 0.88)
+    key.constraints.new(type="TRACK_TO").target = target
+    key.constraints[0].track_axis = "TRACK_NEGATIVE_Z"
+    key.constraints[0].up_axis = "UP_Y"
+
+    bpy.ops.object.light_add(type="AREA", location=(radius * 1.5, radius * 0.8, radius * 0.35))
+    fill = bpy.context.object
+    fill.name = f"{name}_FocusFill"
+    fill.parent = anchor
+    fill.data.energy = fill_energy
+    fill.data.shape = "RECTANGLE"
+    fill.data.size = max(3.0, radius * 1.4)
+    fill.data.size_y = max(3.0, radius * 1.0)
+    fill.data.color = (0.75, 0.82, 1.0)
+    fill.constraints.new(type="TRACK_TO").target = target
+    fill.constraints[0].track_axis = "TRACK_NEGATIVE_Z"
+    fill.constraints[0].up_axis = "UP_Y"
+
+    return key, fill
+
+
+def add_orbiting_moon(parent_empty, name, radius, distance, orbit_turns, texture_candidates, color=(0.7, 0.7, 0.7, 1)):
+    bpy.ops.object.empty_add(type="PLAIN_AXES", location=(0, 0, 0))
+    orbit = bpy.context.object
+    orbit.name = f"Orbit_{name}"
+    orbit.parent = parent_empty
+
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=24, radius=radius, location=(distance, 0, 0))
+    moon = bpy.context.object
+    moon.name = name
+    moon.parent = orbit
+    bpy.ops.object.shade_smooth()
+
+    mat = make_planet_material(name, texture_candidates, rough=0.88, emission_strength=0.0)
+    if not load_texture(*texture_candidates):
+        bsdf = mat.node_tree.nodes.get("Principled BSDF")
+        if bsdf:
+            bsdf.inputs["Base Color"].default_value = color
+    moon.data.materials.append(mat)
+
+    orbit.rotation_euler[2] = 0.0
+    orbit.keyframe_insert(data_path="rotation_euler", index=2, frame=OPENING_START)
+    orbit.rotation_euler[2] = math.radians(360.0 * orbit_turns)
+    orbit.keyframe_insert(data_path="rotation_euler", index=2, frame=FINAL_END)
+    set_linear_keys(orbit)
+
+    return moon, orbit
+
+
+def create_ring(parent_obj, name, inner_r, outer_r, tilt_deg, color=(0.8, 0.8, 0.75, 1), alpha=0.35, texture_names=None):
+    texture_names = texture_names or []
+
+    major = (inner_r + outer_r) * 0.5
+    minor = max((outer_r - inner_r) * 0.5, 0.003)
+    bpy.ops.mesh.primitive_torus_add(
+        major_radius=major,
+        minor_radius=minor,
+        major_segments=96,
+        minor_segments=24,
+        location=(0, 0, 0),
+    )
+    ring = bpy.context.object
+    ring.name = name
+    ring.parent = parent_obj
+    ring.rotation_euler[0] = math.radians(90.0)
+    ring.rotation_euler[1] = math.radians(tilt_deg)
+
+    mat = bpy.data.materials.new(name=f"Mat_{name}")
+    mat.use_nodes = True
+    mat.blend_method = "BLEND"
+    mat.shadow_method = "NONE"
+    nodes = mat.node_tree.nodes
+    links = mat.node_tree.links
+    nodes.clear()
+
+    out = nodes.new("ShaderNodeOutputMaterial")
+    bsdf = nodes.new("ShaderNodeBsdfPrincipled")
+    bsdf.inputs["Roughness"].default_value = 0.92
+    bsdf.inputs["Specular"].default_value = 0.07
+
+    img = load_texture(*texture_names) if texture_names else None
+    if img:
+        tex = nodes.new("ShaderNodeTexImage")
+        tex.image = img
+        links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
+        if "Alpha" in tex.outputs:
+            links.new(tex.outputs["Alpha"], bsdf.inputs["Alpha"])
+        else:
+            bsdf.inputs["Alpha"].default_value = alpha
+    else:
+        bsdf.inputs["Base Color"].default_value = color
+        bsdf.inputs["Alpha"].default_value = alpha
+
+    links.new(bsdf.outputs["BSDF"], out.inputs["Surface"])
+    ring.data.materials.append(mat)
+    return ring
+
+
+def create_saturn_ring(parent_obj, radius, tilt_deg, texture_names=None):
+    texture_names = texture_names or []
+
+    bpy.ops.mesh.primitive_cylinder_add(radius=radius, depth=0.01, location=(0, 0, 0))
+    ring = bpy.context.object
+    ring.name = "Saturn_Rings"
+    ring.parent = parent_obj
+    ring.rotation_euler[0] = math.radians(90.0)
+    ring.rotation_euler[1] = math.radians(tilt_deg)
+
+    mat = bpy.data.materials.new(name="Mat_Saturn_Rings")
+    mat.use_nodes = True
+    mat.blend_method = "BLEND"
+    mat.shadow_method = "NONE"
+    nodes = mat.node_tree.nodes
+    links = mat.node_tree.links
+    nodes.clear()
+
+    out = nodes.new("ShaderNodeOutputMaterial")
+    bsdf = nodes.new("ShaderNodeBsdfPrincipled")
+    tex = nodes.new("ShaderNodeTexImage")
+    img = load_texture(*texture_names)
+
+    if img:
+        tex.image = img
+        try:
+            tex.image.colorspace_settings.name = "sRGB"
+        except Exception:
+            pass
+        links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
+        if "Alpha" in tex.outputs:
+            links.new(tex.outputs["Alpha"], bsdf.inputs["Alpha"])
+    else:
+        bsdf.inputs["Base Color"].default_value = (0.7, 0.6, 0.5, 1.0)
+        bsdf.inputs["Alpha"].default_value = 0.5
+
+    bsdf.inputs["Roughness"].default_value = 0.9
+    links.new(bsdf.outputs["BSDF"], out.inputs["Surface"])
+    ring.data.materials.append(mat)
+    return ring
+
+
+def create_visible_orbit(radius, name, color=(0.55, 0.7, 1.0, 1.0)):
+    bpy.ops.curve.primitive_bezier_circle_add(radius=radius, location=(0, 0, 0))
+    orbit = bpy.context.object
+    orbit.name = name
+    orbit.data.resolution_u = 128
+    orbit.data.render_resolution_u = 128
+    orbit.data.bevel_depth = 0.02
+    orbit.data.bevel_resolution = 4
+    orbit.data.fill_mode = "FULL"
+
+    mat = bpy.data.materials.new(name=f"Mat_{name}")
+    mat.use_nodes = True
+    mat.blend_method = "BLEND"
+    mat.shadow_method = "NONE"
+    nodes = mat.node_tree.nodes
+    links = mat.node_tree.links
+    nodes.clear()
+
+    out = nodes.new("ShaderNodeOutputMaterial")
+    emission = nodes.new("ShaderNodeEmission")
+    emission.inputs["Color"].default_value = color
+    emission.inputs["Strength"].default_value = 0.35
+    links.new(emission.outputs["Emission"], out.inputs["Surface"])
+    orbit.data.materials.append(mat)
+    return orbit
+
+
+# -----------------------------
+# FACT-BASED BODY DATA (from book details + Pluto in Kuiper belt section)
+# -----------------------------
+BODY_DATA = [
+    {
+        "name": "Sun",
+        "radius_rel_earth": 3.8,
+        "distance_au": 0.0,
+        "tilt_deg": 7.5,
+        "period_days": None,
+        "spin_factor": 0.6,
+        "textures": ["sun_surface", "sun_map"],
+        "label": "Our star at the center | Diameter: 1,391,000 km",
+    },
+    {
+        "name": "Mercury",
+        "radius_rel_earth": 0.383,
+        "distance_au": 0.4,
+        "tilt_deg": 0.04,
+        "period_days": 88.0,
+        "spin_factor": 0.8,
+        "textures": ["mercury_color", "mercury_map", "mercury_surface"],
+        "label": "0 moons | 0.4 AU | Orbital period: 88 days",
+    },
+    {
+        "name": "Venus",
+        "radius_rel_earth": 0.95,
+        "distance_au": 0.7,
+        "tilt_deg": 177.0,
+        "period_days": 225.0,
+        "spin_factor": -0.25,
+        "spin_end_deg": -60.0,
+        "textures": ["venus_clouds", "venus_surface", "venus_map"],
+        "label": "Thick sulfuric clouds | 0 moons | Orbital period: 225 days",
+    },
+    {
+        "name": "Earth",
+        "radius_rel_earth": 1.0,
+        "distance_au": 1.0,
+        "tilt_deg": 23.4,
+        "period_days": 365.25,
+        "spin_factor": 8.0,
+        "textures": ["earth_daymap", "earth_surface", "earth_map"],
+        "label": "Nitrogen-oxygen atmosphere | 1 moon | Orbital period: 365.25 days",
+    },
+    {
+        "name": "Mars",
+        "radius_rel_earth": 0.532,
+        "distance_au": 1.5,
+        "tilt_deg": 25.0,
+        "period_days": 687.0,
+        "spin_factor": 7.8,
+        "textures": ["mars_surface", "mars_map", "mars_color"],
+        "label": "Thin CO2 atmosphere | 2 moons | Orbital period: 687 days",
+    },
+    {
+        "name": "Jupiter",
+        "radius_rel_earth": 11.2,
+        "distance_au": 5.2,
+        "tilt_deg": 3.0,
+        "period_days": 11.9 * 365.25,
+        "spin_factor": 14.0,
+        "textures": ["jupiter_map", "jupiter_surface", "jupiter_color"],
+        "label": "Hydrogen-helium giant | Orbital period: 11.9 years",
+    },
+    {
+        "name": "Saturn",
+        "radius_rel_earth": 9.45,
+        "distance_au": 9.5,
+        "tilt_deg": 27.0,
+        "period_days": 29.5 * 365.25,
+        "spin_factor": 11.0,
+        "textures": ["saturn_map", "saturn_surface", "saturn_color"],
+        "label": "Ring system of icy particles | Orbital period: 29.5 years",
+    },
+    {
+        "name": "Uranus",
+        "radius_rel_earth": 4.0,
+        "distance_au": 19.0,
+        "tilt_deg": 98.0,
+        "period_days": 84.0 * 365.25,
+        "spin_factor": -6.0,
+        "textures": ["uranus_map", "uranus_surface", "uranus_color"],
+        "label": "Rotates on its side | 27 moons | Orbital period: 84 years",
+    },
+    {
+        "name": "Neptune",
+        "radius_rel_earth": 3.88,
+        "distance_au": 30.0,
+        "tilt_deg": 28.0,
+        "period_days": 165.0 * 365.25,
+        "spin_factor": 6.0,
+        "textures": ["neptune_map", "neptune_surface", "neptune_color"],
+        "label": "Faint rings + moons including Triton | Orbital period: 165 years",
+    },
+    {
+        "name": "Pluto",
+        "radius_rel_earth": 0.186,
+        "distance_au": 39.5,
+        "tilt_deg": 57.0,
+        "period_days": 248.0 * 365.25,
+        "spin_factor": 1.2,
+        "textures": ["pluto_map", "pluto_surface", "pluto_color"],
+        "label": "Kuiper Belt dwarf planet with moons incl. Charon",
+    },
+]
+
+
+def body_radius(d):
+    if d["name"] == "Sun":
+        return SUN_RADIUS
+    return max(d["radius_rel_earth"] * SIZE_SCALE, 0.24)
+
+
+def body_distance(d):
+    if d["distance_au"] <= 0:
+        return 0.0
+    return 11.0 + (d["distance_au"] ** 0.62) * DIST_SCALE * 6.6
+
+
+# -----------------------------
+# SCENE SETUP
+# -----------------------------
+clear_scene()
+
+scene = bpy.context.scene
+scene.render.engine = "BLENDER_EEVEE"
+scene.eevee.taa_render_samples = 64
+scene.eevee.taa_samples = 32
+scene.eevee.use_soft_shadows = True
+scene.eevee.use_bloom = True
+scene.eevee.bloom_threshold = 0.7
+scene.eevee.bloom_intensity = 0.9
+scene.eevee.bloom_radius = 7.0
+
+scene.render.fps = FPS
+
+FOCUS_END = FOCUS_START + len(BODY_DATA) * FOCUS_DURATION - 1
+WIDE_START = FOCUS_END + 1
+FINAL_END = WIDE_START + 1000
+
+scene.frame_start = OPENING_START
+scene.frame_end = FINAL_END
+
+
+# -----------------------------
+# WORLD BACKGROUND (HDRI stars if available)
+# -----------------------------
+world = scene.world
+world.use_nodes = True
+wn = world.node_tree.nodes
+wl = world.node_tree.links
+wn.clear()
+
+bg = wn.new("ShaderNodeBackground")
+wout = wn.new("ShaderNodeOutputWorld")
+
+stars_img = load_texture("stars", "milky_way", "space_hdri")
+if stars_img:
+    env = wn.new("ShaderNodeTexEnvironment")
+    env.image = stars_img
+    wl.new(env.outputs["Color"], bg.inputs["Color"])
+    bg.inputs["Strength"].default_value = 0.95
+else:
+    sky = wn.new("ShaderNodeTexSky")
+    sky.sky_type = "NISHITA"
+    wl.new(sky.outputs["Color"], bg.inputs["Color"])
+    bg.inputs["Strength"].default_value = 0.03
+
+wl.new(bg.outputs["Background"], wout.inputs["Surface"])
+
+
+# -----------------------------
+# BUILD BODIES
+# -----------------------------
+body_objects = {}
+orbit_empties = {}
+planet_pivots = {}
+focus_cameras = []
+
+for d in BODY_DATA:
+    name = d["name"]
+    rad = body_radius(d)
+    dist = body_distance(d)
+
+    bpy.ops.object.empty_add(type="PLAIN_AXES", location=(0, 0, 0))
+    orbit = bpy.context.object
+    orbit.name = f"Orbit_{name}"
+
+    bpy.ops.object.empty_add(type="PLAIN_AXES", location=(dist, 0, 0))
+    pivot = bpy.context.object
+    pivot.name = f"Pivot_{name}"
+    pivot.parent = orbit
+
+    bpy.ops.object.empty_add(type="PLAIN_AXES", location=(0, 0, 0))
+    tilt = bpy.context.object
+    tilt.name = f"Tilt_{name}"
+    tilt.parent = pivot
+    tilt.rotation_euler[0] = math.radians(d["tilt_deg"])
+
+    seg = 160 if name == "Sun" else 96
+    ring = 80 if name == "Sun" else 48
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=seg, ring_count=ring, radius=rad, location=(0, 0, 0))
+    obj = bpy.context.object
+    obj.name = name
+    obj.parent = tilt
+    bpy.ops.object.shade_smooth()
+
+    if name == "Sun":
+        mat = make_planet_material(name, d["textures"], rough=0.5, emission_strength=18.0)
+    elif name in {"Mercury", "Pluto"}:
+        mat = make_planet_material(name, d["textures"], rough=0.9, emission_strength=0.0)
+    else:
+        mat = make_planet_material(name, d["textures"], rough=0.72, emission_strength=0.05)
+    obj.data.materials.append(mat)
+
+    # Spin animation
+    obj.rotation_euler[2] = 0.0
+    obj.keyframe_insert(data_path="rotation_euler", index=2, frame=OPENING_START)
+    spin_end_deg = d.get("spin_end_deg", 360.0 * d["spin_factor"])
+    obj.rotation_euler[2] = math.radians(spin_end_deg)
+    obj.keyframe_insert(data_path="rotation_euler", index=2, frame=FINAL_END)
+    set_linear_keys(obj)
+
+    body_objects[name] = obj
+    orbit_empties[name] = orbit
+    planet_pivots[name] = pivot
+
+    if name != "Sun":
+        orbit_path = create_visible_orbit(dist, f"OrbitPath_{name}")
+        if name == "Saturn":
+            orbit_path.data.bevel_depth = 0.03
+        if name in {"Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"}:
+            orbit_path.data.bevel_depth = 0.025
+
+
+# -----------------------------
+# SUN CORONA + LIGHTING
+# -----------------------------
+sun_obj = body_objects["Sun"]
+
+bpy.ops.mesh.primitive_uv_sphere_add(radius=SUN_RADIUS * 1.1, segments=96, ring_count=48, location=(0, 0, 0))
+corona = bpy.context.object
+corona.name = "Sun_Corona"
+corona.parent = sun_obj
+
+corona_mat = bpy.data.materials.new(name="Mat_Sun_Corona")
+corona_mat.use_nodes = True
+corona_mat.blend_method = "BLEND"
+corona_mat.shadow_method = "NONE"
+cn = corona_mat.node_tree.nodes
+cl = corona_mat.node_tree.links
+cn.clear()
+
+cout = cn.new("ShaderNodeOutputMaterial")
+ctr = cn.new("ShaderNodeBsdfTransparent")
+cem = cn.new("ShaderNodeEmission")
+cmix = cn.new("ShaderNodeMixShader")
+clw = cn.new("ShaderNodeLayerWeight")
+
+cem.inputs["Color"].default_value = (1.0, 0.65, 0.15, 1.0)
+cem.inputs["Strength"].default_value = 8.0
+clw.inputs["Blend"].default_value = 0.22
+
+cl.new(clw.outputs["Facing"], cmix.inputs["Fac"])
+cl.new(ctr.outputs["BSDF"], cmix.inputs[1])
+cl.new(cem.outputs["Emission"], cmix.inputs[2])
+cl.new(cmix.outputs["Shader"], cout.inputs["Surface"])
+corona.data.materials.append(corona_mat)
+
+# Main solar illumination for shadows
+bpy.ops.object.light_add(type="POINT", location=(0, 0, 0))
+sun_point = bpy.context.object
+sun_point.name = "Sun_Point_Light"
+sun_point.data.energy = 250000
+sun_point.data.color = (1.0, 0.93, 0.78)
+sun_point.data.shadow_soft_size = 1.8
+sun_point.data.use_shadow = True
+
+# Subtle fill for readability (still shadow-driven from sun)
+bpy.ops.object.light_add(type="SUN", location=(0, 0, 0))
+global_fill = bpy.context.object
+global_fill.name = "DeepSpace_Fill"
+global_fill.rotation_euler = (math.radians(55), 0, math.radians(35))
+global_fill.data.energy = 0.08
+global_fill.data.angle = math.radians(1.2)
+
+
+# -----------------------------
+# ORBIT ANIMATION (focus-slow then wide-fast)
+# Pluto is reference: exactly 1 revolution at FINAL_END.
+# -----------------------------
+pluto_period = next(x["period_days"] for x in BODY_DATA if x["name"] == "Pluto")
+
+for d in BODY_DATA:
+    name = d["name"]
+    if name == "Sun":
+        continue
+
+    period = d["period_days"]
+    relative = pluto_period / period
+    compressed_turns = relative ** SPEED_COMPRESSION
+
+    slow_deg = SLOW_PLUTO_DEG * compressed_turns
+    total_deg = 360.0 * compressed_turns
+
+    orbit = orbit_empties[name]
+    orbit.rotation_euler[2] = math.radians(0.0)
+    orbit.keyframe_insert(data_path="rotation_euler", index=2, frame=OPENING_START)
+
+    orbit.rotation_euler[2] = math.radians(slow_deg)
+    orbit.keyframe_insert(data_path="rotation_euler", index=2, frame=FOCUS_END)
+
+    orbit.rotation_euler[2] = math.radians(total_deg)
+    orbit.keyframe_insert(data_path="rotation_euler", index=2, frame=FINAL_END)
+    set_linear_keys(orbit)
+
+
+# -----------------------------
+# MOONS
+# -----------------------------
+# Earth
+add_orbiting_moon(planet_pivots["Earth"], "Moon", 0.33, body_radius(next(x for x in BODY_DATA if x["name"] == "Earth")) * 3.8, 28.0, ["moon_surface", "moon_map"])
+
+# Mars: Phobos, Deimos
+mars_r = body_radius(next(x for x in BODY_DATA if x["name"] == "Mars"))
+add_orbiting_moon(planet_pivots["Mars"], "Phobos", mars_r * 0.15, mars_r * 2.0, 40.0, ["moon_phobos", "phobos_map"], color=(0.5, 0.46, 0.42, 1))
+add_orbiting_moon(planet_pivots["Mars"], "Deimos", mars_r * 0.10, mars_r * 2.8, 22.0, ["moon_deimos", "deimos_map"], color=(0.62, 0.58, 0.53, 1))
+
+# Jupiter: Galilean moons
+jr = body_radius(next(x for x in BODY_DATA if x["name"] == "Jupiter"))
+add_orbiting_moon(planet_pivots["Jupiter"], "Io", jr * 0.10, jr * 1.9, 20.0, ["moon_io", "io_map"], color=(0.87, 0.77, 0.55, 1))
+add_orbiting_moon(planet_pivots["Jupiter"], "Europa", jr * 0.09, jr * 2.4, 12.0, ["moon_europa", "europa_map"], color=(0.88, 0.84, 0.72, 1))
+add_orbiting_moon(planet_pivots["Jupiter"], "Ganymede", jr * 0.14, jr * 3.0, 7.0, ["moon_ganymede", "ganymede_map"], color=(0.62, 0.58, 0.5, 1))
+add_orbiting_moon(planet_pivots["Jupiter"], "Callisto", jr * 0.12, jr * 3.7, 4.0, ["moon_callisto", "callisto_map"], color=(0.45, 0.42, 0.38, 1))
+
+# Saturn moons + rings
+sr = body_radius(next(x for x in BODY_DATA if x["name"] == "Saturn"))
+create_saturn_ring(body_objects["Saturn"], sr * 2.0, 27.0, texture_names=["saturn_rings", "saturn_ring"])
+add_orbiting_moon(planet_pivots["Saturn"], "Titan", sr * 0.14, sr * 3.0, 5.2, ["moon_titan", "titan_map"], color=(0.86, 0.74, 0.5, 1))
+add_orbiting_moon(planet_pivots["Saturn"], "Enceladus", sr * 0.07, sr * 2.2, 13.0, ["moon_enceladus", "enceladus_map"], color=(0.9, 0.9, 0.92, 1))
+add_orbiting_moon(planet_pivots["Saturn"], "Iapetus", sr * 0.10, sr * 3.8, 3.0, ["moon_iapetus", "iapetus_map"], color=(0.6, 0.58, 0.54, 1))
+add_orbiting_moon(planet_pivots["Saturn"], "Hyperion", sr * 0.06, sr * 4.4, 2.2, ["moon_hyperion", "hyperion_map"], color=(0.52, 0.49, 0.45, 1))
+add_orbiting_moon(planet_pivots["Saturn"], "Phoebe", sr * 0.05, sr * 5.1, 1.4, ["moon_phoebe", "phoebe_map"], color=(0.42, 0.41, 0.42, 1))
+
+# Uranus rings + moons
+ur = body_radius(next(x for x in BODY_DATA if x["name"] == "Uranus"))
+for idx, mult in enumerate([1.35, 1.48, 1.62, 1.78]):
+    create_ring(body_objects["Uranus"], f"Uranus_Ring_{idx+1}", ur * mult, ur * (mult + 0.03), 98.0, color=(0.63, 0.7, 0.78, 1), alpha=0.18)
+add_orbiting_moon(planet_pivots["Uranus"], "Titania", ur * 0.09, ur * 2.0, 4.5, ["moon_titania"], color=(0.68, 0.68, 0.7, 1))
+add_orbiting_moon(planet_pivots["Uranus"], "Oberon", ur * 0.09, ur * 2.4, 3.6, ["moon_oberon"], color=(0.64, 0.64, 0.65, 1))
+add_orbiting_moon(planet_pivots["Uranus"], "Ariel", ur * 0.07, ur * 1.6, 6.0, ["moon_ariel"], color=(0.8, 0.8, 0.82, 1))
+
+# Neptune rings + moons (incl Triton)
+nr = body_radius(next(x for x in BODY_DATA if x["name"] == "Neptune"))
+for idx, mult in enumerate([1.4, 1.58, 1.75]):
+    create_ring(body_objects["Neptune"], f"Neptune_Ring_{idx+1}", nr * mult, nr * (mult + 0.025), 28.0, color=(0.72, 0.79, 0.9, 1), alpha=0.12)
+add_orbiting_moon(planet_pivots["Neptune"], "Triton", nr * 0.13, nr * 2.1, 5.5, ["moon_triton", "triton_map"], color=(0.77, 0.74, 0.72, 1))
+add_orbiting_moon(planet_pivots["Neptune"], "Nereid", nr * 0.06, nr * 3.0, 1.8, ["moon_nereid"], color=(0.55, 0.58, 0.62, 1))
+
+# Pluto system
+pr = body_radius(next(x for x in BODY_DATA if x["name"] == "Pluto"))
+add_orbiting_moon(planet_pivots["Pluto"], "Charon", pr * 0.5, pr * 3.0, 18.0, ["charon_map", "moon_charon"], color=(0.58, 0.56, 0.53, 1))
+add_orbiting_moon(planet_pivots["Pluto"], "Nix", pr * 0.12, pr * 5.4, 9.0, ["moon_nix"], color=(0.74, 0.74, 0.74, 1))
+add_orbiting_moon(planet_pivots["Pluto"], "Hydra", pr * 0.11, pr * 6.3, 8.0, ["moon_hydra"], color=(0.72, 0.73, 0.74, 1))
+add_orbiting_moon(planet_pivots["Pluto"], "Kerberos", pr * 0.08, pr * 7.2, 7.2, ["moon_kerberos"], color=(0.66, 0.66, 0.66, 1))
+add_orbiting_moon(planet_pivots["Pluto"], "Styx", pr * 0.08, pr * 8.0, 6.8, ["moon_styx"], color=(0.64, 0.64, 0.64, 1))
+
+
+# -----------------------------
+# CAMERAS
+# -----------------------------
+# Opening deep-space approach
+bpy.ops.object.camera_add(location=(0, -420, 170))
+cam_open = bpy.context.object
+cam_open.name = "Cam_Opening"
+cam_open.data.lens = 32
+trk = cam_open.constraints.new(type="TRACK_TO")
+trk.target = sun_obj
+trk.track_axis = "TRACK_NEGATIVE_Z"
+trk.up_axis = "UP_Y"
+
+cam_open.keyframe_insert(data_path="location", frame=OPENING_START)
+cam_open.location = (0, -165, 62)
+cam_open.keyframe_insert(data_path="location", frame=OPENING_END)
+set_linear_keys(cam_open)
+
+focus_start_frame = FOCUS_START
+for d in BODY_DATA:
+    name = d["name"]
+    target_obj = body_objects[name]
+    rad = body_radius(d)
+
+    bpy.ops.object.camera_add(location=(0, -rad * 6.5 - 7.5, rad * 1.8 + 1.0))
+    cam = bpy.context.object
+    cam.name = f"Cam_{name}"
+    cam.data.lens = 60
+    cam.parent = planet_pivots[name]
+
+    c = cam.constraints.new(type="TRACK_TO")
+    c.target = target_obj
+    c.track_axis = "TRACK_NEGATIVE_Z"
+    c.up_axis = "UP_Y"
+
+    add_focus_lights(planet_pivots[name], target_obj, rad, name)
+
+    focus_end_frame = focus_start_frame + FOCUS_DURATION - 1
+    create_label_for_camera(name, d["label"], cam, focus_start_frame, focus_end_frame)
+    focus_cameras.append((focus_start_frame, cam))
+    focus_start_frame += FOCUS_DURATION
+
+# Final wide camera
+bpy.ops.object.camera_add(location=(0, -250, 125))
+cam_wide = bpy.context.object
+cam_wide.name = "Cam_Final_Wide"
+cam_wide.data.lens = 24
+
+cw = cam_wide.constraints.new(type="TRACK_TO")
+cw.target = sun_obj
+cw.track_axis = "TRACK_NEGATIVE_Z"
+cw.up_axis = "UP_Y"
+
+cam_wide.keyframe_insert(data_path="location", frame=WIDE_START)
+cam_wide.location = (0, -345, 160)
+cam_wide.keyframe_insert(data_path="location", frame=FINAL_END)
+set_linear_keys(cam_wide)
+
+
+# -----------------------------
+# CAMERA CUT MARKERS
+# -----------------------------
+markers = scene.timeline_markers
+
+for m in list(markers):
+    markers.remove(m)
+
+mk_open = markers.new("Opening", frame=OPENING_START)
+mk_open.camera = cam_open
+
+for frame, cam in focus_cameras:
+    mk = markers.new(cam.name, frame=frame)
+    mk.camera = cam
+
+mk_final = markers.new("FinalWide", frame=WIDE_START)
+mk_final.camera = cam_wide
+
+
+# -----------------------------
+# OPTIONAL RENDER SETTINGS
+# -----------------------------
+scene.render.resolution_x = 1920
+scene.render.resolution_y = 1080
+scene.render.resolution_percentage = 100
+scene.render.image_settings.file_format = "FFMPEG"
+scene.render.ffmpeg.format = "MPEG4"
+scene.render.ffmpeg.codec = "H264"
+scene.render.ffmpeg.constant_rate_factor = "HIGH"
+
+
+print("Solar system cinematic generated.")
+print(f"Frames: {OPENING_START} to {FINAL_END}")
+print("Sequence: opening approach -> Sun/planets/Pluto focus labels -> final wide revolution shot")

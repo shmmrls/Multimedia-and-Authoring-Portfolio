@@ -58,7 +58,16 @@
     <div class="nav__links">
       <a href="../index.html"    class="nav__link">Home</a>
       <a href="../about.html"    class="nav__link">About</a>
-      <a href="../projects.html" class="nav__link">Projects</a>
+      <div class="nav__group">
+        <a href="../projects.html" class="nav__link nav__link--dropdown">
+          Projects
+          <svg class="nav__chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </a>
+        <div class="nav__dropdown" aria-label="Project pages">
+          <a href="rotoscoping.html" class="nav__link">Rotoscoping</a>
+          <a href="solar-system.html" class="nav__link">3D Solar System</a>
+        </div>
+      </div>
       <a href="../contact.html"  class="nav__link">Contact</a>
     </div>
     <div class="nav__right">
@@ -78,7 +87,16 @@
   <div class="nav__mobile">
     <a href="../index.html"    class="nav__link">Home</a>
     <a href="../about.html"    class="nav__link">About</a>
-    <a href="../projects.html" class="nav__link">Projects</a>
+    <div class="nav__group">
+      <a href="../projects.html" class="nav__link nav__link--dropdown">
+        Projects
+        <svg class="nav__chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </a>
+      <div class="nav__dropdown" aria-label="Project pages">
+        <a href="rotoscoping.html" class="nav__link">Rotoscoping</a>
+        <a href="solar-system.html" class="nav__link">3D Solar System</a>
+      </div>
+    </div>
     <a href="../contact.html"  class="nav__link">Contact</a>
   </div>
 
@@ -103,7 +121,7 @@
           <span class="tool-tag">FlipaClip</span>
           <span class="tool-tag">Microsoft Clipchamp</span>
           <span class="tool-tag">1080p</span>
-          <span class="tool-tag">10 FPS</span>
+          <span class="tool-tag">Mobile Drawing</span>
           <span class="tool-tag">Frame-by-Frame</span>
         </div>
       </div>
@@ -136,7 +154,7 @@
               <li>Subject: Multimedia and Authoring — TUP Taguig</li>
               <li>Reference video (original): <a href="https://www.youtube.com/watch?v=f6YX3W85vsw" target="_blank" rel="noopener noreferrer">https://www.youtube.com/watch?v=f6YX3W85vsw</a></li>
               <li>Embedding note: The original YouTube source is linked only and not embedded due to copyright restrictions.</li>
-              <li>Rotoscoping tool: FlipaClip (1080p landscape, 10 FPS export)</li>
+              <li>Rotoscoping tool: Manually drawn on phone using FlipaClip (1080p landscape)</li>
               <li>Editing tool: Microsoft Clipchamp (assembly, color grading, audio sync)</li>
               <li>Technique: Separate layers — outline, skin, details, background</li>
             </ul>
@@ -234,10 +252,8 @@
                 <p class="step-card__num">Step 02</p>
                 <h4 class="step-card__title">Set Up in FlipaClip</h4>
                 <p class="step-card__desc">
-                  Import the reference footage into FlipaClip. Set the canvas to
-                  1080p landscape orientation and configure the project at 10 frames
-                  per second to make the frame-by-frame workflow manageable within
-                  the available time.
+                  Import the reference footage into FlipaClip on your phone. Set the canvas to
+                  1080p landscape orientation to prepare for the frame-by-frame manual drawing process.
                 </p>
               </div>
             </div>
@@ -329,14 +345,22 @@
             <div class="week-item">
               <div class="week-item__label">Week 01</div>
               <div class="week-item__video">
-                <iframe src="https://www.youtube.com/embed/Zn82n8FmgRA" title="Week 01 Progress Video" allowfullscreen loading="lazy"></iframe>
+                <video controls preload="metadata" title="Week 01 Progress Video">
+                  <source src="videos/progress/Rotoscope - Week 1 Progress.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
               </div>
             </div>
 
             <!-- Week 2 -->
             <div class="week-item">
               <div class="week-item__label">Week 02</div>
-              <div class="week-item__na">Still not available</div>
+              <div class="week-item__video">
+                <video controls preload="metadata" title="Week 02 Progress Video">
+                  <source src="videos/progress/Rotoscope - Week 2 Progress.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
             </div>
 
             <!-- Week 3 -->

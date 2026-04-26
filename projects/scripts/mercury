@@ -1,0 +1,181 @@
+import bpy
+import math
+import os
+from mathutils import Vector
+
+# -----------------------------
+# TEXTURE PATH
+# -----------------------------
+texture_dir = r"C:\COLLEGE\THIRD TERM\MAA\Planets\textures\\"
+
+def load_texture(name):
+    for ext in [".jpg", ".png", ".jpeg", ".tif"]:
+        path = os.path.join(texture_dir, name + ext)
+        if os.path.exists(path):
+            return bpy.data.images.load(path)
+    print("Missing:", name)
+    return None
+
+# -----------------------------
+# CLEAN SCENE
+# -----------------------------
+bpy.ops.object.select_all(action='SELECT')
+bpy.ops.object.delete(use_global=False)
+
+# -----------------------------
+# SETTINGS
+# NASA-accurate: Mercury = 0.383x Earth
+# EARTH_RADIUS=2.0 → MERCURY_RADIUS = 0.766
+# -----------------------------
+EARTH_RADIUS = 2.0
+MERCURY_RADIUS = EARTH_RADIUS * 0.383  # = 0.766
+MERCURY_TILT = 2.0
+
+scene = bpy.context.scene
+scene.render.engine = 'CYCLES'
+scene.cycles.samples = 128
+scene.cycles.device = 'GPU'
+
+# -----------------------------
+# MERCURY
+# -----------------------------
+bpy.ops.mesh.primitive_uv_sphere_add(radius=MERCURY_RADIUS, location=(0, 0, 0))
+mercury = bpy.context.object
+mercury.name = "Mercury"
+mercury.rotation_euler[0] = math.radians(MERCURY_TILT)
+mercury.rotation_euler[2] = math.radians(140)
+
+bpy.ops.object.shade_smooth()
+
+# -----------------------------
+# MATERIAL
+# -----------------------------
+mat = bpy.data.materials.new("Mercury_Mat")
+mat.use_nodes = True
+nodes = mat.node_tree.nodes
+links = mat.node_tree.links
+nodes.clear()
+
+out = nodes.new("ShaderNodeOutputMaterial")
+bsdf = nodes.new("ShaderNodeBsdfPrincipled")
+
+color_tex = nodes.new("ShaderNodeTexImage")
+bump_tex = nodes.new("ShaderNodeTexImage")
+bump = nodes.new("ShaderNodeBump")
+
+color_tex.image = load_texture("mercury_color")
+bump_tex.image = load_texture("mercury_bump")
+
+if color_tex.image:
+    color_tex.image.colorspace_settings.name = 'sRGB'
+if bump_tex.image:
+    bump_tex.image.colorspace_settings.name = 'Non-Color'
+
+links.new(color_tex.outputs["Color"], bsdf.inputs["Base Color"])
+links.new(bump_tex.outputs["Color"], bump.inputs["Height"])
+links.new(bump.outputs["Normal"], bsdf.inputs["Normal"])
+
+bump.inputs["Strength"].default_value = 0.6
+bsdf.inputs["Roughness"].default_value = 0.95
+bsdf.inputs["Specular"].default_value = 0.03
+
+links.new(bsdf.outputs["BSDF"], out.inputs["Surface"])
+mercury.data.materials.append(mat)
+
+# -----------------------------
+# LIGHTING — NASA STYLE (FULLY VISIBLE)
+# -----------------------------
+bpy.ops.object.light_add(type='AREA', location=(0, -10, 0))
+key = bpy.context.object
+key.name = "Key_Light"
+key.data.energy = 200
+key.data.size = 10
+direction = Vector((0, 0, 0)) - key.location
+key.rotation_euler = direction.to_track_quat('-Z', 'Y').to_euler()
+
+bpy.ops.object.light_add(type='AREA', location=(10, 5, 3))
+fill_l = bpy.context.object
+fill_l.name = "Fill_Left"
+fill_l.data.energy = 150
+fill_l.data.size = 10
+direction = Vector((0, 0, 0)) - fill_l.location
+fill_l.rotation_euler = direction.to_track_quat('-Z', 'Y').to_euler()
+
+bpy.ops.object.light_add(type='AREA', location=(-10, 5, -3))
+fill_r = bpy.context.object
+fill_r.name = "Fill_Right"
+fill_r.data.energy = 150
+fill_r.data.size = 10
+direction = Vector((0, 0, 0)) - fill_r.location
+fill_r.rotation_euler = direction.to_track_quat('-Z', 'Y').to_euler()
+
+bpy.ops.object.light_add(type='AREA', location=(0, 3, 10))
+fill_t = bpy.context.object
+fill_t.name = "Fill_Top"
+fill_t.data.energy = 100
+fill_t.data.size = 10
+direction = Vector((0, 0, 0)) - fill_t.location
+fill_t.rotation_euler = direction.to_track_quat('-Z', 'Y').to_euler()
+
+bpy.ops.object.light_add(type='AREA', location=(0, 10, 0))
+fill_b = bpy.context.object
+fill_b.name = "Fill_Back"
+fill_b.data.energy = 120
+fill_b.data.size = 10
+direction = Vector((0, 0, 0)) - fill_b.location
+fill_b.rotation_euler = direction.to_track_quat('-Z', 'Y').to_euler()
+
+# -----------------------------
+# STARS BACKGROUND
+# -----------------------------
+world = bpy.context.scene.world
+world.use_nodes = True
+nodes = world.node_tree.nodes
+links = world.node_tree.links
+nodes.clear()
+
+bg = nodes.new("ShaderNodeBackground")
+env = nodes.new("ShaderNodeTexEnvironment")
+out_world = nodes.new("ShaderNodeOutputWorld")
+
+env.image = load_texture("stars")
+links.new(env.outputs["Color"], bg.inputs["Color"])
+bg.inputs["Strength"].default_value = 1.5
+links.new(bg.outputs["Background"], out_world.inputs["Surface"])
+
+# -----------------------------
+# CAMERA — UNIFORM FORMULA
+# ← FIXED: was location=(8, -14, 6) with lens=55 (inconsistent angle)
+# D = MERCURY_RADIUS * 16 = 0.766 * 16 = 12.3
+# lens = 55mm (UNIFORM)
+# -----------------------------
+CAM_DIST = MERCURY_RADIUS * 16  # = ~12.3
+
+bpy.ops.object.camera_add(location=(0, -CAM_DIST * 0.94, CAM_DIST * 0.34))
+cam = bpy.context.object
+cam.name = "Main_Camera"
+cam.data.lens = 55  # uniform lens
+cam.data.clip_start = 0.01
+cam.data.clip_end = 10000
+
+direction = Vector((0, 0, 0)) - cam.location
+cam.rotation_euler = direction.to_track_quat('-Z', 'Y').to_euler()
+scene.camera = cam
+
+# -----------------------------
+# ANIMATION
+# -----------------------------
+scene.frame_start = 1
+scene.frame_end = 240
+
+mercury.rotation_euler[2] = math.radians(140)
+mercury.keyframe_insert(data_path="rotation_euler", frame=1)
+mercury.rotation_euler[2] = math.radians(260)
+mercury.keyframe_insert(data_path="rotation_euler", frame=240)
+
+if mercury.animation_data:
+    for fcurve in mercury.animation_data.action.fcurves:
+        for kp in fcurve.keyframe_points:
+            kp.interpolation = 'LINEAR'
+
+print("✅ DONE: Mercury — uniform camera (D=12.3), stars bg, lens=55mm")

@@ -88,11 +88,11 @@
     .py-kw  { color: var(--gold); }
     .py-fn  { color: #9dc5a0; }
     .py-cm  { color: var(--muted); font-style: italic; }
-    .py-st  { color: #c8a0dc; }
+    .py-st  { color: #b8962e; }
     .py-nm  { color: #7ab4d4; }
 
     .planet-media {
-      margin-top: 0.9rem;
+      margin-top: auto;
       border: 1px solid var(--border);
       border-radius: 0;
       overflow: hidden;
@@ -121,6 +121,686 @@
       text-transform: uppercase;
       color: var(--muted);
     }
+
+    .planet-card {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .planet-card__body {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .planet-card__desc {
+      margin-bottom: 0.9rem;
+    }
+
+    @media (min-width: 901px) {
+      .planets-grid > .planet-card:nth-last-child(2) {
+        grid-column: 2;
+      }
+
+      .planets-grid > .planet-card:last-child {
+        grid-column: 3;
+      }
+    }
+
+    .planet-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      background: rgba(9, 10, 14, 0.75);
+      backdrop-filter: blur(6px);
+    }
+
+    .planet-modal.open {
+      display: flex;
+    }
+
+    .planet-modal__panel {
+      width: min(1100px, 100%);
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      box-shadow: 0 28px 80px rgba(0,0,0,0.38);
+      padding: 1.1rem;
+    }
+
+    .planet-modal__head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .planet-modal__title {
+      margin: 0;
+      font-size: clamp(1.2rem, 2.6vw, 1.8rem);
+    }
+
+    .planet-modal__type {
+      margin: 0.2rem 0 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-family: var(--mono);
+    }
+
+    .planet-modal__close {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      width: 38px;
+      height: 38px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .planet-modal__close:hover {
+      border-color: rgba(212,168,83,0.45);
+      color: var(--gold);
+    }
+
+    .planet-modal__layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 1rem;
+      min-height: 0;
+    }
+
+    .planet-modal__video {
+      border: 1px solid var(--border);
+      aspect-ratio: 16 / 9;
+      background: rgba(255,255,255,0.02);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .planet-modal__video video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .planet-modal__video-fullscreen {
+      position: absolute;
+      top: 0.6rem;
+      right: 0.6rem;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      padding: 0.45rem 0.65rem;
+      border: 1px solid rgba(212,168,83,0.42);
+      border-radius: 999px;
+      background: rgba(9, 10, 14, 0.6);
+      color: var(--gold-lt);
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: border-color var(--transition), background var(--transition), color var(--transition), transform var(--transition);
+    }
+
+    .planet-modal__video-fullscreen:hover {
+      border-color: rgba(212,168,83,0.7);
+      background: rgba(9, 10, 14, 0.8);
+      color: var(--gold);
+      transform: translateY(-1px);
+    }
+
+    .planet-modal__video-fullscreen svg {
+      width: 0.9rem;
+      height: 0.9rem;
+      flex: none;
+    }
+
+    .planet-modal__desc {
+      margin: 0.75rem 0 0;
+      color: var(--muted);
+      line-height: 1.85;
+      font-size: 0.9rem;
+    }
+
+    .planet-modal__stats {
+      margin-top: 0.8rem;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      padding: 0.65rem 0.75rem;
+    }
+
+    .planet-modal__stats-title {
+      margin: 0 0 0.55rem;
+      font-family: var(--mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.64rem;
+      color: var(--gold);
+    }
+
+    .planet-modal__stats-grid {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .planet-modal__stat {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.7rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.35rem;
+      font-size: 0.8rem;
+    }
+
+    .planet-modal__stat:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .planet-modal__stat-label {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .planet-modal__stat-value {
+      color: var(--text);
+      text-align: right;
+      font-weight: 500;
+    }
+
+    .planet-modal__script-wrap {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .planet-modal__script-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      padding: 0.65rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .planet-modal__script-title {
+      margin: 0;
+      font-family: var(--mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.66rem;
+      color: var(--gold);
+    }
+
+    .planet-modal__download {
+      border: 1px solid rgba(212,168,83,0.45);
+      background: transparent;
+      color: var(--gold);
+      padding: 0.35rem 0.6rem;
+      font-family: var(--mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .planet-modal__download:hover {
+      background: rgba(212,168,83,0.12);
+    }
+
+    .planet-modal__script {
+      margin: 0;
+      padding: 0.8rem;
+      white-space: pre-wrap;
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      line-height: 1.7;
+      color: var(--text);
+      overflow: auto;
+      max-height: 58vh;
+      flex: 0 1 auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(212,168,83,0.72) rgba(255,255,255,0.04);
+      scrollbar-gutter: stable;
+    }
+
+    .planet-modal__script::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    .planet-modal__script::-webkit-scrollbar-track {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+      border-left: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .planet-modal__script::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, rgba(212,168,83,0.95), rgba(160,120,50,0.78));
+      border: 2px solid rgba(9, 10, 14, 0.85);
+      border-radius: 999px;
+      box-shadow: 0 0 10px rgba(212,168,83,0.18);
+    }
+
+    .planet-modal__script::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, rgba(228,190,112,1), rgba(188,141,61,0.92));
+    }
+
+    .planet-modal__script::-webkit-scrollbar-corner {
+      background: transparent;
+    }
+
+    .planet-modal__script-stars {
+      flex: 1;
+      min-height: 110px;
+      border-top: 1px dashed rgba(212,168,83,0.25);
+      display: grid;
+      place-items: center;
+      padding: 0.95rem 0.8rem;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      line-height: 2;
+      letter-spacing: 0.08em;
+      color: rgba(212,168,83,0.78);
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(212,168,83,0.14) 0 1px, transparent 2px),
+        radial-gradient(circle at 72% 64%, rgba(212,168,83,0.12) 0 1px, transparent 2px),
+        radial-gradient(circle at 45% 80%, rgba(212,168,83,0.1) 0 1px, transparent 2px),
+        linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+      background-size: 170px 170px, 210px 210px, 140px 140px, 100% 100%;
+      background-position: 0 0, 20px -30px, -24px 16px, 0 0;
+    }
+
+    .planet-modal__script-stars span {
+      display: inline-block;
+      max-width: 30ch;
+      text-wrap: balance;
+    }
+
+    @media (max-width: 900px) {
+      .planet-modal__layout {
+        grid-template-columns: 1fr;
+      }
+
+      .planet-modal {
+        padding: 0.75rem;
+      }
+
+      .planet-modal__panel {
+        max-height: 94vh;
+      }
+    }
+
+    /* ── Textures Gallery ── */
+    .tex-group__title {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin: 0 0 0.75rem;
+      padding-bottom: 0.45rem;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .tex-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .tex-card {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color var(--transition), transform var(--transition);
+    }
+
+    .tex-card:hover {
+      border-color: rgba(212,168,83,0.4);
+      transform: translateY(-2px);
+    }
+
+    .tex-card__preview {
+      aspect-ratio: 1;
+      overflow: hidden;
+      background: #0a0b0f;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tex-card__preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: 0.88;
+      transition: opacity var(--transition), transform 0.4s ease;
+    }
+
+    .tex-card:hover .tex-card__preview img {
+      opacity: 1;
+      transform: scale(1.06);
+    }
+
+    .tex-card__info {
+      padding: 0.55rem 0.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.4rem;
+    }
+
+    .tex-card__name {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+
+    .tex-card__dl {
+      flex: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border: 1px solid rgba(212,168,83,0.35);
+      background: transparent;
+      color: var(--gold);
+      cursor: pointer;
+      transition: background var(--transition), border-color var(--transition);
+      text-decoration: none;
+    }
+
+    .tex-card__dl:hover {
+      background: rgba(212,168,83,0.12);
+      border-color: rgba(212,168,83,0.6);
+    }
+
+    .tex-card__dl svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .tex-dl-all {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid rgba(212,168,83,0.45);
+      background: transparent;
+      color: var(--gold);
+      padding: 0.5rem 1rem;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background var(--transition), border-color var(--transition);
+      margin-bottom: 1.5rem;
+    }
+
+    .tex-dl-all:hover {
+      background: rgba(212,168,83,0.12);
+      border-color: rgba(212,168,83,0.7);
+    }
+
+    .tex-dl-all svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    @media (max-width: 600px) {
+      .tex-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      }
+    }
+
+    /* ── Texture Toggle ── */
+    .tex-toggle {
+      display: flex;
+      margin-left: auto;
+      margin-right: auto;
+      align-items: center;
+      gap: 0.55rem;
+      border: 1px solid rgba(212,168,83,0.4);
+      background: rgba(212,168,83,0.06);
+      color: var(--gold);
+      padding: 0.55rem 1.1rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background var(--transition), border-color var(--transition), color var(--transition);
+      margin-bottom: 1.5rem;
+    }
+
+    .tex-toggle:hover {
+      background: rgba(212,168,83,0.14);
+      border-color: rgba(212,168,83,0.65);
+    }
+
+    .tex-toggle svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.35s ease;
+    }
+
+    .tex-toggle[aria-expanded="true"] svg {
+      transform: rotate(180deg);
+    }
+
+    .tex-collapsible {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.45s ease;
+    }
+
+    .tex-collapsible[aria-hidden="false"] {
+      grid-template-rows: 1fr;
+    }
+
+    .tex-collapsible__inner {
+      overflow: hidden;
+    }
+
+    /* ── Texture Lightbox ── */
+    .tex-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: rgba(9,10,14,0.85);
+      backdrop-filter: blur(10px);
+      cursor: zoom-out;
+    }
+
+    .tex-lightbox.open {
+      display: flex;
+    }
+
+    .tex-lightbox__inner {
+      position: relative;
+      max-width: 90vw;
+      max-height: 85vh;
+      cursor: default;
+      text-align: center;
+    }
+
+    .tex-lightbox__img {
+      max-width: 100%;
+      max-height: 78vh;
+      display: block;
+      margin: 0 auto;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .tex-lightbox__name {
+      margin-top: 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      color: var(--gold-lt);
+    }
+
+    .tex-lightbox__close {
+      position: absolute;
+      top: -0.6rem;
+      right: -0.6rem;
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(212,168,83,0.5);
+      background: var(--bg);
+      color: var(--gold);
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .tex-lightbox__close:hover {
+      background: rgba(212,168,83,0.15);
+    }
+
+    /* ── Age Calc Mode Tabs ── */
+    .calc-mode {
+      display: flex;
+      border: 1px solid var(--border);
+      margin-bottom: 1.25rem;
+      overflow: hidden;
+    }
+
+    .calc-mode__btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0.65rem 0.8rem;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+      position: relative;
+    }
+
+    .calc-mode__btn:first-child {
+      border-right: 1px solid var(--border);
+    }
+
+    .calc-mode__btn:hover {
+      background: rgba(212,168,83,0.06);
+      color: var(--gold-lt);
+    }
+
+    .calc-mode__btn.active {
+      background: rgba(212,168,83,0.1);
+      color: var(--gold);
+    }
+
+    .calc-mode__btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 15%;
+      right: 15%;
+      height: 2px;
+      background: var(--gold);
+      border-radius: 2px 2px 0 0;
+    }
+
+    .calc-mode__btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* ── Age Calc Layout Override ── */
+    .age-calc {
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .age-calc .age-calc__inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .age-calc .field input {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .age-calc .btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* ── Planet Modal Age Result ── */
+    .planet-modal__age-result {
+      background: rgba(212,168,83,0.08);
+      border: 1px solid rgba(212,168,83,0.3);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
+    
+    .planet-modal__age-result strong {
+      color: var(--gold);
+      font-size: 1.1em;
+      font-family: var(--serif);
+    }
   </style>
 </head>
 <body>
@@ -134,7 +814,16 @@
     <div class="nav__links">
       <a href="../index.html"    class="nav__link">Home</a>
       <a href="../about.html"    class="nav__link">About</a>
-      <a href="../projects.html" class="nav__link">Projects</a>
+      <div class="nav__group">
+        <a href="../projects.html" class="nav__link nav__link--dropdown">
+          Projects
+          <svg class="nav__chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </a>
+        <div class="nav__dropdown" aria-label="Project pages">
+          <a href="rotoscoping.html" class="nav__link">Rotoscoping</a>
+          <a href="solar-system.html" class="nav__link">3D Solar System</a>
+        </div>
+      </div>
       <a href="../contact.html"  class="nav__link">Contact</a>
     </div>
     <div class="nav__right">
@@ -154,7 +843,16 @@
   <div class="nav__mobile">
     <a href="../index.html"    class="nav__link">Home</a>
     <a href="../about.html"    class="nav__link">About</a>
-    <a href="../projects.html" class="nav__link">Projects</a>
+    <div class="nav__group">
+      <a href="../projects.html" class="nav__link nav__link--dropdown">
+        Projects
+        <svg class="nav__chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </a>
+      <div class="nav__dropdown" aria-label="Project pages">
+        <a href="rotoscoping.html" class="nav__link">Rotoscoping</a>
+        <a href="solar-system.html" class="nav__link">3D Solar System</a>
+      </div>
+    </div>
     <a href="../contact.html"  class="nav__link">Contact</a>
   </div>
 
@@ -171,14 +869,14 @@
         <h1 style="font-size:clamp(2.2rem, 5vw, 4rem);">3D Solar System</h1>
         <div class="divider--gold"></div>
         <p class="section-desc">
-          A fully modeled and animated solar system built in Blender 5.1, featuring every planet,
+          A fully modeled and animated solar system built in Blender 3.6 LTS, featuring every planet,
           the Sun, and Pluto — with orbital motion, textures, and Python scripting.
         </p>
         <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1.5rem;">
-          <span class="tool-tag">Blender 5.1</span>
+          <span class="tool-tag">Blender 3.6 LTS</span>
           <span class="tool-tag">Python</span>
           <span class="tool-tag">3D Modeling</span>
-          <span class="tool-tag">Cycles Render</span>
+          <span class="tool-tag">EEVEE Render</span>
           <span class="tool-tag">PBR Textures</span>
         </div>
       </div>
@@ -193,7 +891,7 @@
           <div class="divider--gold"></div>
 
           <p style="color:var(--muted); line-height:1.9; font-size:0.95rem; margin-bottom:1.25rem;">
-            This project is a 3D simulation of our solar system created entirely within Blender 5.1.
+            This project is a 3D simulation of our solar system created entirely within Blender 3.6 LTS.
             The goal was to model each celestial body with accurate relative sizing, apply realistic
             PBR texture materials, and script the orbital motion programmatically using Python.
           </p>
@@ -217,20 +915,22 @@
           <div class="detail-section">
             <p class="detail-section__title">Tools Used</p>
             <ul class="detail-list">
-              <li>Blender 5.1 — primary 3D modeling and animation software</li>
+              <li>Blender 3.6 LTS — primary 3D modeling and animation software</li>
               <li>Python 3.11 — scripting orbital mechanics and automation</li>
               <li>NASA texture maps — surface material references</li>
-              <li>Cycles renderer — photorealistic rendering engine</li>
+              <li>EEVEE renderer — real-time rendering engine with bloom</li>
             </ul>
           </div>
 
           <div class="detail-section">
             <p class="detail-section__title">Render Info</p>
             <ul class="detail-list">
-              <li>Renderer: Cycles (GPU accelerated)</li>
+              <li>Renderer: EEVEE (GPU accelerated)</li>
               <li>Resolution: 1920 &times; 1080 (1080p)</li>
               <li>Frame rate: 24 FPS</li>
-              <li>Samples: 128 per frame</li>
+              <li>Total frames: 2,941</li>
+              <li>Total render time: ~1 hour 15 minutes</li>
+              <li>Average per frame: ~1.55 sec</li>
               <li>Output format: MP4 (H.264)</li>
             </ul>
           </div>
@@ -259,6 +959,15 @@
             </ul>
           </div>
 
+          <div class="detail-section">
+            <p class="detail-section__title">Texture Credits</p>
+            <ul class="detail-list">
+              <li><a href="https://www.solarsystemscope.com/" target="_blank" rel="noopener noreferrer">Solar System Scope</a> — primary planet surface maps</li>
+              <li><a href="https://planetpixelemporium.com/earth.html" target="_blank" rel="noopener noreferrer">Planet Pixel Emporium</a> — Earth surface, clouds, and bump maps</li>
+              <li><a href="https://www.deviantart.com/search?q=europa+moon+texture+jupiter" target="_blank" rel="noopener noreferrer">DeviantArt</a> — community-created Europa and moon textures</li>
+            </ul>
+          </div>
+
         </div>
       </div>
     </section>
@@ -271,15 +980,11 @@
           <p class="section-label" style="margin-bottom:0.5rem;">Rendered Animation</p>
           <h2 style="font-size:1.6rem; margin-bottom:1.5rem;">The Final Video</h2>
 
-          <div class="video-placeholder">
-            <div class="video-placeholder__inner">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                <path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
-                <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              <span>Still not available</span>
-              <span style="font-size:0.62rem; margin-top:0.25rem;">The final render will be embedded here once completed</span>
-            </div>
+          <div class="planet-media" style="aspect-ratio:16/9; border:1px solid var(--border); overflow:hidden;">
+            <video controls autoplay muted loop playsinline style="width:100%; height:100%; object-fit:cover; display:block;">
+              <source src="./videos/planets/solarsystem.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           </div>
         </div>
       </div>
@@ -288,44 +993,74 @@
     <!-- ── 4. ANIMATION TIMELINE ─────────────────────────────── -->
     <section class="section--sm">
       <div class="container--narrow">
-        <div class="space-divider"><span>Planned Animation Sequence</span></div>
+        <div class="space-divider"><span>Animation Sequence</span></div>
         <div class="fade-in">
           <p class="section-label" style="margin-bottom:0.5rem;">Timeline</p>
           <h2 style="font-size:1.6rem; margin-bottom:2rem;">Scene Breakdown</h2>
           <p style="color:var(--muted); font-size:0.9rem; line-height:1.8; margin-bottom:1.5rem;">
-            This is the planned animation sequence for the project. It outlines the intended flow, but it is not the final rendered order yet.
+            The final animation sequence as scripted in the Blender Python file. Total runtime: ~2 minutes at 24 FPS (2,941 frames).
           </p>
 
           <div class="timeline">
             <div class="timeline__item">
-              <p class="timeline__date">Planned: Frame 0 – 60 &nbsp;|&nbsp; 0:00 – 0:02</p>
+              <p class="timeline__date">Frame 1 – 240 &nbsp;|&nbsp; 0:00 – 0:10</p>
               <h4 class="timeline__title">Opening — Deep Space Approach</h4>
-              <p class="timeline__desc">Camera begins in deep space, slowly approaching the solar system. Stars and the HDRI background establish the setting.</p>
+              <p class="timeline__desc">Camera starts at a distant vantage point and slowly approaches the solar system, establishing the HDRI star field and spatial scale.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Planned: Frame 60 – 240 &nbsp;|&nbsp; 0:02 – 0:10</p>
-              <h4 class="timeline__title">The Sun — Center of the System</h4>
-              <p class="timeline__desc">Camera orbits the sun, showcasing the emission shader, volumetric glow, and surface texture detail.</p>
+              <p class="timeline__date">Frame 241 – 410 &nbsp;|&nbsp; 0:10 – 0:17</p>
+              <h4 class="timeline__title">Focus — The Sun</h4>
+              <p class="timeline__desc">Camera orbits the Sun with a dedicated focus camera and two-point lighting, showcasing the emission shader, corona glow, and surface texture. Fading name label overlay.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Planned: Frame 240 – 480 &nbsp;|&nbsp; 0:10 – 0:20</p>
-              <h4 class="timeline__title">Inner Planets — Mercury to Mars</h4>
-              <p class="timeline__desc">Cut-through sequence showing Mercury, Venus, Earth (with moon), and Mars with individual orbital paths visible.</p>
+              <p class="timeline__date">Frame 411 – 580 &nbsp;|&nbsp; 0:17 – 0:24</p>
+              <h4 class="timeline__title">Focus — Mercury</h4>
+              <p class="timeline__desc">Close-up of Mercury's heavily cratered surface with bump-mapped textures. The smallest and innermost planet.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Planned: Frame 480 – 720 &nbsp;|&nbsp; 0:20 – 0:30</p>
-              <h4 class="timeline__title">Gas Giants — Jupiter &amp; Saturn</h4>
-              <p class="timeline__desc">Close flyby of Jupiter's banded atmosphere and Saturn with full ring system highlighted.</p>
+              <p class="timeline__date">Frame 581 – 750 &nbsp;|&nbsp; 0:24 – 0:31</p>
+              <h4 class="timeline__title">Focus — Venus</h4>
+              <p class="timeline__desc">Venus shown with its thick sulfuric cloud layer texture, rotating slowly in its retrograde direction.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Planned: Frame 720 – 900 &nbsp;|&nbsp; 0:30 – 0:37</p>
-              <h4 class="timeline__title">Ice Giants &amp; Pluto — Outer System</h4>
-              <p class="timeline__desc">Uranus and Neptune shown with tinted atmosphere. Final shot pulls back to show the full solar system in motion.</p>
+              <p class="timeline__date">Frame 751 – 920 &nbsp;|&nbsp; 0:31 – 0:38</p>
+              <h4 class="timeline__title">Focus — Earth</h4>
+              <p class="timeline__desc">Earth with day map, cloud layer, and orbiting Moon. Axial tilt of 23.4° visible with atmospheric detail.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Planned: Frame 900 – 960 &nbsp;|&nbsp; 0:37 – 0:40</p>
-              <h4 class="timeline__title">Closing — Wide Shot</h4>
-              <p class="timeline__desc">Camera pulls back to full system view, all planets orbiting simultaneously. Title card and credits.</p>
+              <p class="timeline__date">Frame 921 – 1090 &nbsp;|&nbsp; 0:38 – 0:45</p>
+              <h4 class="timeline__title">Focus — Mars</h4>
+              <p class="timeline__desc">Mars with surface and bump textures, accompanied by its two small moons Phobos and Deimos in orbit.</p>
+            </div>
+            <div class="timeline__item">
+              <p class="timeline__date">Frame 1091 – 1260 &nbsp;|&nbsp; 0:45 – 0:52</p>
+              <h4 class="timeline__title">Focus — Jupiter</h4>
+              <p class="timeline__desc">The gas giant with banded atmosphere, orbited by the four Galilean moons: Io, Europa, Ganymede, and Callisto.</p>
+            </div>
+            <div class="timeline__item">
+              <p class="timeline__date">Frame 1261 – 1430 &nbsp;|&nbsp; 0:53 – 1:00</p>
+              <h4 class="timeline__title">Focus — Saturn</h4>
+              <p class="timeline__desc">Saturn and its textured ring system with moons Titan, Enceladus, Iapetus, Hyperion, and Phoebe.</p>
+            </div>
+            <div class="timeline__item">
+              <p class="timeline__date">Frame 1431 – 1600 &nbsp;|&nbsp; 1:00 – 1:07</p>
+              <h4 class="timeline__title">Focus — Uranus</h4>
+              <p class="timeline__desc">The sideways ice giant (98° tilt) with four faint ring bands and moons Titania, Oberon, and Ariel.</p>
+            </div>
+            <div class="timeline__item">
+              <p class="timeline__date">Frame 1601 – 1770 &nbsp;|&nbsp; 1:07 – 1:14</p>
+              <h4 class="timeline__title">Focus — Neptune</h4>
+              <p class="timeline__desc">Deep blue methane-rich atmosphere with three ring bands, and moons Triton and Nereid.</p>
+            </div>
+            <div class="timeline__item">
+              <p class="timeline__date">Frame 1771 – 1940 &nbsp;|&nbsp; 1:14 – 1:21</p>
+              <h4 class="timeline__title">Focus — Pluto</h4>
+              <p class="timeline__desc">Kuiper Belt dwarf planet with its binary companion Charon and four small moons: Nix, Hydra, Kerberos, and Styx.</p>
+            </div>
+            <div class="timeline__item">
+              <p class="timeline__date">Frame 1941 – 2941 &nbsp;|&nbsp; 1:21 – 2:02</p>
+              <h4 class="timeline__title">Closing — Full System Wide Shot</h4>
+              <p class="timeline__desc">Camera pulls back to reveal the entire solar system in motion. Orbital speed ramps up so Pluto completes one full revolution. All visible orbit paths and bodies animate simultaneously.</p>
             </div>
           </div>
         </div>
@@ -346,12 +1081,22 @@
 
           <div class="age-calc">
             <div id="age-calc-form" class="age-calc__inputs">
-              <div class="field">
+              <div class="calc-mode">
+                <button type="button" class="calc-mode__btn active" id="mode-age-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                  Enter Age
+                </button>
+                <button type="button" class="calc-mode__btn" id="mode-bday-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  Enter Birthdate
+                </button>
+              </div>
+              <div class="field" id="field-age">
                 <label for="calc-age">Your Age (in Earth years)</label>
                 <input type="number" id="calc-age" placeholder="e.g. 20" min="1" max="150" step="0.1" />
               </div>
-              <div class="field">
-                <label for="calc-bday">Or Enter Birthdate</label>
+              <div class="field" id="field-bday" style="display:none;">
+                <label for="calc-bday">Your Birthdate</label>
                 <input type="date" id="calc-bday" />
               </div>
               <button id="calc-btn" class="btn btn--gold" style="display:flex; align-items:center; justify-content:center;">Calculate</button>
@@ -387,9 +1132,12 @@
                 <div class="planet-stat"><span>Diameter</span> <strong>1,391,000 km</strong></div>
                 <div class="planet-stat"><span>Surface Temp</span> <strong>5,500&deg;C</strong></div>
                 <div class="planet-stat"><span>Age</span> <strong>4.6 Billion yrs</strong></div>
-                <p class="planet-card__desc">The star at the center of our solar system. Its gravity holds all planets in orbit.</p>
+                <p class="planet-card__desc">The Sun is the center of the solar system, supplying the light and energy that drive climates, auroras, and space weather across every planet. Its visible surface is about 5,500&deg;C, while the corona can reach around 5,000,000&deg;C.</p>
                 <div class="planet-media">
-                  <div class="planet-media__placeholder">No video yet</div>
+                  <video autoplay muted loop playsinline>
+                    <source src="./videos/planets/sun.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
                 </div>
               </div>
             </div>
@@ -407,9 +1155,12 @@
                 <div class="planet-stat"><span>Distance from Sun</span> <strong>57.9 M km</strong></div>
                 <div class="planet-stat"><span>Moons</span> <strong>0</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>0.2408</strong></div>
-                <p class="planet-card__desc">The smallest planet and closest to the Sun, with extreme temperature swings between day and night.</p>
+                <p class="planet-card__desc">Mercury is the smallest and innermost planet, orbiting the Sun in just 88 days. With almost no atmosphere to trap heat, it has extreme day-to-night temperature changes and a heavily cratered rocky surface.</p>
                 <div class="planet-media">
-                  <div class="planet-media__placeholder">No video yet</div>
+                  <video autoplay muted loop playsinline>
+                    <source src="./videos/planets/mercury.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
                 </div>
               </div>
             </div>
@@ -427,9 +1178,12 @@
                 <div class="planet-stat"><span>Distance from Sun</span> <strong>108.2 M km</strong></div>
                 <div class="planet-stat"><span>Moons</span> <strong>0</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>0.6152</strong></div>
-                <p class="planet-card__desc">The hottest planet in the solar system, covered by thick clouds of sulfuric acid.</p>
+                <p class="planet-card__desc">Venus is similar in size to Earth but has a dense carbon-dioxide atmosphere and sulfuric-acid clouds. A runaway greenhouse effect makes it the hottest planet in the solar system.</p>
                 <div class="planet-media">
-                  <div class="planet-media__placeholder">No video yet</div>
+                  <video autoplay muted loop playsinline>
+                    <source src="./videos/planets/venus.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
                 </div>
               </div>
             </div>
@@ -447,10 +1201,10 @@
                 <div class="planet-stat"><span>Distance from Sun</span> <strong>149.6 M km</strong></div>
                 <div class="planet-stat"><span>Moons</span> <strong>1</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>1.000</strong></div>
-                <p class="planet-card__desc">The only known planet with life, featuring liquid water, a breathable atmosphere, and a protective magnetic field.</p>
+                <p class="planet-card__desc">Earth is the only known world with life, sustained by liquid surface water, a nitrogen-oxygen atmosphere, and a magnetic field that helps shield the planet from harmful solar radiation.</p>
                 <div class="planet-media">
                   <video autoplay muted loop playsinline>
-                    <source src="./videos/earth.mp4" type="video/mp4" />
+                    <source src="./videos/planets/earth.mp4" type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 </div>
@@ -470,9 +1224,12 @@
                 <div class="planet-stat"><span>Distance from Sun</span> <strong>227.9 M km</strong></div>
                 <div class="planet-stat"><span>Moons</span> <strong>2</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>1.8808</strong></div>
-                <p class="planet-card__desc">Known as the Red Planet due to iron oxide on its surface. Mars has the largest volcano in the solar system.</p>
+                <p class="planet-card__desc">Mars, the Red Planet, is a cold rocky world shaped by volcanoes, canyons, and ancient water activity. It hosts Olympus Mons, the largest volcano in the solar system.</p>
                 <div class="planet-media">
-                  <div class="planet-media__placeholder">No video yet</div>
+                  <video autoplay muted loop playsinline>
+                    <source src="./videos/planets/mars.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
                 </div>
               </div>
             </div>
@@ -490,9 +1247,12 @@
                 <div class="planet-stat"><span>Distance from Sun</span> <strong>778.5 M km</strong></div>
                 <div class="planet-stat"><span>Moons</span> <strong>95</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>11.8626</strong></div>
-                <p class="planet-card__desc">The largest planet in the solar system. Its Great Red Spot is a storm that has lasted for centuries.</p>
+                <p class="planet-card__desc">Jupiter is the largest planet, a gas giant with powerful storms and intense magnetic fields. Its Great Red Spot is a long-lived storm larger than Earth.</p>
                 <div class="planet-media">
-                  <div class="planet-media__placeholder">No video yet</div>
+                  <video autoplay muted loop playsinline>
+                    <source src="./videos/planets/jupiter.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
                 </div>
               </div>
             </div>
@@ -510,9 +1270,12 @@
                 <div class="planet-stat"><span>Distance from Sun</span> <strong>1.43 B km</strong></div>
                 <div class="planet-stat"><span>Moons</span> <strong>146</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>29.4475</strong></div>
-                <p class="planet-card__desc">Defined by its spectacular ring system made of ice and rock particles. Less dense than water.</p>
+                <p class="planet-card__desc">Saturn is a gas giant famous for its bright rings made of ice and rock particles. Despite its huge size, it is the least dense planet and would float in water if a large enough ocean existed.</p>
                 <div class="planet-media">
-                  <div class="planet-media__placeholder">No video yet</div>
+                  <video autoplay muted loop playsinline>
+                    <source src="./videos/planets/saturn.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
                 </div>
               </div>
             </div>
@@ -530,9 +1293,12 @@
                 <div class="planet-stat"><span>Distance from Sun</span> <strong>2.87 B km</strong></div>
                 <div class="planet-stat"><span>Moons</span> <strong>28</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>84.0168</strong></div>
-                <p class="planet-card__desc">An ice giant tilted on its side, rotating nearly perpendicular to its orbital plane.</p>
+                <p class="planet-card__desc">Uranus is an ice giant rich in water, ammonia, and methane ices. It rotates on its side with an extreme axial tilt, giving it unusual seasons unlike any other major planet.</p>
                 <div class="planet-media">
-                  <div class="planet-media__placeholder">No video yet</div>
+                  <video autoplay muted loop playsinline>
+                    <source src="./videos/planets/uranus.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
                 </div>
               </div>
             </div>
@@ -550,9 +1316,12 @@
                 <div class="planet-stat"><span>Distance from Sun</span> <strong>4.50 B km</strong></div>
                 <div class="planet-stat"><span>Moons</span> <strong>16</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>164.791</strong></div>
-                <p class="planet-card__desc">The windiest planet, with supersonic storms and a deep blue color from methane in its atmosphere.</p>
+                <p class="planet-card__desc">Neptune, the outermost major planet, is an ice giant with a deep blue methane-rich atmosphere. It has the fastest winds in the solar system and powerful storm systems.</p>
                 <div class="planet-media">
-                  <div class="planet-media__placeholder">No video yet</div>
+                  <video autoplay muted loop playsinline>
+                    <source src="./videos/planets/neptune.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
                 </div>
               </div>
             </div>
@@ -570,9 +1339,12 @@
                 <div class="planet-stat"><span>Distance from Sun</span> <strong>5.91 B km</strong></div>
                 <div class="planet-stat"><span>Moons</span> <strong>5</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>247.921</strong></div>
-                <p class="planet-card__desc">Reclassified as a dwarf planet in 2006, Pluto is located in the Kuiper Belt beyond Neptune.</p>
+                <p class="planet-card__desc">Pluto is a dwarf planet in the Kuiper Belt with a complex icy surface and a binary-like relationship with Charon. NASA's New Horizons flyby in 2015 revealed active geology and transformed our understanding of this distant world.</p>
                 <div class="planet-media">
-                  <div class="planet-media__placeholder">No video yet</div>
+                  <video autoplay muted loop playsinline>
+                    <source src="./videos/planets/pluto.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
                 </div>
               </div>
             </div>
@@ -582,7 +1354,81 @@
       </div>
     </section>
 
-    <!-- ── 7. PYTHON SCRIPT ───────────────────────────────────── -->
+    <!-- ── 7. TEXTURES ──────────────────────────────────────── -->
+    <section class="section--sm" id="textures">
+      <div class="container">
+        <div class="space-divider"><span>Texture Assets</span></div>
+        <div class="fade-in">
+          <p class="section-label" style="margin-bottom:0.5rem;">PBR Materials</p>
+          <h2 style="font-size:1.6rem; margin-bottom:0.5rem;">Planet Textures</h2>
+          <p style="color:var(--muted); font-size:0.88rem; margin-bottom:1.5rem; line-height:1.8;">
+            High-resolution texture maps used for each celestial body in the Blender scene.
+            Click a thumbnail to preview, or use the download button to save individual files.
+          </p>
+
+          <button id="tex-toggle-btn" class="tex-toggle" type="button" aria-expanded="false" aria-controls="tex-content">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            Show Textures
+          </button>
+
+          <div id="tex-content" class="tex-collapsible" aria-hidden="true">
+            <div class="tex-collapsible__inner">
+
+              <!-- Sun -->
+              <p class="tex-group__title">☀ Sun</p>
+              <div class="tex-grid" id="tex-sun"></div>
+
+              <!-- Mercury -->
+              <p class="tex-group__title">☿ Mercury</p>
+              <div class="tex-grid" id="tex-mercury"></div>
+
+              <!-- Venus -->
+              <p class="tex-group__title">♀ Venus</p>
+              <div class="tex-grid" id="tex-venus"></div>
+
+              <!-- Earth -->
+              <p class="tex-group__title">🜨 Earth</p>
+              <div class="tex-grid" id="tex-earth"></div>
+
+              <!-- Mars -->
+              <p class="tex-group__title">♂ Mars</p>
+              <div class="tex-grid" id="tex-mars"></div>
+
+              <!-- Jupiter -->
+              <p class="tex-group__title">♃ Jupiter</p>
+              <div class="tex-grid" id="tex-jupiter"></div>
+
+              <!-- Saturn -->
+              <p class="tex-group__title">♄ Saturn</p>
+              <div class="tex-grid" id="tex-saturn"></div>
+
+              <!-- Uranus -->
+              <p class="tex-group__title">♅ Uranus</p>
+              <div class="tex-grid" id="tex-uranus"></div>
+
+              <!-- Neptune -->
+              <p class="tex-group__title">♆ Neptune</p>
+              <div class="tex-grid" id="tex-neptune"></div>
+
+              <!-- Pluto -->
+              <p class="tex-group__title">♇ Pluto &amp; Charon</p>
+              <div class="tex-grid" id="tex-pluto"></div>
+
+              <!-- Moon -->
+              <p class="tex-group__title">☽ Moon &amp; Moons</p>
+              <div class="tex-grid" id="tex-moon"></div>
+
+              <!-- Other -->
+              <p class="tex-group__title">✦ Environment</p>
+              <div class="tex-grid" id="tex-other"></div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 8. PYTHON SCRIPT ───────────────────────────────────── -->
     <section class="section--sm">
       <div class="container">
         <div class="space-divider"><span>Python Script</span></div>
@@ -594,8 +1440,15 @@
             based on its orbital period and distance from the Sun.
           </p>
 
-          <div class="code-block">
-            <pre><span class="py-cm"># Still working on progress</span></pre>
+          <div class="code-block" style="position:relative;">
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:0.6rem 0.8rem; border-bottom:1px solid var(--border); background:rgba(255,255,255,0.02);">
+              <span style="font-family:var(--mono); font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold);">scripts/final — solar_system_cinematic.py</span>
+              <div style="display:flex; gap:0.5rem;">
+                <button id="script-copy-btn" type="button" style="border:1px solid rgba(212,168,83,0.4); background:transparent; color:var(--gold); padding:0.3rem 0.6rem; font-family:var(--mono); font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer;">Copy</button>
+                <a href="./scripts/final" download="solar_system_cinematic.py" style="border:1px solid rgba(212,168,83,0.4); background:transparent; color:var(--gold); padding:0.3rem 0.6rem; font-family:var(--mono); font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center;">Download .py</a>
+              </div>
+            </div>
+            <pre id="final-script-code" style="margin:0; padding:0.8rem; white-space:pre; font-family:var(--mono); font-size:0.74rem; line-height:1.7; color:var(--text); overflow:auto; max-height:60vh; scrollbar-width:thin; scrollbar-color:rgba(212,168,83,0.72) rgba(255,255,255,0.04);"><span class="py-cm"># Loading script…</span></pre>
           </div>
         </div>
       </div>
@@ -619,5 +1472,212 @@
   </footer>
 
   <script src="../js/script.js"></script>
+
+  <div id="planet-modal" class="planet-modal" aria-hidden="true">
+    <div class="planet-modal__panel" role="dialog" aria-modal="true" aria-labelledby="planet-modal-title">
+      <div class="planet-modal__head">
+        <div>
+          <h3 id="planet-modal-title" class="planet-modal__title">Planet</h3>
+          <p id="planet-modal-type" class="planet-modal__type">Type</p>
+        </div>
+        <button id="planet-modal-close" class="planet-modal__close" type="button" aria-label="Close modal">✕</button>
+      </div>
+
+      <div class="planet-modal__layout">
+        <div>
+          <div class="planet-modal__video">
+            <button id="planet-modal-fullscreen" class="planet-modal__video-fullscreen" type="button" aria-label="Open video fullscreen" aria-pressed="false">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/>
+              </svg>
+              <span>Fullscreen</span>
+            </button>
+            <video id="planet-modal-video" autoplay muted loop playsinline>
+              <source id="planet-modal-video-source" src="" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <p id="planet-modal-desc" class="planet-modal__desc"></p>
+          <div id="planet-modal-age-result" class="planet-modal__age-result" style="display:none;"></div>
+          <div class="planet-modal__stats">
+            <p class="planet-modal__stats-title">Planet Info</p>
+            <div id="planet-modal-stats" class="planet-modal__stats-grid"></div>
+          </div>
+        </div>
+
+        <div class="planet-modal__script-wrap">
+          <div class="planet-modal__script-head">
+            <p class="planet-modal__script-title">Planet Script</p>
+            <button id="planet-modal-download" class="planet-modal__download" type="button">Download Script</button>
+          </div>
+          <pre id="planet-modal-script" class="planet-modal__script"></pre>
+          <div class="planet-modal__script-stars" aria-hidden="true">
+            <span>⋆⭒˚.⋆₊‧.°.⋆✮⋆.°.‧₊⋆⭒˚｡⋆</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  /* ── Texture Gallery ── */
+  (function(){
+    const TEX = './textures/';
+    const DL_SVG = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+
+    const groups = {
+      sun:     ['sun_surface.jpg','sunmap.jpg'],
+      mercury: ['mercury_color.jpg','mercury_surface.jpg','mercury_bump.jpg'],
+      venus:   ['venus_surface.jpg','venus_clouds.jpg'],
+      earth:   ['earth_daymap.jpg','earth_nightmap.jpg','earth_clouds.jpg','earth_bump.jpg','earth_specular.jpg','earth_specular_2.tif','earth_normal_map.tif'],
+      mars:    ['mars_surface.jpg','mars_bump.jpg','mars_normal.jpg'],
+      jupiter: ['jupiter_map.jpg'],
+      saturn:  ['saturn_map.jpg','saturn_rings.png'],
+      uranus:  ['uranus_map.jpg','uranus_rings.png'],
+      neptune: ['neptune_map.jpg'],
+      pluto:   ['pluto_map.jpg','pluto_bump.jpg','charon_map.jpg'],
+      moon:    ['moon.jpg','moon_surface.jpg','moon_bump.jpg','moon_callisto.png','moon_enceladus.jpg','moon_europa.jpg','moon_ganymede.png','moon_io.png','moon_rhea.jpg','moon_titan.png'],
+      other:   ['stars.jpg']
+    };
+
+    function card(file){
+      const isImg = /\.(jpg|jpeg|png|webp)$/i.test(file);
+      return '<div class="tex-card">' +
+        '<div class="tex-card__preview">' +
+          (isImg ? '<img src="'+TEX+file+'" alt="'+file+'" loading="lazy"/>' :
+           '<div style="width:100%;height:100%;display:grid;place-items:center;font-family:var(--mono);font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;">'+file.split('.').pop()+'</div>') +
+        '</div>' +
+        '<div class="tex-card__info">' +
+          '<span class="tex-card__name" title="'+file+'">'+file+'</span>' +
+          '<a class="tex-card__dl" href="'+TEX+file+'" download="'+file+'" title="Download '+file+'">'+DL_SVG+'</a>' +
+        '</div>' +
+      '</div>';
+    }
+
+    Object.keys(groups).forEach(function(key){
+      var el = document.getElementById('tex-'+key);
+      if(el) el.innerHTML = groups[key].map(card).join('');
+    });
+
+    /* Toggle visibility */
+    var btn = document.getElementById('tex-toggle-btn');
+    var wrap = document.getElementById('tex-content');
+    if(btn && wrap){
+      btn.addEventListener('click', function(){
+        var open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!open));
+        wrap.setAttribute('aria-hidden', String(open));
+        btn.childNodes[btn.childNodes.length - 1].textContent = open ? ' Show Textures' : ' Hide Textures';
+      });
+    }
+  })();
+
+  /* ── Age Calc Mode Toggle ── */
+  (function(){
+    var ageBtn = document.getElementById('mode-age-btn');
+    var bdayBtn = document.getElementById('mode-bday-btn');
+    var fieldAge = document.getElementById('field-age');
+    var fieldBday = document.getElementById('field-bday');
+    if(!ageBtn || !bdayBtn) return;
+
+    ageBtn.addEventListener('click', function(){
+      ageBtn.classList.add('active');
+      bdayBtn.classList.remove('active');
+      fieldAge.style.display = 'block';
+      fieldBday.style.display = 'none';
+      document.getElementById('calc-bday').value = '';
+    });
+
+    bdayBtn.addEventListener('click', function(){
+      bdayBtn.classList.add('active');
+      ageBtn.classList.remove('active');
+      fieldBday.style.display = 'block';
+      fieldAge.style.display = 'none';
+      document.getElementById('calc-age').value = '';
+    });
+  })();
+
+  /* ── Load Final Python Script ── */
+  (function(){
+    var pre = document.getElementById('final-script-code');
+    if(!pre) return;
+
+    fetch('./scripts/final')
+      .then(function(r){ return r.text(); })
+      .then(function(code){
+        /* Basic Python syntax colouring */
+        var esc = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        esc = esc.replace(/(#.*)/gm,'<span class="py-cm">$1</span>');
+        esc = esc.replace(/\b(import|from|def|class|return|if|elif|else|for|in|while|try|except|with|as|not|and|or|True|False|None|pass|break|continue|raise|lambda|global|yield)\b/g,'<span class="py-kw">$1</span>');
+        esc = esc.replace(/(\b\d+\.?\d*\b)/g,'<span class="py-nm">$1</span>');
+        esc = esc.replace(/(\"\"\"[\s\S]*?\"\"\"|\'\'\'[\s\S]*?\'\'\'|\"[^\"]*\"|\'[^\']*\')/g,'<span class="py-st">$1</span>');
+        pre.innerHTML = esc;
+      })
+      .catch(function(){
+        pre.textContent = '# Could not load script file.';
+      });
+
+    var copyBtn = document.getElementById('script-copy-btn');
+    if(copyBtn){
+      copyBtn.addEventListener('click', function(){
+        var text = pre.textContent || pre.innerText;
+        navigator.clipboard.writeText(text).then(function(){
+          copyBtn.textContent = 'Copied!';
+          setTimeout(function(){ copyBtn.textContent = 'Copy'; }, 2000);
+        });
+      });
+    }
+  })();
+
+  /* ── Texture Lightbox ── */
+  document.addEventListener('DOMContentLoaded', function(){
+    var lb = document.getElementById('tex-lightbox');
+    var lbImg = document.getElementById('tex-lightbox-img');
+    var lbName = document.getElementById('tex-lightbox-name');
+    var lbClose = document.getElementById('tex-lightbox-close');
+    if(!lb) return;
+
+    function openLB(src, name){
+      lbImg.src = src;
+      lbName.textContent = name;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLB(){
+      lb.classList.remove('open');
+      lbImg.src = '';
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('click', function(e){
+      var card = e.target.closest('.tex-card');
+      if(!card) return;
+      if(e.target.closest('.tex-card__dl')) return;
+      var img = card.querySelector('.tex-card__preview img');
+      if(!img) return;
+      var name = card.querySelector('.tex-card__name');
+      openLB(img.src, name ? name.textContent : '');
+    });
+
+    lbClose.addEventListener('click', closeLB);
+    lb.addEventListener('click', function(e){
+      if(e.target === lb) closeLB();
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeLB();
+    });
+  });
+  </script>
+
+  <!-- Texture Lightbox -->
+  <div id="tex-lightbox" class="tex-lightbox" aria-hidden="true">
+    <div class="tex-lightbox__inner">
+      <button id="tex-lightbox-close" class="tex-lightbox__close" type="button" aria-label="Close preview">✕</button>
+      <img id="tex-lightbox-img" class="tex-lightbox__img" src="" alt="Texture preview" />
+      <p id="tex-lightbox-name" class="tex-lightbox__name"></p>
+    </div>
+  </div>
+
 </body>
 </html>

@@ -177,6 +177,12 @@ p { color: var(--text); }
   gap: 2.5rem;
 }
 
+.nav__group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .nav__link {
   font-family: var(--mono);
   font-size: 0.75rem;
@@ -206,6 +212,81 @@ p { color: var(--text); }
 .nav__link:hover::after,
 .nav__link.active::after {
   width: 100%;
+}
+
+.nav__link--dropdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.nav__chevron {
+  width: 10px;
+  height: 10px;
+  transition: transform var(--transition);
+}
+
+.nav__group:hover .nav__chevron,
+.nav__group:focus-within .nav__chevron {
+  transform: rotate(180deg);
+}
+
+.nav__dropdown {
+  position: absolute;
+  top: calc(100% + 0.55rem);
+  left: 0;
+  min-width: 13rem;
+  padding: 0.75rem;
+  display: grid;
+  gap: 0.35rem;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) + 1px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity var(--transition), transform var(--transition), visibility 0s linear 0.2s;
+  z-index: 20;
+}
+
+/* Invisible bridge so hover state isn't lost in the gap */
+.nav__dropdown::before {
+  content: '';
+  position: absolute;
+  top: -1rem;
+  left: 0;
+  right: 0;
+  height: 1rem;
+  background: transparent;
+}
+
+.nav__group:hover .nav__dropdown,
+.nav__group:focus-within .nav__dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+
+.nav__dropdown .nav__link {
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  text-transform: none;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.nav__dropdown .nav__link::after {
+  display: none;
+}
+
+.nav__dropdown .nav__link:hover,
+.nav__dropdown .nav__link.active {
+  color: var(--text);
+  background: rgba(212, 168, 83, 0.06);
 }
 
 .nav__right {
@@ -1415,6 +1496,41 @@ footer {
 
   .nav__mobile {
     display: flex;
+  }
+
+  .nav__mobile .nav__group {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav__mobile .nav__link--dropdown {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .nav__mobile .nav__dropdown {
+    position: static;
+    width: 100%;
+    min-width: 0;
+    margin-top: 0.85rem;
+    padding: 0 0 0 1rem;
+    display: grid;
+    gap: 0.75rem;
+    background: transparent;
+    border: 0;
+    border-left: 1px solid var(--border);
+    border-radius: 0;
+    box-shadow: none;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  .nav__mobile .nav__dropdown .nav__link {
+    padding: 0;
+    font-size: 0.68rem;
   }
 
   .steps-grid {

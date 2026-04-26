@@ -74,6 +74,7 @@ function initScrollReveal() {
 // ── Active Nav Link ───────────────────────────────────────────
 function initActiveNav() {
   const path = window.location.pathname;
+  const isProjectsSection = /\/projects\/(rotoscoping|solar-system)\.html$/.test(path) || path.endsWith('projects.html');
   document.querySelectorAll('.nav__link').forEach(link => {
     const href = link.getAttribute('href');
     if (!href) return;
@@ -83,6 +84,9 @@ function initActiveNav() {
       (path.endsWith(href)) ||
       (path.includes(href) && href !== '/' && href !== 'index.html')
     ) {
+      link.classList.add('active');
+    }
+    if (isProjectsSection && href.includes('projects.html')) {
       link.classList.add('active');
     }
     // Index page
@@ -215,10 +219,14 @@ function initAgeCalculator() {
     let earthYears = null;
 
     if (bdayInput && bdayInput.value) {
+      window.lastCalcMode = 'bday';
+      window.lastCalcValue = bdayInput.value;
       const dob  = new Date(bdayInput.value);
       const now  = new Date();
       earthYears = (now - dob) / (1000 * 60 * 60 * 24 * 365.25);
     } else if (ageInput && ageInput.value) {
+      window.lastCalcMode = 'age';
+      window.lastCalcValue = ageInput.value;
       earthYears = parseFloat(ageInput.value);
     }
 
@@ -283,6 +291,241 @@ function updatePlanetCards(ages, earthYears) {
   if (earthEl) earthEl.textContent = parseFloat(earthYears).toFixed(2);
 }
 
+// ── Planet Card Modal (Solar System Page) ───────────────────
+const PLANET_SCRIPT_PATHS = {
+  Sun: './scripts/sun',
+  Mercury: './scripts/mercury',
+  Venus: './scripts/venus',
+  Earth: './scripts/earth',
+  Mars: './scripts/mars',
+  Jupiter: './scripts/jupiter',
+  Saturn: './scripts/saturn',
+  Uranus: './scripts/uranus',
+  Neptune: './scripts/neptune',
+  Pluto: './scripts/pluto',
+};
+
+const planetScriptCache = {};
+
+async function loadPlanetScript(planetName) {
+  const path = PLANET_SCRIPT_PATHS[planetName];
+  if (!path) {
+    return {
+      content: '# Script path not configured for this body.',
+      path: '',
+    };
+  }
+
+  if (planetScriptCache[path]) {
+    return {
+      content: planetScriptCache[path],
+      path,
+    };
+  }
+
+  try {
+    const response = await fetch(path);
+    if (!response.ok) {
+      throw new Error(`Failed to load script: ${response.status}`);
+    }
+
+    const text = await response.text();
+    planetScriptCache[path] = text;
+    return {
+      content: text,
+      path,
+    };
+  } catch (error) {
+    return {
+      content: '# Unable to load script file.\n# Open this page through a local server if you are using file://',
+      path,
+    };
+  }
+}
+
+function initPlanetModal() {
+  const cards = document.querySelectorAll('.planet-card[data-planet]');
+  const modal = document.getElementById('planet-modal');
+  if (!cards.length || !modal) return;
+
+  const panel = modal.querySelector('.planet-modal__panel');
+  const closeBtn = document.getElementById('planet-modal-close');
+  const titleEl = document.getElementById('planet-modal-title');
+  const typeEl = document.getElementById('planet-modal-type');
+  const descEl = document.getElementById('planet-modal-desc');
+  const statsEl = document.getElementById('planet-modal-stats');
+  const videoWrap = modal.querySelector('.planet-modal__video');
+  const videoEl = document.getElementById('planet-modal-video');
+  const videoSourceEl = document.getElementById('planet-modal-video-source');
+  const scriptEl = document.getElementById('planet-modal-script');
+  const fullscreenBtn = document.getElementById('planet-modal-fullscreen');
+  const downloadBtn = document.getElementById('planet-modal-download');
+
+  if (!panel || !closeBtn || !titleEl || !typeEl || !descEl || !statsEl || !videoWrap || !videoEl || !videoSourceEl || !scriptEl || !fullscreenBtn || !downloadBtn) {
+    return;
+  }
+
+  let activePlanet = '';
+  let activeScriptPath = '';
+  let activeScriptContent = '';
+
+  function closeModal() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (document.fullscreenElement) {
+      document.exitFullscreen?.().catch(() => {});
+    }
+    videoEl.pause();
+    videoSourceEl.setAttribute('src', '');
+    videoEl.load();
+  }
+
+  function isVideoFullscreen() {
+    return document.fullscreenElement === videoWrap || document.webkitFullscreenElement === videoWrap;
+  }
+
+  function updateFullscreenButton() {
+    const active = isVideoFullscreen();
+    fullscreenBtn.setAttribute('aria-pressed', String(active));
+    fullscreenBtn.setAttribute('aria-label', active ? 'Exit video fullscreen' : 'Open video fullscreen');
+    fullscreenBtn.querySelector('span').textContent = active ? 'Exit fullscreen' : 'Fullscreen';
+  }
+
+  async function toggleFullscreen() {
+    try {
+      if (isVideoFullscreen()) {
+        await (document.exitFullscreen?.() || document.webkitExitFullscreen?.());
+      } else if (videoWrap.requestFullscreen) {
+        await videoWrap.requestFullscreen();
+      } else if (videoWrap.webkitRequestFullscreen) {
+        await videoWrap.webkitRequestFullscreen();
+      }
+    } catch (_) {
+      // Ignore fullscreen errors if the browser blocks the request.
+    }
+  }
+
+  async function openModalFromCard(card) {
+    const planetName = card.getAttribute('data-planet') || 'Planet';
+    const typeText = card.querySelector('.planet-card__type')?.textContent?.trim() || 'Body';
+    const descText = card.querySelector('.planet-card__desc')?.textContent?.trim() || '';
+    const src = card.querySelector('video source')?.getAttribute('src') || '';
+    const statRows = card.querySelectorAll('.planet-stat');
+
+    activePlanet = planetName;
+    titleEl.textContent = planetName;
+    typeEl.textContent = typeText;
+    descEl.textContent = descText;
+    scriptEl.textContent = '# Loading script...';
+
+    const ageResultEl = document.getElementById('planet-modal-age-result');
+    if (ageResultEl) {
+      const ageVal = card.querySelector('.planet-card__age')?.textContent?.trim();
+      if (ageVal && ageVal !== '—' && window.lastCalcMode) {
+        if (window.lastCalcMode === 'bday') {
+          const d = new Date(window.lastCalcValue).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+          ageResultEl.innerHTML = `If you were born on ${d}, your age on ${planetName} is <strong>${ageVal} years</strong>.`;
+        } else {
+          ageResultEl.innerHTML = `If you are ${window.lastCalcValue} in Earth years, your age on ${planetName} is <strong>${ageVal} years</strong>.`;
+        }
+        ageResultEl.style.display = 'block';
+      } else {
+        ageResultEl.style.display = 'none';
+      }
+    }
+
+    statsEl.innerHTML = '';
+    statRows.forEach((row) => {
+      const label = row.querySelector('span')?.textContent?.trim();
+      const value = row.querySelector('strong')?.textContent?.trim();
+      if (!label || !value) return;
+
+      const item = document.createElement('div');
+      item.className = 'planet-modal__stat';
+
+      const labelEl = document.createElement('span');
+      labelEl.className = 'planet-modal__stat-label';
+      labelEl.textContent = label;
+
+      const valueEl = document.createElement('span');
+      valueEl.className = 'planet-modal__stat-value';
+      valueEl.textContent = value;
+
+      item.appendChild(labelEl);
+      item.appendChild(valueEl);
+      statsEl.appendChild(item);
+    });
+
+    if (src) {
+      videoSourceEl.setAttribute('src', src);
+      videoEl.load();
+      videoEl.play().catch(() => {});
+    }
+
+    const scriptData = await loadPlanetScript(planetName);
+    activeScriptPath = scriptData.path;
+    activeScriptContent = scriptData.content;
+    scriptEl.textContent = scriptData.content;
+
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  cards.forEach((card) => {
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', `Open ${card.getAttribute('data-planet') || 'planet'} details`);
+
+    card.addEventListener('click', () => openModalFromCard(card));
+    card.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openModalFromCard(card);
+      }
+    });
+  });
+
+  closeBtn.addEventListener('click', closeModal);
+
+  fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+  document.addEventListener('fullscreenchange', updateFullscreenButton);
+  document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
+
+  modal.addEventListener('click', (event) => {
+    if (!panel.contains(event.target)) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && modal.classList.contains('open')) {
+      closeModal();
+    }
+  });
+
+  downloadBtn.addEventListener('click', () => {
+    const scriptContent = activeScriptContent || scriptEl.textContent || '';
+    if (!scriptContent.trim()) return;
+
+    const blob = new Blob([scriptContent], { type: 'text/x-python;charset=utf-8' });
+    const blobUrl = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    const fileBase = (activePlanet || 'planet').toLowerCase().replace(/\s+/g, '-');
+    const hasExtension = activeScriptPath && /\.[a-z0-9]+$/i.test(activeScriptPath);
+    const suffix = hasExtension ? '' : '.py';
+
+    anchor.href = blobUrl;
+    anchor.download = `${fileBase}-script${suffix}`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+    URL.revokeObjectURL(blobUrl);
+  });
+}
+
 // ── Init ──────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   const theme = localStorage.getItem('theme') || 'dark';
@@ -293,6 +536,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroScrollCta();
   initStars();
   initAgeCalculator();
+  initPlanetModal();
 
   // Theme toggle button
   const toggleBtn = document.getElementById('theme-toggle');

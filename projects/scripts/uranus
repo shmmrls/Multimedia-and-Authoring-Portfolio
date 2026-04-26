@@ -1,0 +1,232 @@
+import bpy
+import math
+import os
+from mathutils import Vector
+
+# -----------------------------
+# TEXTURE PATH
+# -----------------------------
+texture_dir = r"C:\\COLLEGE\\THIRD TERM\\MAA\\Planets\\textures\\"
+
+def load_texture(name):
+    for ext in [".jpg", ".png", ".jpeg", ".tif"]:
+        path = os.path.join(texture_dir, name + ext)
+        if os.path.exists(path):
+            return bpy.data.images.load(path)
+    print("Missing:", name)
+    return None
+
+# -----------------------------
+# CLEAN SCENE
+# -----------------------------
+bpy.ops.object.select_all(action='SELECT')
+bpy.ops.object.delete(use_global=False)
+
+# -----------------------------
+# SETTINGS
+# -----------------------------
+URANUS_RADIUS = 4.0
+URANUS_TILT = 97.8
+RING_OUTER = 8.0
+
+scene = bpy.context.scene
+scene.render.engine = 'BLENDER_EEVEE'
+scene.eevee.taa_render_samples = 32
+scene.eevee.taa_samples = 16
+scene.eevee.use_soft_shadows = True
+
+# -----------------------------
+# URANUS PLANET
+# -----------------------------
+bpy.ops.mesh.primitive_uv_sphere_add(radius=URANUS_RADIUS, location=(0,0,0))
+uranus = bpy.context.object
+uranus.name = "Uranus"
+uranus.rotation_euler[1] = math.radians(URANUS_TILT)
+bpy.ops.object.shade_smooth()
+
+mat = bpy.data.materials.new("Uranus_Material")
+mat.use_nodes = True
+nodes = mat.node_tree.nodes
+links = mat.node_tree.links
+nodes.clear()
+
+out = nodes.new("ShaderNodeOutputMaterial")
+bsdf = nodes.new("ShaderNodeBsdfPrincipled")
+
+tex = nodes.new("ShaderNodeTexImage")
+tex.image = load_texture("uranus_map")
+if tex.image:
+    tex.image.colorspace_settings.name = 'sRGB'
+
+links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
+bsdf.inputs["Roughness"].default_value = 0.7
+bsdf.inputs["Specular"].default_value = 0.2
+
+emission = nodes.new("ShaderNodeEmission")
+emission.inputs["Strength"].default_value = 0.1
+links.new(tex.outputs["Color"], emission.inputs["Color"])
+
+mix = nodes.new("ShaderNodeMixShader")
+mix.inputs["Fac"].default_value = 0.2
+links.new(bsdf.outputs["BSDF"], mix.inputs[1])
+links.new(emission.outputs["Emission"], mix.inputs[2])
+links.new(mix.outputs["Shader"], out.inputs["Surface"])
+
+uranus.data.materials.append(mat)
+
+# -----------------------------
+# RINGS — 13 faint icy bands
+# -----------------------------
+def create_ring(name, inner_radius, outer_radius, color=(0.2,0.2,0.2,1), alpha=0.15):
+    bpy.ops.mesh.primitive_torus_add(
+        location=(0,0,0),
+        major_radius=(inner_radius+outer_radius)/2,
+        minor_radius=(outer_radius-inner_radius)/2
+    )
+    ring = bpy.context.object
+    ring.name = name
+    ring.rotation_euler[1] = math.radians(URANUS_TILT)
+    ring.parent = uranus
+
+    mat = bpy.data.materials.new(name+"_Mat")
+    mat.use_nodes = True
+    nodes = mat.node_tree.nodes
+    links = mat.node_tree.links
+    nodes.clear()
+
+    out = nodes.new("ShaderNodeOutputMaterial")
+    bsdf = nodes.new("ShaderNodeBsdfPrincipled")
+
+    bsdf.inputs["Base Color"].default_value = color
+    bsdf.inputs["Roughness"].default_value = 0.95
+    bsdf.inputs["Specular"].default_value = 0.05
+    bsdf.inputs["Alpha"].default_value = alpha
+
+    links.new(bsdf.outputs["BSDF"], out.inputs["Surface"])
+    mat.blend_method = 'BLEND'
+    mat.shadow_method = 'NONE'
+    ring.data.materials.append(mat)
+
+# Inner 9 dark icy rings
+for i in range(9):
+    inner = 4.5 + i*0.25
+    outer = inner + 0.08
+    create_ring(f"Ring_{i+1}", inner, outer, color=(0.15,0.15,0.15,1), alpha=0.12)
+
+# Two outer faint tinted rings (subtle hues)
+create_ring("Ring_Red", 7.0, 7.15, color=(0.3,0.25,0.25,1), alpha=0.15)
+create_ring("Ring_Blue", 7.5, 7.65, color=(0.25,0.3,0.35,1), alpha=0.15)
+
+# Remaining faint gray rings
+create_ring("Ring_11", 6.0, 6.1, color=(0.25,0.25,0.25,1), alpha=0.12)
+create_ring("Ring_12", 6.5, 6.6, color=(0.25,0.25,0.25,1), alpha=0.12)
+
+# -----------------------------
+# MOONS — major + looping orbits
+# -----------------------------
+def create_moon(name, distance, size, speed):
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=size, location=(distance, 0, 0))
+    moon = bpy.context.object
+    moon.name = name
+    bpy.ops.object.shade_smooth()
+
+    mat = bpy.data.materials.new(name+"_Mat")
+    mat.use_nodes = True
+    bsdf = mat.node_tree.nodes["Principled BSDF"]
+    bsdf.inputs["Base Color"].default_value = (0.7, 0.7, 0.7, 1)
+    bsdf.inputs["Roughness"].default_value = 1
+    moon.data.materials.append(mat)
+
+    bpy.ops.object.empty_add(location=(0, 0, 0))
+    orbit = bpy.context.object
+    orbit.name = name+"_Orbit"
+    moon.parent = orbit
+
+    orbit.rotation_euler[2] = 0
+    orbit.keyframe_insert(data_path="rotation_euler", frame=1)
+    orbit.rotation_euler[2] = math.radians(360 * speed)
+    orbit.keyframe_insert(data_path="rotation_euler", frame=240)
+
+    if orbit.animation_data:
+        for fcurve in orbit.animation_data.action.fcurves:
+            for kp in fcurve.keyframe_points:
+                kp.interpolation = 'LINEAR'
+            fcurve.modifiers.new(type='CYCLES')
+
+# Major moons
+create_moon("Titania", 9, 0.4, 1.2)
+create_moon("Oberon", 11, 0.4, 1.0)
+create_moon("Umbriel", 13, 0.35, 0.8)
+create_moon("Ariel", 15, 0.35, 0.6)
+create_moon("Miranda", 17, 0.25, 0.4)
+
+# -----------------------------
+# LIGHTING — Sun + fills
+# -----------------------------
+bpy.ops.object.light_add(type='SUN', location=(10, -10, 10))
+sun = bpy.context.object
+sun.name = "Sun_Light"
+sun.data.energy = 3
+
+bpy.ops.object.light_add(type='AREA', location=(5, 5, 5))
+fill1 = bpy.context.object
+fill1.data.energy = 25
+fill1.data.size = 10
+
+bpy.ops.object.light_add(type='AREA', location=(-5, -5, -5))
+fill2 = bpy.context.object
+fill2.data.energy = 25
+fill2.data.size = 10
+
+# -----------------------------
+# STARS BACKGROUND
+# -----------------------------
+world = bpy.context.scene.world
+world.use_nodes = True
+nodes = world.node_tree.nodes
+links = world.node_tree.links
+nodes.clear()
+
+bg = nodes.new("ShaderNodeBackground")
+env = nodes.new("ShaderNodeTexEnvironment")
+out_world = nodes.new("ShaderNodeOutputWorld")
+
+env.image = load_texture("stars")
+links.new(env.outputs["Color"], bg.inputs["Color"])
+bg.inputs["Strength"].default_value = 1.0
+links.new(bg.outputs["Background"], out_world.inputs["Surface"])
+
+# -----------------------------
+# CAMERA — Uniform Formula
+# -----------------------------
+CAM_DIST = RING_OUTER * 16  # = 128
+
+bpy.ops.object.camera_add(location=(0, -CAM_DIST * 0.94, CAM_DIST * 0.34))
+cam = bpy.context.object
+cam.data.lens = 55
+cam.data.clip_start = 0.01
+cam.data.clip_end = 10000
+
+direction = Vector((0, 0, 0)) - cam.location
+cam.rotation_euler = direction.to_track_quat('-Z', 'Y').to_euler()
+scene.camera = cam
+
+# -----------------------------
+# URANUS ROTATION ANIMATION (looping)
+# -----------------------------
+scene.frame_start = 1
+scene.frame_end = 240
+
+uranus.rotation_euler[2] = 0
+uranus.keyframe_insert(data_path="rotation_euler", frame=1)
+uranus.rotation_euler[2] = math.radians(180)
+uranus.keyframe_insert(data_path="rotation_euler", frame=240)
+
+# Make Uranus rotation loop
+if uranus.animation_data:
+    for fcurve in uranus.animation_data.action.fcurves:
+        for kp in fcurve.keyframe_points:
+            kp.interpolation = 'LINEAR'
+        fcurve.modifiers.new(type='CYCLES')  # continuous loop
+
+print("✅ DONE: Uranus — Eevee optimized, icy faint rings, major moons, looping rotation + orbits")
