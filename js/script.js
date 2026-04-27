@@ -390,6 +390,32 @@ function initHeroScrollCta() {
   });
 }
 
+// ── External Link Handler ───────────────────────────────────
+function initExternalLinks() {
+  const links = document.querySelectorAll('a[data-external-url], a[data-mailto]');
+  if (!links.length) return;
+
+  links.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      const externalUrl = link.getAttribute('data-external-url');
+      const mailto = link.getAttribute('data-mailto');
+
+      if (!externalUrl && !mailto) return;
+
+      event.preventDefault();
+
+      if (mailto) {
+        window.location.href = `mailto:${mailto}`;
+        return;
+      }
+
+      if (externalUrl) {
+        window.open(externalUrl, '_blank', 'noopener,noreferrer');
+      }
+    });
+  });
+}
+
 function updatePlanetCards(ages, earthYears) {
   for (const [planet, age] of Object.entries(ages)) {
     const el = document.querySelector(`[data-planet="${planet}"] .planet-card__age`);
@@ -642,6 +668,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileNav();
   initScrollReveal();
   initActiveNav();
+  initExternalLinks();
   initHeroScrollCta();
   initStars();
   initAgeCalculator();

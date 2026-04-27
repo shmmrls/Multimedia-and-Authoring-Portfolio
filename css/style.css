@@ -267,7 +267,7 @@ p { color: var(--text); }
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
-  pointer-events: auto;
+  pointer-events: unset;
   transition-delay: 0s;
 }
 
@@ -1542,7 +1542,6 @@ footer {
     opacity: 1;
     visibility: visible;
     transform: none;
-    pointer-events: auto;
   }
 
   .nav__mobile .nav__dropdown .nav__link {
