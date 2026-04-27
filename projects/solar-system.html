@@ -9,799 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
 
-  <style>
-    /* Stars fixed background */
-    #stars-canvas {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    main, footer {
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Orbit animation on planet card hover */
-    .planet-card__orbit {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      position: relative;
-      margin: 1rem auto;
-      transition: border-color var(--transition);
-    }
-
-    .planet-card:hover .planet-card__orbit {
-      border-color: rgba(212,168,83,0.4);
-      animation: orbit-spin 4s linear infinite;
-    }
-
-    .planet-card__dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--gold);
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      transition: background var(--transition);
-    }
-
-    @keyframes orbit-spin {
-      0%   { transform: rotate(0deg);   }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Sun card special style */
-    [data-planet="Sun"] .planet-card__header {
-      background: radial-gradient(ellipse at center, rgba(212,168,83,0.08) 0%, transparent 70%);
-    }
-
-    /* Space divider */
-    .space-divider {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin: 3rem 0 2rem;
-    }
-    .space-divider::before,
-    .space-divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-    .space-divider span {
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      color: var(--gold);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    /* Python code highlight */
-    .py-kw  { color: var(--gold); }
-    .py-fn  { color: #9dc5a0; }
-    .py-cm  { color: var(--muted); font-style: italic; }
-    .py-st  { color: #b8962e; }
-    .py-nm  { color: #7ab4d4; }
-
-    .planet-media {
-      margin-top: auto;
-      border: 1px solid var(--border);
-      border-radius: 0;
-      overflow: hidden;
-      aspect-ratio: 16 / 9;
-      background: rgba(255,255,255,0.01);
-    }
-
-    .planet-media video {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .planet-media__placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 0.85rem 0.9rem;
-      font-family: var(--mono);
-      font-size: 0.74rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .planet-card {
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-
-    .planet-card__body {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-
-    .planet-card__desc {
-      margin-bottom: 0.9rem;
-    }
-
-    @media (min-width: 901px) {
-      .planets-grid > .planet-card:nth-last-child(2) {
-        grid-column: 2;
-      }
-
-      .planets-grid > .planet-card:last-child {
-        grid-column: 3;
-      }
-    }
-
-    .planet-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 1200;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 1.25rem;
-      background: rgba(9, 10, 14, 0.75);
-      backdrop-filter: blur(6px);
-    }
-
-    .planet-modal.open {
-      display: flex;
-    }
-
-    .planet-modal__panel {
-      width: min(1100px, 100%);
-      max-height: 90vh;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      box-shadow: 0 28px 80px rgba(0,0,0,0.38);
-      padding: 1.1rem;
-    }
-
-    .planet-modal__head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 1rem;
-      margin-bottom: 0.9rem;
-    }
-
-    .planet-modal__title {
-      margin: 0;
-      font-size: clamp(1.2rem, 2.6vw, 1.8rem);
-    }
-
-    .planet-modal__type {
-      margin: 0.2rem 0 0;
-      color: var(--muted);
-      font-size: 0.8rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-family: var(--mono);
-    }
-
-    .planet-modal__close {
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text);
-      width: 38px;
-      height: 38px;
-      cursor: pointer;
-      font-size: 1.1rem;
-      line-height: 1;
-    }
-
-    .planet-modal__close:hover {
-      border-color: rgba(212,168,83,0.45);
-      color: var(--gold);
-    }
-
-    .planet-modal__layout {
-      display: grid;
-      grid-template-columns: 1.35fr 1fr;
-      gap: 1rem;
-      min-height: 0;
-    }
-
-    .planet-modal__video {
-      border: 1px solid var(--border);
-      aspect-ratio: 16 / 9;
-      background: rgba(255,255,255,0.02);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .planet-modal__video video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .planet-modal__video-fullscreen {
-      position: absolute;
-      top: 0.6rem;
-      right: 0.6rem;
-      z-index: 2;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.35rem;
-      padding: 0.45rem 0.65rem;
-      border: 1px solid rgba(212,168,83,0.42);
-      border-radius: 999px;
-      background: rgba(9, 10, 14, 0.6);
-      color: var(--gold-lt);
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      backdrop-filter: blur(8px);
-      transition: border-color var(--transition), background var(--transition), color var(--transition), transform var(--transition);
-    }
-
-    .planet-modal__video-fullscreen:hover {
-      border-color: rgba(212,168,83,0.7);
-      background: rgba(9, 10, 14, 0.8);
-      color: var(--gold);
-      transform: translateY(-1px);
-    }
-
-    .planet-modal__video-fullscreen svg {
-      width: 0.9rem;
-      height: 0.9rem;
-      flex: none;
-    }
-
-    .planet-modal__desc {
-      margin: 0.75rem 0 0;
-      color: var(--muted);
-      line-height: 1.85;
-      font-size: 0.9rem;
-    }
-
-    .planet-modal__stats {
-      margin-top: 0.8rem;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.02);
-      padding: 0.65rem 0.75rem;
-    }
-
-    .planet-modal__stats-title {
-      margin: 0 0 0.55rem;
-      font-family: var(--mono);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-size: 0.64rem;
-      color: var(--gold);
-    }
-
-    .planet-modal__stats-grid {
-      display: grid;
-      gap: 0.5rem;
-    }
-
-    .planet-modal__stat {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 0.7rem;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 0.35rem;
-      font-size: 0.8rem;
-    }
-
-    .planet-modal__stat:last-child {
-      border-bottom: 0;
-      padding-bottom: 0;
-    }
-
-    .planet-modal__stat-label {
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .planet-modal__stat-value {
-      color: var(--text);
-      text-align: right;
-      font-weight: 500;
-    }
-
-    .planet-modal__script-wrap {
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.02);
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
-    }
-
-    .planet-modal__script-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.6rem;
-      padding: 0.65rem 0.75rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .planet-modal__script-title {
-      margin: 0;
-      font-family: var(--mono);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-size: 0.66rem;
-      color: var(--gold);
-    }
-
-    .planet-modal__download {
-      border: 1px solid rgba(212,168,83,0.45);
-      background: transparent;
-      color: var(--gold);
-      padding: 0.35rem 0.6rem;
-      font-family: var(--mono);
-      font-size: 0.64rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-    }
-
-    .planet-modal__download:hover {
-      background: rgba(212,168,83,0.12);
-    }
-
-    .planet-modal__script {
-      margin: 0;
-      padding: 0.8rem;
-      white-space: pre-wrap;
-      font-family: var(--mono);
-      font-size: 0.74rem;
-      line-height: 1.7;
-      color: var(--text);
-      overflow: auto;
-      max-height: 58vh;
-      flex: 0 1 auto;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(212,168,83,0.72) rgba(255,255,255,0.04);
-      scrollbar-gutter: stable;
-    }
-
-    .planet-modal__script::-webkit-scrollbar {
-      width: 10px;
-      height: 10px;
-    }
-
-    .planet-modal__script::-webkit-scrollbar-track {
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
-      border-left: 1px solid rgba(255,255,255,0.04);
-    }
-
-    .planet-modal__script::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, rgba(212,168,83,0.95), rgba(160,120,50,0.78));
-      border: 2px solid rgba(9, 10, 14, 0.85);
-      border-radius: 999px;
-      box-shadow: 0 0 10px rgba(212,168,83,0.18);
-    }
-
-    .planet-modal__script::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(180deg, rgba(228,190,112,1), rgba(188,141,61,0.92));
-    }
-
-    .planet-modal__script::-webkit-scrollbar-corner {
-      background: transparent;
-    }
-
-    .planet-modal__script-stars {
-      flex: 1;
-      min-height: 110px;
-      border-top: 1px dashed rgba(212,168,83,0.25);
-      display: grid;
-      place-items: center;
-      padding: 0.95rem 0.8rem;
-      text-align: center;
-      font-family: var(--mono);
-      font-size: 0.8rem;
-      line-height: 2;
-      letter-spacing: 0.08em;
-      color: rgba(212,168,83,0.78);
-      background-image:
-        radial-gradient(circle at 20% 30%, rgba(212,168,83,0.14) 0 1px, transparent 2px),
-        radial-gradient(circle at 72% 64%, rgba(212,168,83,0.12) 0 1px, transparent 2px),
-        radial-gradient(circle at 45% 80%, rgba(212,168,83,0.1) 0 1px, transparent 2px),
-        linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
-      background-size: 170px 170px, 210px 210px, 140px 140px, 100% 100%;
-      background-position: 0 0, 20px -30px, -24px 16px, 0 0;
-    }
-
-    .planet-modal__script-stars span {
-      display: inline-block;
-      max-width: 30ch;
-      text-wrap: balance;
-    }
-
-    @media (max-width: 900px) {
-      .planet-modal__layout {
-        grid-template-columns: 1fr;
-      }
-
-      .planet-modal {
-        padding: 0.75rem;
-      }
-
-      .planet-modal__panel {
-        max-height: 94vh;
-      }
-    }
-
-    /* ── Textures Gallery ── */
-    .tex-group__title {
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin: 0 0 0.75rem;
-      padding-bottom: 0.45rem;
-      border-bottom: 1px solid var(--border);
-      text-align: center;
-    }
-
-    .tex-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
-      gap: 0.75rem;
-      margin-bottom: 2rem;
-      justify-content: center;
-      max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .tex-card {
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.02);
-      overflow: hidden;
-      cursor: pointer;
-      transition: border-color var(--transition), transform var(--transition);
-    }
-
-    .tex-card:hover {
-      border-color: rgba(212,168,83,0.4);
-      transform: translateY(-2px);
-    }
-
-    .tex-card__preview {
-      aspect-ratio: 1;
-      overflow: hidden;
-      background: #0a0b0f;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .tex-card__preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      opacity: 0.88;
-      transition: opacity var(--transition), transform 0.4s ease;
-    }
-
-    .tex-card:hover .tex-card__preview img {
-      opacity: 1;
-      transform: scale(1.06);
-    }
-
-    .tex-card__info {
-      padding: 0.55rem 0.6rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.4rem;
-    }
-
-    .tex-card__name {
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      letter-spacing: 0.04em;
-      color: var(--text);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      min-width: 0;
-    }
-
-    .tex-card__dl {
-      flex: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 26px;
-      height: 26px;
-      border: 1px solid rgba(212,168,83,0.35);
-      background: transparent;
-      color: var(--gold);
-      cursor: pointer;
-      transition: background var(--transition), border-color var(--transition);
-      text-decoration: none;
-    }
-
-    .tex-card__dl:hover {
-      background: rgba(212,168,83,0.12);
-      border-color: rgba(212,168,83,0.6);
-    }
-
-    .tex-card__dl svg {
-      width: 13px;
-      height: 13px;
-    }
-
-    .tex-dl-all {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      border: 1px solid rgba(212,168,83,0.45);
-      background: transparent;
-      color: var(--gold);
-      padding: 0.5rem 1rem;
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background var(--transition), border-color var(--transition);
-      margin-bottom: 1.5rem;
-    }
-
-    .tex-dl-all:hover {
-      background: rgba(212,168,83,0.12);
-      border-color: rgba(212,168,83,0.7);
-    }
-
-    .tex-dl-all svg {
-      width: 15px;
-      height: 15px;
-    }
-
-    @media (max-width: 600px) {
-      .tex-grid {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      }
-    }
-
-    /* ── Texture Toggle ── */
-    .tex-toggle {
-      display: flex;
-      margin-left: auto;
-      margin-right: auto;
-      align-items: center;
-      gap: 0.55rem;
-      border: 1px solid rgba(212,168,83,0.4);
-      background: rgba(212,168,83,0.06);
-      color: var(--gold);
-      padding: 0.55rem 1.1rem;
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background var(--transition), border-color var(--transition), color var(--transition);
-      margin-bottom: 1.5rem;
-    }
-
-    .tex-toggle:hover {
-      background: rgba(212,168,83,0.14);
-      border-color: rgba(212,168,83,0.65);
-    }
-
-    .tex-toggle svg {
-      width: 14px;
-      height: 14px;
-      transition: transform 0.35s ease;
-    }
-
-    .tex-toggle[aria-expanded="true"] svg {
-      transform: rotate(180deg);
-    }
-
-    .tex-collapsible {
-      display: grid;
-      grid-template-rows: 0fr;
-      transition: grid-template-rows 0.45s ease;
-    }
-
-    .tex-collapsible[aria-hidden="false"] {
-      grid-template-rows: 1fr;
-    }
-
-    .tex-collapsible__inner {
-      overflow: hidden;
-    }
-
-    /* ── Texture Lightbox ── */
-    .tex-lightbox {
-      position: fixed;
-      inset: 0;
-      z-index: 1300;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      background: rgba(9,10,14,0.85);
-      backdrop-filter: blur(10px);
-      cursor: zoom-out;
-    }
-
-    .tex-lightbox.open {
-      display: flex;
-    }
-
-    .tex-lightbox__inner {
-      position: relative;
-      max-width: 90vw;
-      max-height: 85vh;
-      cursor: default;
-      text-align: center;
-    }
-
-    .tex-lightbox__img {
-      max-width: 100%;
-      max-height: 78vh;
-      display: block;
-      margin: 0 auto;
-      border: 1px solid var(--border);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    }
-
-    .tex-lightbox__name {
-      margin-top: 0.75rem;
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      letter-spacing: 0.08em;
-      color: var(--gold-lt);
-    }
-
-    .tex-lightbox__close {
-      position: absolute;
-      top: -0.6rem;
-      right: -0.6rem;
-      width: 34px;
-      height: 34px;
-      border: 1px solid rgba(212,168,83,0.5);
-      background: var(--bg);
-      color: var(--gold);
-      font-size: 1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2;
-    }
-
-    .tex-lightbox__close:hover {
-      background: rgba(212,168,83,0.15);
-    }
-
-    /* ── Age Calc Mode Tabs ── */
-    .calc-mode {
-      display: flex;
-      border: 1px solid var(--border);
-      margin-bottom: 1.25rem;
-      overflow: hidden;
-    }
-
-    .calc-mode__btn {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.45rem;
-      padding: 0.65rem 0.8rem;
-      border: none;
-      background: transparent;
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background var(--transition), color var(--transition);
-      position: relative;
-    }
-
-    .calc-mode__btn:first-child {
-      border-right: 1px solid var(--border);
-    }
-
-    .calc-mode__btn:hover {
-      background: rgba(212,168,83,0.06);
-      color: var(--gold-lt);
-    }
-
-    .calc-mode__btn.active {
-      background: rgba(212,168,83,0.1);
-      color: var(--gold);
-    }
-
-    .calc-mode__btn.active::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 15%;
-      right: 15%;
-      height: 2px;
-      background: var(--gold);
-      border-radius: 2px 2px 0 0;
-    }
-
-    .calc-mode__btn svg {
-      width: 14px;
-      height: 14px;
-    }
-
-    /* ── Age Calc Layout Override ── */
-    .age-calc {
-      max-width: 480px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .age-calc .age-calc__inputs {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      align-items: stretch;
-    }
-
-    .age-calc .field input {
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    .age-calc .btn {
-      width: 100%;
-      justify-content: center;
-    }
-
-    /* ── Planet Modal Age Result ── */
-    .planet-modal__age-result {
-      background: rgba(212,168,83,0.08);
-      border: 1px solid rgba(212,168,83,0.3);
-      border-radius: var(--radius);
-      padding: 1rem 1.25rem;
-      margin: 1.25rem 0;
-      font-size: 0.95rem;
-      color: var(--text);
-      line-height: 1.6;
-    }
-    
-    .planet-modal__age-result strong {
-      color: var(--gold);
-      font-size: 1.1em;
-      font-family: var(--serif);
-    }
-  </style>
 </head>
 <body>
 
@@ -809,7 +16,7 @@
   <canvas id="stars-canvas"></canvas>
 
   <!-- ── NAV ─────────────────────────────────────────────────── -->
-  <nav class="nav" style="background: var(--bg); backdrop-filter: blur(10px);">
+  <nav class="nav nav--frosted">
     <a href="../index.html" class="nav__logo">Port<span>.</span></a>
     <div class="nav__links">
       <a href="../index.html"    class="nav__link">Home</a>
@@ -831,7 +38,7 @@
         <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
           <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
         </svg>
-        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="display:none">
+        <svg class="icon-moon icon-moon--hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
         </svg>
       </button>
@@ -859,20 +66,20 @@
   <main>
 
     <!-- ── PAGE HERO ──────────────────────────────────────────── -->
-    <div class="page-hero" style="background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(212,168,83,0.04) 0%, transparent 70%);">
+    <div class="page-hero page-hero--solar">
       <div class="container">
         <a href="../projects.html" class="page-hero__back">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
           Back to Projects
         </a>
         <p class="section-label">Project 02 — 3D Modeling &amp; Animation</p>
-        <h1 style="font-size:clamp(2.2rem, 5vw, 4rem);">3D Solar System</h1>
+        <h1 class="page-hero__title--solar">3D Solar System</h1>
         <div class="divider--gold"></div>
         <p class="section-desc">
           A fully modeled and animated solar system built in Blender 3.6 LTS, featuring every planet,
           the Sun, and Pluto — with orbital motion, textures, and Python scripting.
         </p>
-        <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1.5rem;">
+        <div class="page-hero__tags">
           <span class="tool-tag">Blender 3.6 LTS</span>
           <span class="tool-tag">Python</span>
           <span class="tool-tag">3D Modeling</span>
@@ -887,16 +94,16 @@
       <div class="container--narrow">
         <div class="fade-in">
           <p class="section-label">Section 01</p>
-          <h2 style="font-size:1.8rem;">About the Project</h2>
+          <h2 class="solar-h2-about">About the Project</h2>
           <div class="divider--gold"></div>
 
-          <p style="color:var(--muted); line-height:1.9; font-size:0.95rem; margin-bottom:1.25rem;">
+          <p class="solar-copy solar-copy--spaced">
             This project is a 3D simulation of our solar system created entirely within Blender 3.6 LTS.
             The goal was to model each celestial body with accurate relative sizing, apply realistic
             PBR texture materials, and script the orbital motion programmatically using Python.
           </p>
 
-          <p style="color:var(--muted); line-height:1.9; font-size:0.95rem;">
+          <p class="solar-copy">
             The project demonstrates the integration of artistic 3D modeling with technical scripting,
             producing a rendered animation that captures the scale and motion of the solar system.
             Submitted as a major output for the subject Multimedia and Authoring.
@@ -977,17 +184,17 @@
       <div class="container">
         <div class="space-divider"><span>Final Output</span></div>
         <div class="fade-in">
-          <p class="section-label" style="margin-bottom:0.5rem;">Rendered Animation</p>
-          <h2 style="font-size:1.6rem; margin-bottom:1.5rem;">The Final Video</h2>
+          <p class="section-label section-label--tight">Rendered Animation</p>
+          <h2 class="solar-h2 solar-h2--mb-15">The Final Video</h2>
 
-          <div class="planet-media" style="aspect-ratio:16/9; border:1px solid var(--border); overflow:hidden;">
-            <video controls autoplay muted loop playsinline style="width:100%; height:100%; object-fit:cover; display:block;">
+          <div class="planet-media">
+            <video controls autoplay muted loop playsinline>
               <source src="./videos/planets/solarsystem.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
 
-          <p class="disclaimer" style="margin-top:0.9rem;">
+          <p class="disclaimer disclaimer--top">
             Disclaimer: The reference video materials used in this project are for educational purposes only.
             All rights remain with their respective owners.
           </p>
@@ -1000,9 +207,9 @@
       <div class="container--narrow">
         <div class="space-divider"><span>Animation Sequence</span></div>
         <div class="fade-in">
-          <p class="section-label" style="margin-bottom:0.5rem;">Timeline</p>
-          <h2 style="font-size:1.6rem; margin-bottom:2rem;">Scene Breakdown</h2>
-          <p style="color:var(--muted); font-size:0.9rem; line-height:1.8; margin-bottom:1.5rem;">
+          <p class="section-label section-label--tight">Timeline</p>
+          <h2 class="solar-h2 solar-h2--mb-20">Scene Breakdown</h2>
+          <p class="solar-lead solar-lead--mb-15">
             The final animation sequence as scripted in the Blender Python file. Total runtime: ~2 minutes at 24 FPS (2,941 frames).
           </p>
 
@@ -1077,9 +284,9 @@
       <div class="container">
         <div class="space-divider"><span>Interactive Tool</span></div>
         <div class="fade-in">
-          <p class="section-label" style="margin-bottom:0.5rem;">Age Calculator</p>
-          <h2 style="font-size:1.6rem; margin-bottom:0.5rem;">How Old Are You on Other Planets?</h2>
-          <p style="color:var(--muted); font-size:0.9rem; margin-bottom:2rem; line-height:1.8;">
+          <p class="section-label section-label--tight">Age Calculator</p>
+          <h2 class="solar-h2 solar-h2--mb-05">How Old Are You on Other Planets?</h2>
+          <p class="solar-lead solar-lead--mb-20">
             Each planet has a different orbital period — the time it takes to complete one revolution
             around the Sun. Enter your age or birthdate to find out how old you would be on each planet.
           </p>
@@ -1101,14 +308,14 @@
                 <input type="number" id="calc-age" name="calc-age" inputmode="decimal" placeholder="e.g. 20" min="1" max="150" step="0.1" required aria-describedby="calc-age-error" />
                 <p class="field__error" id="calc-age-error" aria-live="polite"></p>
               </div>
-              <div class="field" id="field-bday" style="display:none;">
+              <div class="field is-hidden" id="field-bday">
                 <label for="calc-bday">Your Birthdate</label>
                 <input type="date" id="calc-bday" name="calc-bday" aria-describedby="calc-bday-error" />
                 <p class="field__error" id="calc-bday-error" aria-live="polite"></p>
               </div>
-              <button id="calc-btn" type="submit" class="btn btn--gold" style="display:flex; align-items:center; justify-content:center;">Calculate</button>
+              <button id="calc-btn" type="submit" class="btn btn--gold btn--centered">Calculate</button>
             </form>
-            <p style="color:var(--muted); font-size:0.78rem; font-family:var(--mono);">
+            <p class="solar-footnote">
               Age is based on each planet's orbital period relative to Earth's 365.25-day year.
             </p>
           </div>
@@ -1121,8 +328,8 @@
       <div class="container">
         <div class="space-divider"><span>Planet Data</span></div>
         <div class="fade-in">
-          <p class="section-label" style="margin-bottom:0.5rem;">The Solar System</p>
-          <h2 style="font-size:1.6rem; margin-bottom:2rem;">Planet Cards</h2>
+          <p class="section-label section-label--tight">The Solar System</p>
+          <h2 class="solar-h2 solar-h2--mb-20">Planet Cards</h2>
 
           <div class="planets-grid">
 
@@ -1133,7 +340,7 @@
                 <p class="planet-card__type">Star — G-type Main Sequence</p>
               </div>
               <div class="planet-card__body">
-                <p class="planet-card__age" style="color:var(--gold-lt);">&#8212;</p>
+                <p class="planet-card__age planet-card__age--sun">&#8212;</p>
                 <p class="planet-card__age-label">Center of the System</p>
                 <div class="planet-stat"><span>Type</span> <strong>Yellow Dwarf</strong></div>
                 <div class="planet-stat"><span>Diameter</span> <strong>1,391,000 km</strong></div>
@@ -1366,9 +573,9 @@
       <div class="container">
         <div class="space-divider"><span>Texture Assets</span></div>
         <div class="fade-in">
-          <p class="section-label" style="margin-bottom:0.5rem;">PBR Materials</p>
-          <h2 style="font-size:1.6rem; margin-bottom:0.5rem;">Planet Textures</h2>
-          <p style="color:var(--muted); font-size:0.88rem; margin-bottom:1.5rem; line-height:1.8;">
+          <p class="section-label section-label--tight">PBR Materials</p>
+          <h2 class="solar-h2 solar-h2--mb-05">Planet Textures</h2>
+          <p class="solar-note">
             High-resolution texture maps used for each celestial body in the Blender scene.
             Click a thumbnail to preview, or use the download button to save individual files.
           </p>
@@ -1440,22 +647,22 @@
       <div class="container">
         <div class="space-divider"><span>Python Script</span></div>
         <div class="fade-in">
-          <p class="section-label" style="margin-bottom:0.5rem;">Code</p>
-          <h2 style="font-size:1.6rem; margin-bottom:1.5rem;">Blender Python Script</h2>
-          <p style="color:var(--muted); font-size:0.88rem; margin-bottom:1.5rem; line-height:1.8;">
+          <p class="section-label section-label--tight">Code</p>
+          <h2 class="solar-h2 solar-h2--mb-15">Blender Python Script</h2>
+          <p class="solar-note">
             The following script automates orbital motion by keyframing each planet's location
             based on its orbital period and distance from the Sun.
           </p>
 
-          <div class="code-block" style="position:relative;">
-            <div style="display:flex; align-items:center; justify-content:space-between; padding:0.6rem 0.8rem; border-bottom:1px solid var(--border); background:rgba(255,255,255,0.02);">
-              <span style="font-family:var(--mono); font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold);">scripts/final — solar_system_cinematic.py</span>
-              <div style="display:flex; gap:0.5rem;">
-                <button id="script-copy-btn" type="button" style="border:1px solid rgba(212,168,83,0.4); background:transparent; color:var(--gold); padding:0.3rem 0.6rem; font-family:var(--mono); font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer;">Copy</button>
-                <a href="./scripts/final" download="solar_system_cinematic.py" style="border:1px solid rgba(212,168,83,0.4); background:transparent; color:var(--gold); padding:0.3rem 0.6rem; font-family:var(--mono); font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center;">Download .py</a>
+          <div class="code-block code-block--relative">
+            <div class="code-block__head">
+              <span class="code-block__file">scripts/final — solar_system_cinematic.py</span>
+              <div class="code-block__actions">
+                <button id="script-copy-btn" type="button" class="code-block__action">Copy</button>
+                <a href="./scripts/final" download="solar_system_cinematic.py" class="code-block__action code-block__action-link">Download .py</a>
               </div>
             </div>
-            <pre id="final-script-code" style="margin:0; padding:0.8rem; white-space:pre; font-family:var(--mono); font-size:0.74rem; line-height:1.7; color:var(--text); overflow:auto; max-height:60vh; scrollbar-width:thin; scrollbar-color:rgba(212,168,83,0.72) rgba(255,255,255,0.04);"><span class="py-cm"># Loading script…</span></pre>
+            <pre id="final-script-code" class="code-block__pre"># Loading script...</pre>
           </div>
         </div>
       </div>
@@ -1505,7 +712,7 @@
             </video>
           </div>
           <p id="planet-modal-desc" class="planet-modal__desc"></p>
-          <div id="planet-modal-age-result" class="planet-modal__age-result" style="display:none;"></div>
+          <div id="planet-modal-age-result" class="planet-modal__age-result is-hidden"></div>
           <div class="planet-modal__stats">
             <p class="planet-modal__stats-title">Planet Info</p>
             <div id="planet-modal-stats" class="planet-modal__stats-grid"></div>
@@ -1552,7 +759,7 @@
       return '<div class="tex-card">' +
         '<div class="tex-card__preview">' +
           (isImg ? '<img src="'+TEX+file+'" alt="'+file+'" loading="lazy"/>' :
-           '<div style="width:100%;height:100%;display:grid;place-items:center;font-family:var(--mono);font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;">'+file.split('.').pop()+'</div>') +
+           '<div class="tex-card__filetype">'+file.split('.').pop()+'</div>') +
         '</div>' +
         '<div class="tex-card__info">' +
           '<span class="tex-card__name" title="'+file+'">'+file+'</span>' +
@@ -1612,13 +819,7 @@
     fetch('./scripts/final')
       .then(function(r){ return r.text(); })
       .then(function(code){
-        /* Basic Python syntax colouring */
-        var esc = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-        esc = esc.replace(/(#.*)/gm,'<span class="py-cm">$1</span>');
-        esc = esc.replace(/\b(import|from|def|class|return|if|elif|else|for|in|while|try|except|with|as|not|and|or|True|False|None|pass|break|continue|raise|lambda|global|yield)\b/g,'<span class="py-kw">$1</span>');
-        esc = esc.replace(/(\b\d+\.?\d*\b)/g,'<span class="py-nm">$1</span>');
-        esc = esc.replace(/(\"\"\"[\s\S]*?\"\"\"|\'\'\'[\s\S]*?\'\'\'|\"[^\"]*\"|\'[^\']*\')/g,'<span class="py-st">$1</span>');
-        pre.innerHTML = esc;
+        pre.textContent = code;
       })
       .catch(function(){
         pre.textContent = '# Could not load script file.';
@@ -1688,3 +889,4 @@
 
 </body>
 </html>
+
