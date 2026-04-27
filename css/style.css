@@ -1239,6 +1239,23 @@ main {
 
 .field input::placeholder { color: var(--muted); }
 
+.field__error {
+  min-height: 1.1rem;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  color: #de8c8c;
+}
+
+.field input[aria-invalid="true"] {
+  border-color: rgba(222, 140, 140, 0.85);
+}
+
+.field input[aria-invalid="false"] {
+  border-color: rgba(157, 197, 160, 0.65);
+}
+
 /* Timeline */
 .timeline {
   position: relative;

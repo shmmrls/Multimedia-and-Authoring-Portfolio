@@ -213,26 +213,139 @@ function initAgeCalculator() {
 
   const ageInput  = document.getElementById('calc-age');
   const bdayInput = document.getElementById('calc-bday');
-  const calcBtn   = document.getElementById('calc-btn');
+  const modeAgeBtn = document.getElementById('mode-age-btn');
+  const modeBdayBtn = document.getElementById('mode-bday-btn');
+  const ageError = document.getElementById('calc-age-error');
+  const bdayError = document.getElementById('calc-bday-error');
 
-  calcBtn.addEventListener('click', () => {
-    let earthYears = null;
+  if (!ageInput || !bdayInput) return;
 
-    if (bdayInput && bdayInput.value) {
-      window.lastCalcMode = 'bday';
-      window.lastCalcValue = bdayInput.value;
-      const dob  = new Date(bdayInput.value);
-      const now  = new Date();
-      earthYears = (now - dob) / (1000 * 60 * 60 * 24 * 365.25);
-    } else if (ageInput && ageInput.value) {
-      window.lastCalcMode = 'age';
-      window.lastCalcValue = ageInput.value;
-      earthYears = parseFloat(ageInput.value);
+  const today = new Date();
+  const maxBirthdate = today.toISOString().split('T')[0];
+  const oldest = new Date(today);
+  oldest.setFullYear(today.getFullYear() - 150);
+  const minBirthdate = oldest.toISOString().split('T')[0];
+
+  bdayInput.setAttribute('max', maxBirthdate);
+  bdayInput.setAttribute('min', minBirthdate);
+
+  const setFieldState = (inputEl, errorEl, message) => {
+    inputEl.setCustomValidity(message || '');
+    inputEl.setAttribute('aria-invalid', message ? 'true' : 'false');
+    if (errorEl) errorEl.textContent = message || '';
+  };
+
+  const clearAllErrors = () => {
+    setFieldState(ageInput, ageError, '');
+    setFieldState(bdayInput, bdayError, '');
+  };
+
+  const activeMode = () => (modeBdayBtn && modeBdayBtn.classList.contains('active') ? 'bday' : 'age');
+
+  const validateAge = () => {
+    const raw = ageInput.value.trim();
+    if (!raw) {
+      setFieldState(ageInput, ageError, 'Please enter your age in Earth years.');
+      return null;
     }
 
-    if (!earthYears || isNaN(earthYears) || earthYears <= 0) {
-      alert('Please enter a valid age or birthdate.');
+    const value = Number(raw);
+    if (!Number.isFinite(value)) {
+      setFieldState(ageInput, ageError, 'Age must be a valid number.');
+      return null;
+    }
+    if (value < 1 || value > 150) {
+      setFieldState(ageInput, ageError, 'Age must be between 1 and 150 years.');
+      return null;
+    }
+
+    setFieldState(ageInput, ageError, '');
+    return value;
+  };
+
+  const validateBirthdate = () => {
+    const raw = bdayInput.value;
+    if (!raw) {
+      setFieldState(bdayInput, bdayError, 'Please select your birthdate.');
+      return null;
+    }
+
+    const dob = new Date(raw);
+    if (Number.isNaN(dob.getTime())) {
+      setFieldState(bdayInput, bdayError, 'Please enter a valid birthdate.');
+      return null;
+    }
+
+    if (dob > today) {
+      setFieldState(bdayInput, bdayError, 'Birthdate cannot be in the future.');
+      return null;
+    }
+
+    const earthYears = (today - dob) / (1000 * 60 * 60 * 24 * 365.25);
+    if (earthYears <= 0 || earthYears > 150) {
+      setFieldState(bdayInput, bdayError, 'Birthdate must represent an age between 1 and 150 years.');
+      return null;
+    }
+
+    setFieldState(bdayInput, bdayError, '');
+    return earthYears;
+  };
+
+  const syncModeValidation = () => {
+    const mode = activeMode();
+    const isAgeMode = mode === 'age';
+    ageInput.required = isAgeMode;
+    bdayInput.required = !isAgeMode;
+
+    if (isAgeMode) {
+      bdayInput.value = '';
+      setFieldState(bdayInput, bdayError, '');
+    } else {
+      ageInput.value = '';
+      setFieldState(ageInput, ageError, '');
+    }
+  };
+
+  modeAgeBtn?.addEventListener('click', syncModeValidation);
+  modeBdayBtn?.addEventListener('click', syncModeValidation);
+
+  ageInput.addEventListener('input', () => {
+    if (!ageInput.value.trim()) {
+      setFieldState(ageInput, ageError, '');
       return;
+    }
+    validateAge();
+  });
+
+  bdayInput.addEventListener('change', () => {
+    if (!bdayInput.value) {
+      setFieldState(bdayInput, bdayError, '');
+      return;
+    }
+    validateBirthdate();
+  });
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    clearAllErrors();
+
+    let earthYears = null;
+    if (activeMode() === 'bday') {
+      earthYears = validateBirthdate();
+      if (!earthYears) {
+        bdayInput.focus();
+        return;
+      }
+      window.lastCalcMode = 'bday';
+      window.lastCalcValue = bdayInput.value;
+    } else {
+      earthYears = validateAge();
+      if (!earthYears) {
+        ageInput.focus();
+        return;
+      }
+      window.lastCalcMode = 'age';
+      window.lastCalcValue = ageInput.value;
     }
 
     const ages = computePlanetAges(earthYears);
@@ -252,11 +365,7 @@ function initAgeCalculator() {
     }
   });
 
-  // Sync inputs — clear one when the other is typed in
-  if (ageInput && bdayInput) {
-    ageInput.addEventListener('input',  () => { if (ageInput.value)  bdayInput.value = ''; });
-    bdayInput.addEventListener('input', () => { if (bdayInput.value) ageInput.value  = ''; });
-  }
+  syncModeValidation();
 }
 
 // ── Hero Scroll CTA (Index Page) ────────────────────────────

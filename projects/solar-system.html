@@ -986,6 +986,11 @@
               Your browser does not support the video tag.
             </video>
           </div>
+
+          <p class="disclaimer" style="margin-top:0.9rem;">
+            Disclaimer: The reference video materials used in this project are for educational purposes only.
+            All rights remain with their respective owners.
+          </p>
         </div>
       </div>
     </section>
@@ -1080,7 +1085,7 @@
           </p>
 
           <div class="age-calc">
-            <div id="age-calc-form" class="age-calc__inputs">
+            <form id="age-calc-form" class="age-calc__inputs" novalidate>
               <div class="calc-mode">
                 <button type="button" class="calc-mode__btn active" id="mode-age-btn">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
@@ -1093,14 +1098,16 @@
               </div>
               <div class="field" id="field-age">
                 <label for="calc-age">Your Age (in Earth years)</label>
-                <input type="number" id="calc-age" placeholder="e.g. 20" min="1" max="150" step="0.1" />
+                <input type="number" id="calc-age" name="calc-age" inputmode="decimal" placeholder="e.g. 20" min="1" max="150" step="0.1" required aria-describedby="calc-age-error" />
+                <p class="field__error" id="calc-age-error" aria-live="polite"></p>
               </div>
               <div class="field" id="field-bday" style="display:none;">
                 <label for="calc-bday">Your Birthdate</label>
-                <input type="date" id="calc-bday" />
+                <input type="date" id="calc-bday" name="calc-bday" aria-describedby="calc-bday-error" />
+                <p class="field__error" id="calc-bday-error" aria-live="polite"></p>
               </div>
-              <button id="calc-btn" class="btn btn--gold" style="display:flex; align-items:center; justify-content:center;">Calculate</button>
-            </div>
+              <button id="calc-btn" type="submit" class="btn btn--gold" style="display:flex; align-items:center; justify-content:center;">Calculate</button>
+            </form>
             <p style="color:var(--muted); font-size:0.78rem; font-family:var(--mono);">
               Age is based on each planet's orbital period relative to Earth's 365.25-day year.
             </p>
