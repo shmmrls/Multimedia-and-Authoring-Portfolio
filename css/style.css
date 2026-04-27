@@ -1685,6 +1685,42 @@ footer {
       object-fit: cover;
     }
 
+    .planet-media--final-output {
+      border-color: rgba(212,168,83,0.32);
+      box-shadow:
+        0 0 0 1px rgba(212,168,83,0.14) inset,
+        0 14px 38px rgba(0,0,0,0.34);
+      background: radial-gradient(circle at 50% 0%, rgba(212,168,83,0.08), rgba(255,255,255,0.01) 56%);
+    }
+
+    .final-output-video {
+      filter: contrast(1.05) saturate(1.08);
+    }
+
+    .final-output-video::-webkit-media-controls-play-button,
+    .final-output-video::-webkit-media-controls-mute-button,
+    .final-output-video::-webkit-media-controls-fullscreen-button,
+    .final-output-video::-webkit-media-controls-picture-in-picture-button {
+      filter: drop-shadow(0 0 6px rgba(212,168,83,0.32));
+    }
+
+    .final-output-video::-webkit-media-controls-current-time-display,
+    .final-output-video::-webkit-media-controls-time-remaining-display {
+      color: #f4e2b8;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      text-shadow: 0 0 6px rgba(212,168,83,0.22);
+    }
+
+    .final-output-video::-webkit-media-controls-timeline {
+      margin: 0 0.45rem;
+      border-radius: 999px;
+    }
+
+    .final-output-video::-webkit-media-controls-volume-slider {
+      border-radius: 999px;
+    }
+
     .planet-media__placeholder {
       width: 100%;
       height: 100%;
@@ -1732,11 +1768,15 @@ footer {
       inset: 0;
       z-index: 1200;
       display: none;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       padding: 1.25rem;
       background: rgba(9, 10, 14, 0.75);
       backdrop-filter: blur(6px);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(212,168,83,0.72) rgba(255,255,255,0.04);
+      scrollbar-gutter: stable;
     }
 
     .planet-modal.open {
@@ -1745,14 +1785,43 @@ footer {
 
     .planet-modal__panel {
       width: min(1100px, 100%);
-      max-height: 90vh;
-      overflow: hidden;
+      max-height: calc(100dvh - 2.5rem);
+      overflow: auto;
       display: flex;
       flex-direction: column;
       background: var(--bg);
       border: 1px solid var(--border);
       box-shadow: 0 28px 80px rgba(0,0,0,0.38);
       padding: 1.1rem;
+      margin: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(212,168,83,0.82) rgba(255,255,255,0.03);
+      scrollbar-gutter: stable;
+    }
+
+    .planet-modal::-webkit-scrollbar,
+    .planet-modal__panel::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    .planet-modal::-webkit-scrollbar-track,
+    .planet-modal__panel::-webkit-scrollbar-track {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+      border-left: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .planet-modal::-webkit-scrollbar-thumb,
+    .planet-modal__panel::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, rgba(212,168,83,0.94), rgba(160,120,50,0.78));
+      border: 2px solid rgba(9,10,14,0.86);
+      border-radius: 999px;
+      box-shadow: 0 0 10px rgba(212,168,83,0.18);
+    }
+
+    .planet-modal::-webkit-scrollbar-thumb:hover,
+    .planet-modal__panel::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, rgba(228,190,112,1), rgba(188,141,61,0.92));
     }
 
     .planet-modal__head {
@@ -1925,6 +1994,12 @@ footer {
       border-bottom: 1px solid var(--border);
     }
 
+    .planet-modal__actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
     .planet-modal__script-title {
       margin: 0;
       font-family: var(--mono);
@@ -1944,10 +2019,20 @@ footer {
       letter-spacing: 0.08em;
       text-transform: uppercase;
       cursor: pointer;
+      transition: background var(--transition), border-color var(--transition), color var(--transition), transform var(--transition);
     }
 
     .planet-modal__download:hover {
       background: rgba(212,168,83,0.12);
+      border-color: rgba(212,168,83,0.72);
+      color: var(--gold-lt);
+      transform: translateY(-1px);
+    }
+
+    .planet-modal__download.is-success {
+      border-color: rgba(148,210,134,0.62);
+      background: rgba(148,210,134,0.16);
+      color: #d8f6cf;
     }
 
     .planet-modal__script {
@@ -2029,7 +2114,7 @@ footer {
       }
 
       .planet-modal__panel {
-        max-height: 94vh;
+        max-height: calc(100dvh - 1.5rem);
       }
     }
 

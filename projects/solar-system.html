@@ -185,8 +185,8 @@
           <p class="section-label section-label--tight">Rendered Animation</p>
           <h2 class="solar-h2 solar-h2--mb-15">The Final Video</h2>
 
-          <div class="planet-media">
-            <video controls autoplay muted loop playsinline>
+          <div class="planet-media planet-media--final-output">
+            <video class="final-output-video" controls autoplay muted loop playsinline>
               <source src="./videos/planets/solarsystem.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
@@ -720,7 +720,10 @@
         <div class="planet-modal__script-wrap">
           <div class="planet-modal__script-head">
             <p class="planet-modal__script-title">Planet Script</p>
-            <button id="planet-modal-download" class="planet-modal__download" type="button">Download Script</button>
+            <div class="planet-modal__actions">
+              <button id="planet-modal-copy" class="planet-modal__download" type="button">Copy Script</button>
+              <button id="planet-modal-download" class="planet-modal__download" type="button">Download Script</button>
+            </div>
           </div>
           <pre id="planet-modal-script" class="planet-modal__script"></pre>
           <div class="planet-modal__script-stars" aria-hidden="true">

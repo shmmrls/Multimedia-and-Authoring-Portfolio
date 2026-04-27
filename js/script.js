@@ -78,8 +78,6 @@ function initActiveNav() {
   document.querySelectorAll('.nav__link').forEach(link => {
     const href = link.getAttribute('href');
     if (!href) return;
-    // Normalize: strip leading dots and slashes for comparison
-    const linkPath = href.replace(/^\.\.\//, '/').replace(/^\.\//, '/');
     if (
       (path.endsWith(href)) ||
       (path.includes(href) && href !== '/' && href !== 'index.html')
@@ -329,7 +327,7 @@ function initAgeCalculator() {
     event.preventDefault();
     clearAllErrors();
 
-    let earthYears = null;
+    let earthYears;
     if (activeMode() === 'bday') {
       earthYears = validateBirthdate();
       if (!earthYears) {
@@ -470,7 +468,7 @@ async function loadPlanetScript(planetName) {
       content: text,
       path,
     };
-  } catch (error) {
+  } catch {
     return {
       content: '# Unable to load script file.\n# Open this page through a local server if you are using file://',
       path,
@@ -495,14 +493,24 @@ function initPlanetModal() {
   const scriptEl = document.getElementById('planet-modal-script');
   const fullscreenBtn = document.getElementById('planet-modal-fullscreen');
   const downloadBtn = document.getElementById('planet-modal-download');
+  const copyBtn = document.getElementById('planet-modal-copy');
 
-  if (!panel || !closeBtn || !titleEl || !typeEl || !descEl || !statsEl || !videoWrap || !videoEl || !videoSourceEl || !scriptEl || !fullscreenBtn || !downloadBtn) {
+  if (!panel || !closeBtn || !titleEl || !typeEl || !descEl || !statsEl || !videoWrap || !videoEl || !videoSourceEl || !scriptEl || !fullscreenBtn || !downloadBtn || !copyBtn) {
     return;
   }
 
   let activePlanet = '';
   let activeScriptPath = '';
   let activeScriptContent = '';
+
+  function setCopyButtonState(text, success) {
+    copyBtn.textContent = text;
+    copyBtn.classList.toggle('is-success', success);
+    window.setTimeout(() => {
+      copyBtn.textContent = 'Copy Script';
+      copyBtn.classList.remove('is-success');
+    }, 1600);
+  }
 
   function closeModal() {
     modal.classList.remove('open');
@@ -536,7 +544,7 @@ function initPlanetModal() {
       } else if (videoWrap.webkitRequestFullscreen) {
         await videoWrap.webkitRequestFullscreen();
       }
-    } catch (_) {
+    } catch {
       // Ignore fullscreen errors if the browser blocks the request.
     }
   }
@@ -658,6 +666,31 @@ function initPlanetModal() {
     anchor.click();
     document.body.removeChild(anchor);
     URL.revokeObjectURL(blobUrl);
+  });
+
+  copyBtn.addEventListener('click', async () => {
+    const scriptContent = activeScriptContent || scriptEl.textContent || '';
+    if (!scriptContent.trim()) return;
+
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(scriptContent);
+      } else {
+        const helper = document.createElement('textarea');
+        helper.value = scriptContent;
+        helper.setAttribute('readonly', 'true');
+        helper.style.position = 'fixed';
+        helper.style.opacity = '0';
+        document.body.appendChild(helper);
+        helper.select();
+        document.execCommand('copy');
+        document.body.removeChild(helper);
+      }
+
+      setCopyButtonState('Copied', true);
+    } catch {
+      setCopyButtonState('Copy failed', false);
+    }
   });
 }
 
