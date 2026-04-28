@@ -1,6 +1,8 @@
+/* jshint esversion: 11 */
+
 /* ============================================================
-   script.js — Portfolio JavaScript
-   ============================================================ */
+  script.js — Portfolio JavaScript
+  ============================================================ */
 
 // ── Theme Toggle ─────────────────────────────────────────────
 (function initTheme() {
@@ -304,8 +306,8 @@ function initAgeCalculator() {
     }
   };
 
-  modeAgeBtn?.addEventListener('click', syncModeValidation);
-  modeBdayBtn?.addEventListener('click', syncModeValidation);
+  if (modeAgeBtn) modeAgeBtn.addEventListener('click', syncModeValidation);
+  if (modeBdayBtn) modeBdayBtn.addEventListener('click', syncModeValidation);
 
   ageInput.addEventListener('input', () => {
     if (!ageInput.value.trim()) {
@@ -517,7 +519,11 @@ function initPlanetModal() {
     modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
     if (document.fullscreenElement) {
-      document.exitFullscreen?.().catch(() => {});
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      } else if (document.webkitExitFullscreen) {
+        try { document.webkitExitFullscreen(); } catch (e) {}
+      }
     }
     videoEl.pause();
     videoSourceEl.setAttribute('src', '');
@@ -538,7 +544,11 @@ function initPlanetModal() {
   async function toggleFullscreen() {
     try {
       if (isVideoFullscreen()) {
-        await (document.exitFullscreen?.() || document.webkitExitFullscreen?.());
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          await document.webkitExitFullscreen();
+        }
       } else if (videoWrap.requestFullscreen) {
         await videoWrap.requestFullscreen();
       } else if (videoWrap.webkitRequestFullscreen) {
@@ -551,9 +561,12 @@ function initPlanetModal() {
 
   async function openModalFromCard(card) {
     const planetName = card.getAttribute('data-planet') || 'Planet';
-    const typeText = card.querySelector('.planet-card__type')?.textContent?.trim() || 'Body';
-    const descText = card.querySelector('.planet-card__desc')?.textContent?.trim() || '';
-    const src = card.querySelector('video source')?.getAttribute('src') || '';
+    const _typeEl = card.querySelector('.planet-card__type');
+    const typeText = (_typeEl && _typeEl.textContent) ? _typeEl.textContent.trim() : 'Body';
+    const _descEl = card.querySelector('.planet-card__desc');
+    const descText = (_descEl && _descEl.textContent) ? _descEl.textContent.trim() : '';
+    const _srcEl = card.querySelector('video source');
+    const src = _srcEl ? (_srcEl.getAttribute('src') || '') : '';
     const statRows = card.querySelectorAll('.planet-stat');
 
     activePlanet = planetName;
@@ -564,7 +577,8 @@ function initPlanetModal() {
 
     const ageResultEl = document.getElementById('planet-modal-age-result');
     if (ageResultEl) {
-      const ageVal = card.querySelector('.planet-card__age')?.textContent?.trim();
+      const _ageEl = card.querySelector('.planet-card__age');
+      const ageVal = (_ageEl && _ageEl.textContent) ? _ageEl.textContent.trim() : '';
       if (ageVal && ageVal !== '—' && window.lastCalcMode) {
         if (window.lastCalcMode === 'bday') {
           const d = new Date(window.lastCalcValue).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
@@ -580,8 +594,10 @@ function initPlanetModal() {
 
     statsEl.innerHTML = '';
     statRows.forEach((row) => {
-      const label = row.querySelector('span')?.textContent?.trim();
-      const value = row.querySelector('strong')?.textContent?.trim();
+      const _qLabel = row.querySelector('span');
+      const label = (_qLabel && _qLabel.textContent) ? _qLabel.textContent.trim() : null;
+      const _qValue = row.querySelector('strong');
+      const value = (_qValue && _qValue.textContent) ? _qValue.textContent.trim() : null;
       if (!label || !value) return;
 
       const item = document.createElement('div');
