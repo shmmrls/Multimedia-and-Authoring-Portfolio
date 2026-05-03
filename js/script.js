@@ -428,16 +428,16 @@ function updatePlanetCards(ages, earthYears) {
 
 // ── Planet Card Modal (Solar System Page) ───────────────────
 const PLANET_SCRIPT_PATHS = {
-  Sun: './scripts/sun',
-  Mercury: './scripts/mercury',
-  Venus: './scripts/venus',
-  Earth: './scripts/earth',
-  Mars: './scripts/mars',
-  Jupiter: './scripts/jupiter',
-  Saturn: './scripts/saturn',
-  Uranus: './scripts/uranus',
-  Neptune: './scripts/neptune',
-  Pluto: './scripts/pluto',
+  Sun: './scripts/sun.py',
+  Mercury: './scripts/mercury.py',
+  Venus: './scripts/venus.py',
+  Earth: './scripts/earth.py',
+  Mars: './scripts/mars.py',
+  Jupiter: './scripts/jupiter.py',
+  Saturn: './scripts/saturn.py',
+  Uranus: './scripts/uranus.py',
+  Neptune: './scripts/neptune.py',
+  Pluto: './scripts/pluto.py',
 };
 
 const planetScriptCache = {};
