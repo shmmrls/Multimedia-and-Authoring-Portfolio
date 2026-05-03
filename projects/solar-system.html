@@ -110,73 +110,6 @@
       </div>
     </section>
 
-    <!-- ── 2. PROJECT DETAILS ───────────────────────────────── -->
-    <section class="section--sm">
-      <div class="container">
-        <div class="space-divider"><span>Project Details</span></div>
-
-        <div class="grid-2 fade-in">
-
-          <div class="detail-section">
-            <p class="detail-section__title">Tools Used</p>
-            <ul class="detail-list">
-              <li>Blender 3.6 LTS — primary 3D modeling and animation software</li>
-              <li>Python 3.11 — scripting orbital mechanics and automation</li>
-              <li>NASA texture maps — surface material references</li>
-              <li>EEVEE renderer — real-time rendering engine with bloom</li>
-            </ul>
-          </div>
-
-          <div class="detail-section">
-            <p class="detail-section__title">Render Info</p>
-            <ul class="detail-list">
-              <li>Renderer: EEVEE (GPU accelerated)</li>
-              <li>Resolution: 1920 &times; 1080 (1080p)</li>
-              <li>Frame rate: 24 FPS</li>
-              <li>Total frames: 2,941</li>
-              <li>Total render time: ~1 hour 15 minutes</li>
-              <li>Average per frame: ~1.55 sec</li>
-              <li>Output format: MP4 (H.264)</li>
-            </ul>
-          </div>
-
-          <div class="detail-section">
-            <p class="detail-section__title">Key Features</p>
-            <ul class="detail-list">
-              <li>All 8 planets + Pluto + Sun modeled and textured</li>
-              <li>Orbital motion automated via Python script</li>
-              <li>Axial tilt applied to each planet</li>
-              <li>Sun emission shader with volumetric glow</li>
-              <li>Saturn ring system with transparency texture</li>
-              <li>HDRI space environment background</li>
-            </ul>
-          </div>
-
-          <div class="detail-section">
-            <p class="detail-section__title">Texture Materials</p>
-            <ul class="detail-list">
-              <li>Sun — emission shader, noise-based surface texture</li>
-              <li>Earth — diffuse map, cloud layer, specular water map</li>
-              <li>Gas giants — procedural band textures (Jupiter, Saturn)</li>
-              <li>Ice giants — tinted emission + diffuse blend (Uranus, Neptune)</li>
-              <li>Rocky planets — bump-mapped crater surface textures</li>
-              <li>Saturn rings — alpha-mapped ring plane geometry</li>
-            </ul>
-          </div>
-
-          <div class="detail-section">
-            <p class="detail-section__title">Texture Credits</p>
-            <ul class="detail-list">
-              <li><a href="https://www.solarsystemscope.com/" target="_blank" rel="noopener noreferrer">Solar System Scope</a> — primary planet surface maps</li>
-              <li><a href="https://planetpixelemporium.com/earth.html" target="_blank" rel="noopener noreferrer">Planet Pixel Emporium</a> — Earth surface, clouds, and bump maps</li>
-              <li><a href="https://www.deviantart.com/search?q=europa+moon+texture+jupiter" target="_blank" rel="noopener noreferrer">DeviantArt</a> — community-created Europa and moon textures</li>
-            </ul>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
     <!-- ── 3. FINAL VIDEO ───────────────────────────────────── -->
     <section class="section--sm">
       <div class="container">
@@ -200,7 +133,40 @@
       </div>
     </section>
 
-    <!-- ── 4. ANIMATION TIMELINE ─────────────────────────────── -->
+    <!-- ── 4. PYTHON SCRIPT ───────────────────────────────────── -->
+    <section class="section--sm">
+      <div class="container">
+        <details class="script-collapsible fade-in">
+          <summary class="script-collapsible__summary">
+            <div>
+              <p class="section-label section-label--tight">Code</p>
+              <h2 class="solar-h2 solar-h2--mb-15">Blender Python Script</h2>
+              <p class="solar-note">
+                The following script automates orbital motion by keyframing each planet's location
+                based on its orbital period and distance from the Sun.
+              </p>
+            </div>
+            <span class="script-collapsible__toggle">Show Script</span>
+          </summary>
+
+          <div class="script-collapsible__body">
+            <div class="code-block code-block--relative">
+              <div class="code-block__head">
+                <span class="code-block__file">scripts/final — solar_system_cinematic.py</span>
+                <div class="code-block__actions">
+                  <button id="script-copy-btn" type="button" class="code-block__action">Copy</button>
+                  <a href="./textures.zip" download="solar-system-textures.zip" class="code-block__action code-block__action-link">Download Textures (.zip)</a>
+                  <a href="./scripts/final" download="solar_system_cinematic.py" class="code-block__action code-block__action-link">Download .py</a>
+                </div>
+              </div>
+              <pre id="final-script-code" class="code-block__pre"># Loading script...</pre>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ── 5. ANIMATION TIMELINE ─────────────────────────────── -->
     <section class="section--sm">
       <div class="container--narrow">
         <div class="space-divider"><span>Animation Sequence</span></div>
@@ -344,7 +310,7 @@
                 <div class="planet-stat"><span>Diameter</span> <strong>1,391,000 km</strong></div>
                 <div class="planet-stat"><span>Surface Temp</span> <strong>5,500&deg;C</strong></div>
                 <div class="planet-stat"><span>Age</span> <strong>4.6 Billion yrs</strong></div>
-                <p class="planet-card__desc">The Sun is the center of the solar system, supplying the light and energy that drive climates, auroras, and space weather across every planet. Its visible surface is about 5,500&deg;C, while the corona can reach around 5,000,000&deg;C.</p>
+                <p class="planet-card__desc">The Sun is the center of the solar system, supplying the light and energy that drive climates, auroras, and space weather across every planet. Its visible surface is about 5,500&deg;C, while the corona can reach around 5,000,000&deg;C. It also acts as the primary sunlight source for the full solar system simulation.</p>
                 <div class="planet-media">
                   <video autoplay muted loop playsinline>
                     <source src="./videos/planets/sun.mp4" type="video/mp4" />
@@ -367,7 +333,7 @@
                 <div class="planet-stat"><span>Distance from Sun</span> <strong>57.9 M km</strong></div>
                 <div class="planet-stat"><span>Moons</span> <strong>0</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>0.2408</strong></div>
-                <p class="planet-card__desc">Mercury is the smallest and innermost planet, orbiting the Sun in just 88 days. With almost no atmosphere to trap heat, it has extreme day-to-night temperature changes and a heavily cratered rocky surface.</p>
+                <p class="planet-card__desc">Mercury is the smallest and innermost planet, orbiting the Sun in just 88 days. With almost no atmosphere to trap heat, it has extreme day-to-night temperature changes and a heavily cratered rocky surface. The card also reflects Mercury's near-total lack of atmosphere, keeping the surface fully exposed.</p>
                 <div class="planet-media">
                   <video autoplay muted loop playsinline>
                     <source src="./videos/planets/mercury.mp4" type="video/mp4" />
@@ -390,7 +356,7 @@
                 <div class="planet-stat"><span>Distance from Sun</span> <strong>108.2 M km</strong></div>
                 <div class="planet-stat"><span>Moons</span> <strong>0</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>0.6152</strong></div>
-                <p class="planet-card__desc">Venus is similar in size to Earth but has a dense carbon-dioxide atmosphere and sulfuric-acid clouds. A runaway greenhouse effect makes it the hottest planet in the solar system.</p>
+                <p class="planet-card__desc">Venus is similar in size to Earth but has a dense carbon-dioxide atmosphere and sulfuric-acid clouds. A runaway greenhouse effect makes it the hottest planet in the solar system. The card also highlights Venus's slow retrograde spin and opaque cloud cover.</p>
                 <div class="planet-media">
                   <video autoplay muted loop playsinline>
                     <source src="./videos/planets/venus.mp4" type="video/mp4" />
@@ -413,7 +379,7 @@
                 <div class="planet-stat"><span>Distance from Sun</span> <strong>149.6 M km</strong></div>
                 <div class="planet-stat"><span>Moons</span> <strong>1</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>1.000</strong></div>
-                <p class="planet-card__desc">Earth is the only known world with life, sustained by liquid surface water, a nitrogen-oxygen atmosphere, and a magnetic field that helps shield the planet from harmful solar radiation.</p>
+                <p class="planet-card__desc">Earth is the only known world with life, sustained by liquid surface water, a nitrogen-oxygen atmosphere, and a magnetic field that helps shield the planet from harmful solar radiation. It also keeps the Moon as a tidally locked companion and uses Earth's day as the timing baseline for the simulation.</p>
                 <div class="planet-media">
                   <video autoplay muted loop playsinline>
                     <source src="./videos/planets/earth.mp4" type="video/mp4" />
@@ -436,7 +402,7 @@
                 <div class="planet-stat"><span>Distance from Sun</span> <strong>227.9 M km</strong></div>
                 <div class="planet-stat"><span>Moons</span> <strong>2</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>1.8808</strong></div>
-                <p class="planet-card__desc">Mars, the Red Planet, is a cold rocky world shaped by volcanoes, canyons, and ancient water activity. It hosts Olympus Mons, the largest volcano in the solar system.</p>
+                <p class="planet-card__desc">Mars, the Red Planet, is a cold rocky world shaped by volcanoes, canyons, and ancient water activity. It hosts Olympus Mons, the largest volcano in the solar system. The card also points to Phobos and Deimos and keeps Mars wrapped in a thin atmospheric glow.</p>
                 <div class="planet-media">
                   <video autoplay muted loop playsinline>
                     <source src="./videos/planets/mars.mp4" type="video/mp4" />
@@ -459,7 +425,7 @@
                 <div class="planet-stat"><span>Distance from Sun</span> <strong>778.5 M km</strong></div>
                 <div class="planet-stat"><span>Moons</span> <strong>95</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>11.8626</strong></div>
-                <p class="planet-card__desc">Jupiter is the largest planet, a gas giant with powerful storms and intense magnetic fields. Its Great Red Spot is a long-lived storm larger than Earth.</p>
+                <p class="planet-card__desc">Jupiter is the largest planet, a gas giant with powerful storms and intense magnetic fields. Its Great Red Spot is a long-lived storm larger than Earth. It also acknowledges Jupiter's 95 known moons while focusing on the four Galilean satellites in the build.</p>
                 <div class="planet-media">
                   <video autoplay muted loop playsinline>
                     <source src="./videos/planets/jupiter.mp4" type="video/mp4" />
@@ -482,7 +448,7 @@
                 <div class="planet-stat"><span>Distance from Sun</span> <strong>1.43 B km</strong></div>
                 <div class="planet-stat"><span>Moons</span> <strong>146</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>29.4475</strong></div>
-                <p class="planet-card__desc">Saturn is a gas giant famous for its bright rings made of ice and rock particles. Despite its huge size, it is the least dense planet and would float in water if a large enough ocean existed.</p>
+                <p class="planet-card__desc">Saturn is a gas giant famous for its bright rings made of ice and rock particles. Despite its huge size, it is the least dense planet and would float in water if a large enough ocean existed. The card also emphasizes Saturn's 26.7-degree axial tilt and ring system with contact shadows.</p>
                 <div class="planet-media">
                   <video autoplay muted loop playsinline>
                     <source src="./videos/planets/saturn.mp4" type="video/mp4" />
@@ -505,7 +471,7 @@
                 <div class="planet-stat"><span>Distance from Sun</span> <strong>2.87 B km</strong></div>
                 <div class="planet-stat"><span>Moons</span> <strong>28</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>84.0168</strong></div>
-                <p class="planet-card__desc">Uranus is an ice giant rich in water, ammonia, and methane ices. It rotates on its side with an extreme axial tilt, giving it unusual seasons unlike any other major planet.</p>
+                <p class="planet-card__desc">Uranus is an ice giant rich in water, ammonia, and methane ices. It rotates on its side with an extreme axial tilt, giving it unusual seasons unlike any other major planet. It also reflects Uranus's 97.77-degree axial tilt, 255-frame day loop, and five largest moons.</p>
                 <div class="planet-media">
                   <video autoplay muted loop playsinline>
                     <source src="./videos/planets/uranus.mp4" type="video/mp4" />
@@ -528,7 +494,7 @@
                 <div class="planet-stat"><span>Distance from Sun</span> <strong>4.50 B km</strong></div>
                 <div class="planet-stat"><span>Moons</span> <strong>16</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>164.791</strong></div>
-                <p class="planet-card__desc">Neptune, the outermost major planet, is an ice giant with a deep blue methane-rich atmosphere. It has the fastest winds in the solar system and powerful storm systems.</p>
+                <p class="planet-card__desc">Neptune, the outermost major planet, is an ice giant with a deep blue methane-rich atmosphere. It has the fastest winds in the solar system and powerful storm systems. It also includes Triton's retrograde orbit and the planet's thin, dusty ring system.</p>
                 <div class="planet-media">
                   <video autoplay muted loop playsinline>
                     <source src="./videos/planets/neptune.mp4" type="video/mp4" />
@@ -551,7 +517,7 @@
                 <div class="planet-stat"><span>Distance from Sun</span> <strong>5.91 B km</strong></div>
                 <div class="planet-stat"><span>Moons</span> <strong>5</strong></div>
                 <div class="planet-stat"><span>Earth Years</span> <strong>247.921</strong></div>
-                <p class="planet-card__desc">Pluto is a dwarf planet in the Kuiper Belt with a complex icy surface and a binary-like relationship with Charon. NASA's New Horizons flyby in 2015 revealed active geology and transformed our understanding of this distant world.</p>
+                <p class="planet-card__desc">Pluto is a dwarf planet in the Kuiper Belt with a complex icy surface and a binary-like relationship with Charon. NASA's New Horizons flyby in 2015 revealed active geology and transformed our understanding of this distant world. It also notes Pluto's binary relationship with Charon, 122.5-degree axial tilt, and faint atmospheric haze.</p>
                 <div class="planet-media">
                   <video autoplay muted loop playsinline>
                     <source src="./videos/planets/pluto.mp4" type="video/mp4" />
@@ -640,28 +606,85 @@
       </div>
     </section>
 
-    <!-- ── 8. PYTHON SCRIPT ───────────────────────────────────── -->
+    <!-- ── 9. PROJECT DETAILS ───────────────────────────────── -->
     <section class="section--sm">
       <div class="container">
-        <div class="space-divider"><span>Python Script</span></div>
-        <div class="fade-in">
-          <p class="section-label section-label--tight">Code</p>
-          <h2 class="solar-h2 solar-h2--mb-15">Blender Python Script</h2>
-          <p class="solar-note">
-            The following script automates orbital motion by keyframing each planet's location
-            based on its orbital period and distance from the Sun.
-          </p>
+        <div class="space-divider"><span>Project Details</span></div>
 
-          <div class="code-block code-block--relative">
-            <div class="code-block__head">
-              <span class="code-block__file">scripts/final — solar_system_cinematic.py</span>
-              <div class="code-block__actions">
-                <button id="script-copy-btn" type="button" class="code-block__action">Copy</button>
-                <a href="./scripts/final" download="solar_system_cinematic.py" class="code-block__action code-block__action-link">Download .py</a>
-              </div>
-            </div>
-            <pre id="final-script-code" class="code-block__pre"># Loading script...</pre>
+        <div class="grid-2 fade-in">
+
+          <div class="detail-section">
+            <p class="detail-section__title">Tools Used</p>
+            <ul class="detail-list">
+              <li>Blender 3.6 LTS — primary 3D modeling and animation software</li>
+              <li>Python 3.11 — scripting orbital mechanics and automation</li>
+              <li>NASA texture maps — surface material references</li>
+              <li>EEVEE renderer — real-time rendering engine with bloom</li>
+            </ul>
           </div>
+
+          <div class="detail-section">
+            <p class="detail-section__title">Render Info</p>
+            <ul class="detail-list">
+              <li>Renderer: EEVEE (GPU accelerated)</li>
+              <li>Resolution: 1920 &times; 1080 (1080p)</li>
+              <li>Frame rate: 24 FPS</li>
+              <li>Total frames: 2,941</li>
+              <li>Total render time: ~1 hour 15 minutes</li>
+              <li>Average per frame: ~1.55 sec</li>
+              <li>Output format: MP4 (H.264)</li>
+            </ul>
+          </div>
+
+          <div class="detail-section">
+            <p class="detail-section__title">Key Features</p>
+            <ul class="detail-list">
+              <li>All 8 planets + Pluto + Sun modeled and textured</li>
+              <li>Orbital motion automated via Python script</li>
+              <li>Axial tilt applied to each planet</li>
+              <li>Sun emission shader with volumetric glow</li>
+              <li>Saturn ring system with transparency texture</li>
+              <li>HDRI space environment background</li>
+            </ul>
+          </div>
+
+          <div class="detail-section">
+            <p class="detail-section__title">Texture Materials</p>
+            <ul class="detail-list">
+              <li>Sun — emission shader, noise-based surface texture</li>
+              <li>Earth — diffuse map, cloud layer, specular water map</li>
+              <li>Gas giants — procedural band textures (Jupiter, Saturn)</li>
+              <li>Ice giants — tinted emission + diffuse blend (Uranus, Neptune)</li>
+              <li>Rocky planets — bump-mapped crater surface textures</li>
+              <li>Saturn rings — alpha-mapped ring plane geometry</li>
+            </ul>
+          </div>
+
+          <div class="detail-section">
+            <p class="detail-section__title">Texture Credits</p>
+            <ul class="detail-list">
+              <li><a href="https://www.solarsystemscope.com/" target="_blank" rel="noopener noreferrer">Solar System Scope</a> — primary planet surface maps</li>
+              <li><a href="https://planetpixelemporium.com/earth.html" target="_blank" rel="noopener noreferrer">Planet Pixel Emporium</a> — Earth surface, clouds, and bump maps</li>
+              <li><a href="https://www.deviantart.com/search?q=europa+moon+texture+jupiter" target="_blank" rel="noopener noreferrer">DeviantArt</a> — community-created Europa and moon textures</li>
+            </ul>
+          </div>
+
+          <div class="detail-section">
+            <p class="detail-section__title">Facts Credits</p>
+            <ul class="detail-list">
+              <li><a href="https://science.nasa.gov/sun/facts/" target="_blank" rel="noopener noreferrer">NASA Sun Facts</a></li>
+              <li><a href="https://science.nasa.gov/mercury/facts/" target="_blank" rel="noopener noreferrer">NASA Mercury Facts</a></li>
+              <li><a href="https://science.nasa.gov/venus/facts/" target="_blank" rel="noopener noreferrer">NASA Venus Facts</a></li>
+              <li><a href="https://science.nasa.gov/earth/facts/" target="_blank" rel="noopener noreferrer">NASA Earth Facts</a></li>
+              <li><a href="https://science.nasa.gov/mars/facts/" target="_blank" rel="noopener noreferrer">NASA Mars Facts</a></li>
+              <li><a href="https://science.nasa.gov/jupiter/jupiter-facts/" target="_blank" rel="noopener noreferrer">NASA Jupiter Facts</a></li>
+              <li><a href="https://science.nasa.gov/saturn/facts/" target="_blank" rel="noopener noreferrer">NASA Saturn Facts</a></li>
+              <li><a href="https://science.nasa.gov/uranus/facts/" target="_blank" rel="noopener noreferrer">NASA Uranus Facts</a></li>
+              <li><a href="https://science.nasa.gov/neptune/neptune-facts/" target="_blank" rel="noopener noreferrer">NASA Neptune Facts</a></li>
+              <li><a href="https://science.nasa.gov/dwarf-planets/pluto/facts/" target="_blank" rel="noopener noreferrer">NASA Pluto Facts</a></li>
+            </ul>
+          </div>
+
         </div>
       </div>
     </section>
@@ -714,6 +737,13 @@
           <div class="planet-modal__stats">
             <p class="planet-modal__stats-title">Planet Info</p>
             <div id="planet-modal-stats" class="planet-modal__stats-grid"></div>
+          </div>
+          <div class="planet-modal__downloads">
+            <p class="planet-modal__stats-title">Project Files</p>
+            <div class="planet-modal__downloads-grid">
+              <a id="planet-modal-textures" class="planet-modal__download" href="#" download>Download Textures (.zip)</a>
+              <a id="planet-modal-blend" class="planet-modal__download" href="#" download>Download Blender File</a>
+            </div>
           </div>
         </div>
 

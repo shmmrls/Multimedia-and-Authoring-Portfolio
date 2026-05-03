@@ -440,6 +440,49 @@ const PLANET_SCRIPT_PATHS = {
   Pluto: './scripts/pluto.py',
 };
 
+const PLANET_DOWNLOAD_PATHS = {
+  Sun: {
+    textures: './downloads/sun-textures.zip',
+    blend: './blender_files/sun.blend',
+  },
+  Mercury: {
+    textures: './downloads/mercury-textures.zip',
+    blend: './blender_files/mercury.blend',
+  },
+  Venus: {
+    textures: './downloads/venus-textures.zip',
+    blend: './blender_files/venus.blend',
+  },
+  Earth: {
+    textures: './downloads/earth-textures.zip',
+    blend: './blender_files/earth.blend',
+  },
+  Mars: {
+    textures: './downloads/mars-textures.zip',
+    blend: './blender_files/mars.blend',
+  },
+  Jupiter: {
+    textures: './downloads/jupiter-textures.zip',
+    blend: './blender_files/jupiter.blend',
+  },
+  Saturn: {
+    textures: './downloads/saturn-textures.zip',
+    blend: './blender_files/saturn.blend',
+  },
+  Uranus: {
+    textures: './downloads/uranus-textures.zip',
+    blend: './blender_files/uranus.blend',
+  },
+  Neptune: {
+    textures: './downloads/neptune-textures.zip',
+    blend: './blender_files/neptune.blend',
+  },
+  Pluto: {
+    textures: './downloads/pluto-textures.zip',
+    blend: './blender_files/pluto.blend',
+  },
+};
+
 const planetScriptCache = {};
 
 async function loadPlanetScript(planetName) {
@@ -496,8 +539,10 @@ function initPlanetModal() {
   const fullscreenBtn = document.getElementById('planet-modal-fullscreen');
   const downloadBtn = document.getElementById('planet-modal-download');
   const copyBtn = document.getElementById('planet-modal-copy');
+  const texturesBtn = document.getElementById('planet-modal-textures');
+  const blendBtn = document.getElementById('planet-modal-blend');
 
-  if (!panel || !closeBtn || !titleEl || !typeEl || !descEl || !statsEl || !videoWrap || !videoEl || !videoSourceEl || !scriptEl || !fullscreenBtn || !downloadBtn || !copyBtn) {
+  if (!panel || !closeBtn || !titleEl || !typeEl || !descEl || !statsEl || !videoWrap || !videoEl || !videoSourceEl || !scriptEl || !fullscreenBtn || !downloadBtn || !copyBtn || !texturesBtn || !blendBtn) {
     return;
   }
 
@@ -512,6 +557,40 @@ function initPlanetModal() {
       copyBtn.textContent = 'Copy Script';
       copyBtn.classList.remove('is-success');
     }, 1600);
+  }
+
+  function setDownloadLink(link, href, fileName) {
+    if (!link) return;
+
+    link.setAttribute('href', href);
+    link.setAttribute('download', fileName);
+    link.setAttribute('aria-disabled', 'false');
+    link.classList.remove('is-disabled');
+  }
+
+  function setDisabledDownloadLink(link) {
+    if (!link) return;
+
+    link.setAttribute('href', '#');
+    link.removeAttribute('download');
+    link.setAttribute('aria-disabled', 'true');
+    link.classList.add('is-disabled');
+  }
+
+  function updateModalDownloads(planetName) {
+    const downloadConfig = PLANET_DOWNLOAD_PATHS[planetName];
+
+    if (!downloadConfig) {
+      setDisabledDownloadLink(texturesBtn);
+      setDisabledDownloadLink(blendBtn);
+      return;
+    }
+
+    const textureFileName = downloadConfig.textures.split('/').pop();
+    const blendFileName = downloadConfig.blend.split('/').pop();
+
+    setDownloadLink(texturesBtn, downloadConfig.textures, textureFileName);
+    setDownloadLink(blendBtn, downloadConfig.blend, blendFileName);
   }
 
   function closeModal() {
@@ -574,6 +653,7 @@ function initPlanetModal() {
     typeEl.textContent = typeText;
     descEl.textContent = descText;
     scriptEl.textContent = '# Loading script...';
+    updateModalDownloads(planetName);
 
     const ageResultEl = document.getElementById('planet-modal-age-result');
     if (ageResultEl) {
