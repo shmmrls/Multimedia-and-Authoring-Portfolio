@@ -2,6 +2,5 @@
 *.png !text !filter !merge !diff
 *.jpg !text !filter !merge !diff
 *.zip filter=lfs diff=lfs merge=lfs -text
-*.mp4 filter=lfs diff=lfs merge=lfs -text
 projects/videos/reference.mp4 filter=lfs diff=lfs merge=lfs -text
 projects/videos/roto_wip/wip_ref.mp4 filter=lfs diff=lfs merge=lfs -text
