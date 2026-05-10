@@ -145,7 +145,7 @@
               <p class="video-label">Work in Progress Reference</p>
               <div class="video-wrap video-wrap--wip">
                 <video muted preload="metadata" playsinline title="Work in Progress Reference" data-roto-wip-reference>
-                  <source src="videos/roto_wip/wip_ref.mp4" type="video/mp4">
+                  <source src="videos/reference.mp4" type="video/mp4">
                   Your browser does not support the video tag.
                 </video>
               </div>
@@ -154,7 +154,14 @@
 
             <div class="roto-wip-controls" data-roto-wip-controls>
               <button type="button" class="roto-wip-controls__btn" data-roto-wip-action="toggle">
-                <span class="roto-wip-controls__icon" aria-hidden="true">▶</span>
+                <span class="roto-wip-controls__icon" aria-hidden="true">
+                  <svg data-roto-wip-play-icon viewBox="0 0 24 24" role="presentation" focusable="false">
+                    <path d="M8 5v14l11-7z"></path>
+                  </svg>
+                  <svg data-roto-wip-pause-icon viewBox="0 0 24 24" role="presentation" focusable="false" hidden>
+                    <path d="M7 5h3v14H7zm7 0h3v14h-3z"></path>
+                  </svg>
+                </span>
                 <span data-roto-wip-play-label>Play both</span>
               </button>
               <button type="button" class="roto-wip-controls__btn roto-wip-controls__btn--ghost" data-roto-wip-action="fullscreen">
@@ -444,11 +451,14 @@
             <div class="week-item">
               <div class="week-item__label">Week 11</div>
               <div class="week-item__video">
-                <div class="video-wrap">
-                  <video controls preload="metadata">
-                    <source src="videos/progress/week11.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                  </video>
+                <div class="video-placeholder" aria-hidden="true">
+                  <div class="video-placeholder__inner">
+                    <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+                      <path d="M4 6h16v12H4z" fill="none" stroke="currentColor" stroke-width="1.6"></path>
+                      <path d="M8 9l8 3-8 3z" fill="currentColor"></path>
+                    </svg>
+                    <span>Not yet done</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -457,11 +467,14 @@
              <div class="week-item">
               <div class="week-item__label">Week 12</div>
               <div class="week-item__video">
-                <div class="video-wrap">
-                  <video controls preload="metadata">
-                    <source src="videos/progress/week12.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                  </video>
+                <div class="video-placeholder" aria-hidden="true">
+                  <div class="video-placeholder__inner">
+                    <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+                      <path d="M4 6h16v12H4z" fill="none" stroke="currentColor" stroke-width="1.6"></path>
+                      <path d="M8 9l8 3-8 3z" fill="currentColor"></path>
+                    </svg>
+                    <span>Not yet done</span>
+                  </div>
                 </div>
               </div>
             </div>

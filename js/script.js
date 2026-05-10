@@ -806,9 +806,11 @@ function initRotoWipControls() {
   const currentTimeEl = stage.querySelector('[data-roto-wip-current]');
   const durationEl = stage.querySelector('[data-roto-wip-duration]');
   const playLabel = stage.querySelector('[data-roto-wip-play-label]');
+  const playIcon = stage.querySelector('[data-roto-wip-play-icon]');
+  const pauseIcon = stage.querySelector('[data-roto-wip-pause-icon]');
   const fullscreenLabel = stage.querySelector('[data-roto-wip-fullscreen-label]');
 
-  if (!outputVideo || !outputWrap || !referenceVideo || !controls || !playBtn || !fullscreenBtn || !restartBtn || !seek || !currentTimeEl || !durationEl || !playLabel || !fullscreenLabel) {
+  if (!outputVideo || !outputWrap || !referenceVideo || !controls || !playBtn || !fullscreenBtn || !restartBtn || !seek || !currentTimeEl || !durationEl || !playLabel || !playIcon || !pauseIcon || !fullscreenLabel) {
     return;
   }
 
@@ -824,16 +826,23 @@ function initRotoWipControls() {
   }
 
   function getSharedDuration() {
-    const durations = [outputVideo.duration, referenceVideo.duration]
-      .filter((value) => Number.isFinite(value) && value > 0);
+    if (Number.isFinite(referenceVideo.duration) && referenceVideo.duration > 0) {
+      return referenceVideo.duration;
+    }
 
-    if (!durations.length) return 0;
-    return Math.min(...durations);
+    if (Number.isFinite(outputVideo.duration) && outputVideo.duration > 0) {
+      return outputVideo.duration;
+    }
+
+    return 0;
   }
 
   function setPlaybackState() {
     const playing = !outputVideo.paused || !referenceVideo.paused;
     playLabel.textContent = playing ? 'Pause both' : 'Play both';
+    playIcon.hidden = playing;
+    pauseIcon.hidden = !playing;
+    playBtn.dataset.state = playing ? 'pause' : 'play';
     playBtn.setAttribute('aria-pressed', playing ? 'true' : 'false');
   }
 
@@ -868,28 +877,28 @@ function initRotoWipControls() {
   function syncTo(time, shouldPlay = false) {
     const target = Math.max(0, Math.min(time, sharedDuration || time));
     isScrubbing = true;
-    outputVideo.currentTime = target;
     referenceVideo.currentTime = target;
+    outputVideo.currentTime = Math.min(target, outputVideo.duration || target);
     seek.value = String(target);
     currentTimeEl.textContent = formatTime(target);
     isScrubbing = false;
 
     if (shouldPlay) {
-      outputVideo.play().catch(() => {});
       referenceVideo.play().catch(() => {});
+      outputVideo.play().catch(() => {});
     }
   }
 
   function updateProgress() {
-    const time = Math.min(outputVideo.currentTime || 0, referenceVideo.currentTime || 0);
+    const time = referenceVideo.currentTime || 0;
     seek.value = String(time);
     currentTimeEl.textContent = formatTime(time);
 
     if (sharedDuration > 0) {
       const atEnd = time >= sharedDuration - 0.1;
       if (atEnd) {
-        outputVideo.pause();
         referenceVideo.pause();
+        outputVideo.pause();
       }
     }
 
@@ -906,13 +915,13 @@ function initRotoWipControls() {
   }
 
   playBtn.addEventListener('click', () => {
-    const shouldPlay = outputVideo.paused || referenceVideo.paused;
-    if (shouldPlay) {
-      outputVideo.play().catch(() => {});
-      referenceVideo.play().catch(() => {});
-    } else {
-      outputVideo.pause();
+    const isPlaying = !referenceVideo.paused || !outputVideo.paused;
+    if (isPlaying) {
       referenceVideo.pause();
+      outputVideo.pause();
+    } else {
+      referenceVideo.play().catch(() => {});
+      outputVideo.play().catch(() => {});
     }
     setPlaybackState();
   });
@@ -920,8 +929,8 @@ function initRotoWipControls() {
   fullscreenBtn.addEventListener('click', toggleFullscreen);
 
   restartBtn.addEventListener('click', () => {
-    outputVideo.pause();
     referenceVideo.pause();
+    outputVideo.pause();
     syncTo(0, false);
     setPlaybackState();
   });
@@ -936,13 +945,9 @@ function initRotoWipControls() {
     video.addEventListener('durationchange', updateDuration);
     video.addEventListener('timeupdate', () => {
       if (isScrubbing) return;
-      const time = outputVideo.currentTime || referenceVideo.currentTime || 0;
+      const time = referenceVideo.currentTime || 0;
 
-      if (video === outputVideo && Math.abs(referenceVideo.currentTime - time) > 0.08) {
-        isScrubbing = true;
-        referenceVideo.currentTime = time;
-        isScrubbing = false;
-      } else if (video === referenceVideo && Math.abs(outputVideo.currentTime - time) > 0.08) {
+      if (video === referenceVideo && Math.abs(outputVideo.currentTime - time) > 0.08) {
         isScrubbing = true;
         outputVideo.currentTime = time;
         isScrubbing = false;
@@ -953,8 +958,12 @@ function initRotoWipControls() {
     video.addEventListener('play', setPlaybackState);
     video.addEventListener('pause', setPlaybackState);
     video.addEventListener('ended', () => {
-      outputVideo.pause();
-      referenceVideo.pause();
+      if (video === outputVideo) {
+        outputVideo.pause();
+      } else {
+        referenceVideo.pause();
+        outputVideo.pause();
+      }
       setPlaybackState();
     });
   });

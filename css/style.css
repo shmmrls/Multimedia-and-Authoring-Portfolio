@@ -955,14 +955,28 @@ main {
 }
 
 .roto-wip-controls__icon {
-  display: inline-grid;
-  place-items: center;
+  position: relative;
+  display: inline-block;
   width: 1.25rem;
   height: 1.25rem;
   border-radius: 999px;
   background: rgba(0,0,0,0.14);
-  font-size: 0.72rem;
-  line-height: 1;
+  flex: 0 0 1.25rem;
+  overflow: hidden;
+}
+
+.roto-wip-controls__icon svg {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 0.75rem;
+  height: 0.75rem;
+  display: block;
+  fill: currentColor;
+}
+
+.roto-wip-controls__icon svg[hidden] {
+  display: none;
 }
 
 .roto-wip-scrub {
