@@ -790,6 +790,183 @@ function initPlanetModal() {
   });
 }
 
+// ── Rotoscoping WIP Controls ─────────────────────────────────
+function initRotoWipControls() {
+  const stage = document.querySelector('[data-roto-wip-stage]');
+  if (!stage) return;
+
+  const outputVideo = stage.querySelector('[data-roto-wip-output]');
+  const outputWrap = outputVideo ? outputVideo.closest('.video-wrap') : null;
+  const referenceVideo = stage.querySelector('[data-roto-wip-reference]');
+  const controls = stage.querySelector('[data-roto-wip-controls]');
+  const playBtn = stage.querySelector('[data-roto-wip-action="toggle"]');
+  const fullscreenBtn = stage.querySelector('[data-roto-wip-action="fullscreen"]');
+  const restartBtn = stage.querySelector('[data-roto-wip-action="restart"]');
+  const seek = stage.querySelector('[data-roto-wip-seek]');
+  const currentTimeEl = stage.querySelector('[data-roto-wip-current]');
+  const durationEl = stage.querySelector('[data-roto-wip-duration]');
+  const playLabel = stage.querySelector('[data-roto-wip-play-label]');
+  const fullscreenLabel = stage.querySelector('[data-roto-wip-fullscreen-label]');
+
+  if (!outputVideo || !outputWrap || !referenceVideo || !controls || !playBtn || !fullscreenBtn || !restartBtn || !seek || !currentTimeEl || !durationEl || !playLabel || !fullscreenLabel) {
+    return;
+  }
+
+  let isScrubbing = false;
+  let sharedDuration = 0;
+
+  function formatTime(seconds) {
+    if (!Number.isFinite(seconds) || seconds < 0) return '00:00';
+    const total = Math.floor(seconds);
+    const minutes = Math.floor(total / 60);
+    const remaining = total % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(remaining).padStart(2, '0')}`;
+  }
+
+  function getSharedDuration() {
+    const durations = [outputVideo.duration, referenceVideo.duration]
+      .filter((value) => Number.isFinite(value) && value > 0);
+
+    if (!durations.length) return 0;
+    return Math.min(...durations);
+  }
+
+  function setPlaybackState() {
+    const playing = !outputVideo.paused || !referenceVideo.paused;
+    playLabel.textContent = playing ? 'Pause both' : 'Play both';
+    playBtn.setAttribute('aria-pressed', playing ? 'true' : 'false');
+  }
+
+  function isOutputFullscreen() {
+    return document.fullscreenElement === outputWrap || document.webkitFullscreenElement === outputWrap;
+  }
+
+  function setFullscreenState() {
+    const active = isOutputFullscreen();
+    fullscreenLabel.textContent = active ? 'Exit fullscreen' : 'Fullscreen output';
+    fullscreenBtn.setAttribute('aria-pressed', active ? 'true' : 'false');
+  }
+
+  async function toggleFullscreen() {
+    try {
+      if (isOutputFullscreen()) {
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          await document.webkitExitFullscreen();
+        }
+      } else if (outputWrap.requestFullscreen) {
+        await outputWrap.requestFullscreen();
+      } else if (outputWrap.webkitRequestFullscreen) {
+        await outputWrap.webkitRequestFullscreen();
+      }
+    } catch {
+      // Ignore fullscreen errors if the browser blocks the request.
+    }
+  }
+
+  function syncTo(time, shouldPlay = false) {
+    const target = Math.max(0, Math.min(time, sharedDuration || time));
+    isScrubbing = true;
+    outputVideo.currentTime = target;
+    referenceVideo.currentTime = target;
+    seek.value = String(target);
+    currentTimeEl.textContent = formatTime(target);
+    isScrubbing = false;
+
+    if (shouldPlay) {
+      outputVideo.play().catch(() => {});
+      referenceVideo.play().catch(() => {});
+    }
+  }
+
+  function updateProgress() {
+    const time = Math.min(outputVideo.currentTime || 0, referenceVideo.currentTime || 0);
+    seek.value = String(time);
+    currentTimeEl.textContent = formatTime(time);
+
+    if (sharedDuration > 0) {
+      const atEnd = time >= sharedDuration - 0.1;
+      if (atEnd) {
+        outputVideo.pause();
+        referenceVideo.pause();
+      }
+    }
+
+    setPlaybackState();
+  }
+
+  function updateDuration() {
+    sharedDuration = getSharedDuration();
+    if (sharedDuration > 0) {
+      seek.max = String(sharedDuration);
+      durationEl.textContent = formatTime(sharedDuration);
+    }
+    updateProgress();
+  }
+
+  playBtn.addEventListener('click', () => {
+    const shouldPlay = outputVideo.paused || referenceVideo.paused;
+    if (shouldPlay) {
+      outputVideo.play().catch(() => {});
+      referenceVideo.play().catch(() => {});
+    } else {
+      outputVideo.pause();
+      referenceVideo.pause();
+    }
+    setPlaybackState();
+  });
+
+  fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+  restartBtn.addEventListener('click', () => {
+    outputVideo.pause();
+    referenceVideo.pause();
+    syncTo(0, false);
+    setPlaybackState();
+  });
+
+  seek.addEventListener('input', () => {
+    const value = Number(seek.value) || 0;
+    syncTo(value, false);
+  });
+
+  [outputVideo, referenceVideo].forEach((video) => {
+    video.addEventListener('loadedmetadata', updateDuration);
+    video.addEventListener('durationchange', updateDuration);
+    video.addEventListener('timeupdate', () => {
+      if (isScrubbing) return;
+      const time = outputVideo.currentTime || referenceVideo.currentTime || 0;
+
+      if (video === outputVideo && Math.abs(referenceVideo.currentTime - time) > 0.08) {
+        isScrubbing = true;
+        referenceVideo.currentTime = time;
+        isScrubbing = false;
+      } else if (video === referenceVideo && Math.abs(outputVideo.currentTime - time) > 0.08) {
+        isScrubbing = true;
+        outputVideo.currentTime = time;
+        isScrubbing = false;
+      }
+
+      updateProgress();
+    });
+    video.addEventListener('play', setPlaybackState);
+    video.addEventListener('pause', setPlaybackState);
+    video.addEventListener('ended', () => {
+      outputVideo.pause();
+      referenceVideo.pause();
+      setPlaybackState();
+    });
+  });
+
+  document.addEventListener('fullscreenchange', setFullscreenState);
+  document.addEventListener('webkitfullscreenchange', setFullscreenState);
+
+  updateDuration();
+  setPlaybackState();
+  setFullscreenState();
+}
+
 // ── Init ──────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   const theme = localStorage.getItem('theme') || 'dark';
@@ -802,6 +979,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initStars();
   initAgeCalculator();
   initPlanetModal();
+  initRotoWipControls();
 
   // Theme toggle button
   const toggleBtn = document.getElementById('theme-toggle');

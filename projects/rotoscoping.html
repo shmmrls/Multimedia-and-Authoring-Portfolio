@@ -124,40 +124,63 @@
     <section class="section--sm">
       <div class="container">
         <div class="fade-in">
-          <div class="roto-divider"><span>Final Output</span></div>
+          <div class="roto-divider"><span>Work in Progress Output</span></div>
 
-          <div class="video-grid-2">
-            <!-- Final output -->
-            <div>
-              <p class="video-label">My Rotoscoping Output</p>
-              <!-- Replace VIDEO_ID with your actual YouTube video ID -->
-              <div class="video-placeholder">
-                <div class="video-placeholder__inner">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                    <path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
-                    <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
-                  <span>Video not yet uploaded</span>
-                  <span class="roto-video-hint">Replace this block with your YouTube embed</span>
-                </div>
+          <div class="roto-wip-stage" data-roto-wip-stage>
+            <div class="video-grid-2 roto-wip-grid">
+              <!-- WIP output -->
+              <div>
+              <p class="video-label">Work in Progress Output Version</p>
+              <div class="video-wrap video-wrap--wip">
+                <video preload="metadata" playsinline title="Work in Progress Output" data-roto-wip-output>
+                  <source src="videos/roto_wip/wip.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
               </div>
-              <!-- Uncomment and replace YOUR_VIDEO_ID when ready:
-              <div class="video-wrap">
-                <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" allowfullscreen loading="lazy"></iframe>
-              </div>
-              -->
-            </div>
 
-            <!-- Reference video -->
-            <div>
-              <p class="video-label">Reference Video</p>
-              <div class="video-wrap">
-                <video controls preload="metadata" title="Reference Video">
-                  <source src="references/reference_roto.mp4" type="video/mp4" />
+              </div>
+
+              <!-- Reference video -->
+              <div>
+              <p class="video-label">Work in Progress Reference</p>
+              <div class="video-wrap video-wrap--wip">
+                <video muted preload="metadata" playsinline title="Work in Progress Reference" data-roto-wip-reference>
+                  <source src="videos/roto_wip/wip_ref.mp4" type="video/mp4">
                   Your browser does not support the video tag.
                 </video>
               </div>
             </div>
+            </div>
+
+            <div class="roto-wip-controls" data-roto-wip-controls>
+              <button type="button" class="roto-wip-controls__btn" data-roto-wip-action="toggle">
+                <span class="roto-wip-controls__icon" aria-hidden="true">▶</span>
+                <span data-roto-wip-play-label>Play both</span>
+              </button>
+              <button type="button" class="roto-wip-controls__btn roto-wip-controls__btn--ghost" data-roto-wip-action="fullscreen">
+                <span class="roto-wip-controls__icon" aria-hidden="true">⛶</span>
+                <span data-roto-wip-fullscreen-label>Fullscreen output</span>
+              </button>
+              <button type="button" class="roto-wip-controls__btn roto-wip-controls__btn--ghost" data-roto-wip-action="restart">
+                <span class="roto-wip-controls__icon" aria-hidden="true">↺</span>
+                <span>Restart</span>
+              </button>
+
+              <label class="roto-wip-scrub">
+                <span class="roto-wip-scrub__label">Timeline sync</span>
+                <input type="range" min="0" max="1000" step="0.01" value="0" data-roto-wip-seek>
+              </label>
+
+              <div class="roto-wip-time" aria-label="Shared playback time">
+                <span data-roto-wip-current>00:00</span>
+                <span class="roto-wip-time__sep">/</span>
+                <span data-roto-wip-duration>00:00</span>
+              </div>
+            </div>
+
+            <p class="roto-wip-note">
+              Shared controls keep the reference and output in sync so you can compare them side by side.
+            </p>
           </div>
 
           <div class="disclaimer">
@@ -233,7 +256,7 @@
             <!-- Step 4 -->
             <div class="step-card fade-in">
               <div class="step-card__img">
-                <span>No image yet</span>
+                <img src="pictures/rotoscope/step_4.png" alt="Step 4 rotoscoping in After Effects" />
               </div>
               <div class="step-card__body">
                 <p class="step-card__num">Step 04</p>
@@ -247,7 +270,7 @@
             <!-- Step 5 -->
             <div class="step-card fade-in">
               <div class="step-card__img">
-                <span>No image yet</span>
+                <img src="pictures/rotoscope/step_5.png" alt="Step 5 assembling in CapCut" />
               </div>
               <div class="step-card__body">
                 <p class="step-card__num">Step 05</p>
@@ -261,7 +284,7 @@
             <!-- Step 6 -->
             <div class="step-card fade-in">
               <div class="step-card__img">
-                <span>No image yet</span>
+                <img src="pictures/rotoscope/step_6.png" alt="Step 6 exporting and reviewing final output" />
               </div>
               <div class="step-card__body">
                 <p class="step-card__num">Step 06</p>
@@ -292,7 +315,10 @@
               <div class="week-item__label">Week 01</div>
               <div class="week-item__video">
                 <div class="video-wrap">
-                  <iframe src="https://www.youtube.com/embed/L-mNAeUbG70" allowfullscreen loading="lazy"></iframe>
+                  <video controls preload="metadata">
+                    <source src="videos/progress/week1.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
                 </div>
               </div>
             </div>
@@ -302,7 +328,10 @@
               <div class="week-item__label">Week 02</div>
               <div class="week-item__video">
                 <div class="video-wrap">
-                  <iframe src="https://www.youtube.com/embed/Hp3zdRmpvJo" allowfullscreen loading="lazy"></iframe>
+                  <video controls preload="metadata">
+                    <source src="videos/progress/week2.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
                 </div>
               </div>
             </div>
@@ -312,7 +341,10 @@
               <div class="week-item__label">Week 03</div>
               <div class="week-item__video">
                 <div class="video-wrap">
-                  <iframe src="https://www.youtube.com/embed/ChOlp1estoY" allowfullscreen loading="lazy"></iframe>
+                  <video controls preload="metadata">
+                    <source src="videos/progress/week3.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
                 </div>
               </div>
             </div>
@@ -322,7 +354,10 @@
               <div class="week-item__label">Week 04</div>
               <div class="week-item__video">
                 <div class="video-wrap">
-                  <iframe src="https://www.youtube.com/embed/L0mQkQmwKMg" allowfullscreen loading="lazy"></iframe>
+                  <video controls preload="metadata">
+                    <source src="videos/progress/week4.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
                 </div>
               </div>
             </div>
@@ -330,49 +365,105 @@
             <!-- Week 5 -->
             <div class="week-item">
               <div class="week-item__label">Week 05</div>
-              <div class="week-item__na">Still not available</div>
+              <div class="week-item__video">
+                <div class="video-wrap">
+                  <video controls preload="metadata">
+                    <source src="videos/progress/week5.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
             </div>
 
             <!-- Week 6 -->
             <div class="week-item">
               <div class="week-item__label">Week 06</div>
-              <div class="week-item__na">Still not available</div>
+              <div class="week-item__video">
+                <div class="video-wrap">
+                  <video controls preload="metadata">
+                    <source src="videos/progress/week6.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
             </div>
 
             <!-- Week 7 -->
             <div class="week-item">
               <div class="week-item__label">Week 07</div>
-              <div class="week-item__na">Still not available</div>
+              <div class="week-item__video">
+                <div class="video-wrap">
+                  <video controls preload="metadata">
+                    <source src="videos/progress/week7.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
             </div>
 
             <!-- Week 8 -->
             <div class="week-item">
               <div class="week-item__label">Week 08</div>
-              <div class="week-item__na">Still not available</div>
+              <div class="week-item__video">
+                <div class="video-wrap">
+                  <video controls preload="metadata">
+                    <source src="videos/progress/week8.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
             </div>
 
             <!-- Week 9 -->
             <div class="week-item">
               <div class="week-item__label">Week 09</div>
-              <div class="week-item__na">Still not available</div>
+              <div class="week-item__video">
+                <div class="video-wrap">
+                  <video controls preload="metadata">
+                    <source src="videos/progress/week9.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
             </div>
 
             <!-- Week 10 -->
             <div class="week-item">
               <div class="week-item__label">Week 10</div>
-              <div class="week-item__na">Still not available</div>
+              <div class="week-item__video">
+                <div class="video-wrap">
+                  <video controls preload="metadata">
+                    <source src="videos/progress/week10.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
             </div>
 
             <!-- Week 11 -->
             <div class="week-item">
               <div class="week-item__label">Week 11</div>
-              <div class="week-item__na">Still not available</div>
+              <div class="week-item__video">
+                <div class="video-wrap">
+                  <video controls preload="metadata">
+                    <source src="videos/progress/week11.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
             </div>
 
             <!-- Week 12 -->
-            <div class="week-item">
+             <div class="week-item">
               <div class="week-item__label">Week 12</div>
-              <div class="week-item__na">Still not available</div>
+              <div class="week-item__video">
+                <div class="video-wrap">
+                  <video controls preload="metadata">
+                    <source src="videos/progress/week12.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
             </div>
 
           </div>
