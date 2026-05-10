@@ -1016,6 +1016,12 @@ main {
   color: var(--muted);
 }
 
+.roto-wip-time__output-end {
+  color: var(--gold);
+  opacity: 0.7;
+  font-weight: 500;
+}
+
 .roto-wip-note {
   font-family: var(--mono);
   font-size: 0.68rem;
