@@ -618,18 +618,14 @@ main {
 .project-card__thumb-inner {
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--serif);
-  font-size: 4rem;
-  opacity: 0.15;
-  color: var(--gold);
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.95;
   transition: opacity var(--transition), transform var(--transition);
 }
 
 .project-card:hover .project-card__thumb-inner {
-  opacity: 0.25;
+  opacity: 1;
   transform: scale(1.05);
 }
 
@@ -891,30 +887,30 @@ main {
   border: none;
 }
 
-.video-wrap--wip {
+.video-wrap--final {
   border: 2px dashed rgba(212,168,83,0.55);
   box-shadow:
     0 0 0 1px rgba(212,168,83,0.12) inset,
     0 14px 34px rgba(0, 0, 0, 0.18);
 }
 
-.video-wrap--wip:hover {
+.video-wrap--final:hover {
   border-color: rgba(212,168,83,0.9);
 }
 
-.roto-wip-stage {
+.roto-final-stage {
   display: flex;
   flex-direction: column;
   gap: 0.95rem;
 }
 
-.roto-wip-grid {
+.roto-final-grid {
   align-items: stretch;
 }
 
-.roto-wip-controls {
+.roto-final-controls {
   display: grid;
-  grid-template-columns: auto auto auto minmax(0, 1fr) auto;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
   gap: 0.85rem 1rem;
   align-items: center;
   padding: 1rem 1.05rem;
@@ -926,7 +922,7 @@ main {
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
 }
 
-.roto-wip-controls__btn {
+.roto-final-controls__btn {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
@@ -943,18 +939,18 @@ main {
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition), background var(--transition);
 }
 
-.roto-wip-controls__btn:hover {
+.roto-final-controls__btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 10px 20px rgba(212,168,83,0.18);
 }
 
-.roto-wip-controls__btn--ghost {
+.roto-final-controls__btn--ghost {
   background: rgba(255,255,255,0.04);
   color: var(--text);
   border-color: rgba(255,255,255,0.08);
 }
 
-.roto-wip-controls__icon {
+.roto-final-controls__icon {
   position: relative;
   display: inline-block;
   width: 1.25rem;
@@ -965,7 +961,7 @@ main {
   overflow: hidden;
 }
 
-.roto-wip-controls__icon svg {
+.roto-final-controls__icon svg {
   position: absolute;
   inset: 0;
   margin: auto;
@@ -975,18 +971,18 @@ main {
   fill: currentColor;
 }
 
-.roto-wip-controls__icon svg[hidden] {
+.roto-final-controls__icon svg[hidden] {
   display: none;
 }
 
-.roto-wip-scrub {
+.roto-final-scrub {
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
   min-width: 0;
 }
 
-.roto-wip-scrub__label {
+.roto-final-scrub__label {
   font-family: var(--mono);
   font-size: 0.62rem;
   letter-spacing: 0.16em;
@@ -994,13 +990,13 @@ main {
   color: var(--muted);
 }
 
-.roto-wip-scrub input[type="range"] {
+.roto-final-scrub input[type="range"] {
   width: 100%;
   accent-color: var(--gold);
   cursor: pointer;
 }
 
-.roto-wip-time {
+.roto-final-time {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
@@ -1012,17 +1008,17 @@ main {
   color: var(--gold);
 }
 
-.roto-wip-time__sep {
+.roto-final-time__sep {
   color: var(--muted);
 }
 
-.roto-wip-time__output-end {
+.roto-final-time__output-end {
   color: var(--gold);
   opacity: 0.7;
   font-weight: 500;
 }
 
-.roto-wip-note {
+.roto-final-note {
   font-family: var(--mono);
   font-size: 0.68rem;
   letter-spacing: 0.08em;
@@ -1031,11 +1027,11 @@ main {
 }
 
 @media (max-width: 900px) {
-  .roto-wip-controls {
+  .roto-final-controls {
     grid-template-columns: 1fr;
   }
 
-  .roto-wip-time {
+  .roto-final-time {
     justify-self: start;
   }
 }
@@ -1619,6 +1615,60 @@ footer {
   margin-top: 1rem;
 }
 
+.disclaimer-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.disclaimer-split .disclaimer {
+  margin-top: 0;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.disclaimer--credits {
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.credits-list {
+  margin-top: 0.6rem;
+}
+
+.credits-item {
+  padding-bottom: 0.55rem;
+  margin-bottom: 0.55rem;
+  border-bottom: 1px solid rgba(212,168,83,0.2);
+}
+
+.credits-item:last-child {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: 0;
+}
+
+.credits-label {
+  display: block;
+  font-size: 0.62rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.2rem;
+}
+
+.credits-value {
+  display: block;
+  color: var(--text);
+  line-height: 1.55;
+}
+
+.disclaimer--credits a.credits-value {
+  color: var(--gold);
+}
+
+
 /* ============================================================
    ABOUT PAGE INTRO SPLIT
    ============================================================ */
@@ -1665,6 +1715,7 @@ footer {
   .about-split,
   .contact-grid,
   .video-grid-2,
+  .disclaimer-split,
   .age-calc__inputs {
     grid-template-columns: 1fr;
   }
@@ -3052,4 +3103,5 @@ footer {
       letter-spacing: 0.04em;
       text-align: center;
     }
+
 

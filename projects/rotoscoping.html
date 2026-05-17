@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
@@ -108,12 +108,12 @@
           <div class="detail-section roto-detail-offset">
             <p class="detail-section__title">Project Info</p>
             <ul class="detail-list">
-              <li>Subject: Multimedia and Authoring — TUP Taguig</li>
-              <li>Reference video (original): <a href="https://youtu.be/hhu5YMzAZFQ?si=9pC4oMVM7qJMyTPW" target="_blank" rel="noopener noreferrer">https://youtu.be/hhu5YMzAZFQ?si=9pC4oMVM7qJMyTPW</a></li>
-              <li>Embedding note: The original YouTube source is linked only and not embedded due to copyright restrictions.</li>
-              <li>Rotoscoping tool: Adobe After Effects (1080p landscape)</li>
-              <li>Editing tool: CapCut (cutting clips, assembly, color grading, audio sync)</li>
-              <li>Technique: Separate layers — outline, skin, details, background</li>
+              <li><strong>Subject:</strong> Multimedia and Authoring — TUP Taguig</li>
+              <li><strong>Reference video (original):</strong> <a href="https://youtu.be/hhu5YMzAZFQ?si=5u8FQ_0J2vuqGzHN" target="_blank" rel="noopener noreferrer">https://youtu.be/hhu5YMzAZFQ?si=5u8FQ_0J2vuqGzHN</a></li>
+              <li><strong>Embedding note:</strong> The original YouTube source is linked only and not embedded due to copyright restrictions.</li>
+              <li><strong>Rotoscoping tool:</strong> Adobe After Effects (1080p landscape)</li>
+              <li><strong>Editing tool:</strong> CapCut (cutting clips, assembly, color grading, audio sync)</li>
+              <li><strong>Technique:</strong> Separate layers — outline, skin, details, background</li>
             </ul>
           </div>
         </div>
@@ -126,13 +126,13 @@
         <div class="fade-in">
           <div class="roto-divider"><span>Final Output</span></div>
 
-          <div class="roto-wip-stage" data-roto-wip-stage>
-            <div class="video-grid-2 roto-wip-grid">
-              <!-- WIP output -->
+          <div class="roto-final-stage" data-roto-final-stage>
+            <div class="video-grid-2 roto-final-grid">
+              <!-- Final output -->
               <div>
               <p class="video-label">Final Output Version</p>
-              <div class="video-wrap video-wrap--wip">
-                <video preload="metadata" playsinline title="Work in Progress Output" data-roto-wip-output>
+              <div class="video-wrap video-wrap--final">
+                <video preload="metadata" playsinline title="Final Output" data-roto-final-output>
                   <source src="videos/rotoscope/final_roto.mp4" type="video/mp4">
                   Your browser does not support the video tag.
                 </video>
@@ -143,8 +143,8 @@
               <!-- Reference video -->
               <div>
               <p class="video-label">Final Reference</p>
-              <div class="video-wrap video-wrap--wip">
-                <video muted preload="metadata" playsinline title="Work in Progress Reference" data-roto-wip-reference>
+              <div class="video-wrap video-wrap--final">
+                <video muted preload="metadata" playsinline title="Final Reference" data-roto-final-reference>
                   <source src="videos/rotoscope/final_reference.mp4" type="video/mp4">
                   Your browser does not support the video tag.
                 </video>
@@ -152,53 +152,73 @@
             </div>
             </div>
 
-            <div class="roto-wip-controls" data-roto-wip-controls>
-              <button type="button" class="roto-wip-controls__btn" data-roto-wip-action="toggle">
-                <span class="roto-wip-controls__icon" aria-hidden="true">
-                  <svg data-roto-wip-play-icon viewBox="0 0 24 24" role="presentation" focusable="false">
+            <div class="roto-final-controls" data-roto-final-controls>
+              <button type="button" class="roto-final-controls__btn" data-roto-final-action="toggle">
+                <span class="roto-final-controls__icon" aria-hidden="true">
+                  <svg data-roto-final-play-icon viewBox="0 0 24 24" role="presentation" focusable="false">
                     <path d="M8 5v14l11-7z"></path>
                   </svg>
-                  <svg data-roto-wip-pause-icon viewBox="0 0 24 24" role="presentation" focusable="false" hidden>
+                  <svg data-roto-final-pause-icon viewBox="0 0 24 24" role="presentation" focusable="false" hidden>
                     <path d="M7 5h3v14H7zm7 0h3v14h-3z"></path>
                   </svg>
                 </span>
-                <span data-roto-wip-play-label>Play both</span>
+                <span data-roto-final-play-label>Play both</span>
               </button>
-              <button type="button" class="roto-wip-controls__btn roto-wip-controls__btn--ghost" data-roto-wip-action="fullscreen">
-                <span class="roto-wip-controls__icon" aria-hidden="true">⛶</span>
-                <span data-roto-wip-fullscreen-label>Fullscreen output</span>
-              </button>
-              <button type="button" class="roto-wip-controls__btn roto-wip-controls__btn--ghost" data-roto-wip-action="restart">
-                <span class="roto-wip-controls__icon" aria-hidden="true">↺</span>
-                <span>Restart</span>
+              <button type="button" class="roto-final-controls__btn roto-final-controls__btn--ghost" data-roto-final-action="fullscreen">
+                <span class="roto-final-controls__icon" aria-hidden="true">&#x26F6;</span>
+                <span data-roto-final-fullscreen-label>Fullscreen output</span>
               </button>
 
-              <label class="roto-wip-scrub">
-                <span class="roto-wip-scrub__label">Timeline sync</span>
-                <input type="range" min="0" max="1000" step="0.01" value="0" data-roto-wip-seek>
+              <label class="roto-final-scrub">
+                <span class="roto-final-scrub__label">Timeline sync</span>
+                <input type="range" min="0" max="1000" step="0.01" value="0" data-roto-final-seek>
               </label>
 
-              <div class="roto-wip-time" aria-label="Shared playback time">
-                <span data-roto-wip-current>00:00</span>
-                <span class="roto-wip-time__sep">/</span>
-                <span data-roto-wip-duration>00:00</span>
-                <span class="roto-wip-time__sep">·</span>
-                <span class="roto-wip-time__output-end" data-roto-wip-output-end title="Output video ends here">OUT: 00:00</span>
+              <div class="roto-final-time" aria-label="Shared playback time">
+                <span data-roto-final-current>00:00</span>
+                <span class="roto-final-time__sep">/</span>
+                <span data-roto-final-duration>00:00</span>
+                <span class="roto-final-time__sep">·</span>
+                <span class="roto-final-time__output-end" data-roto-final-output-end title="Output video ends here">OUT: 00:00</span>
               </div>
             </div>
 
-            <p class="roto-wip-note">
+            <p class="roto-final-note">
               Shared controls keep the final reference and output in sync so you can compare them side by side.
             </p>
           </div>
 
-          <div class="disclaimer">
-            <strong>DISCLAIMER:</strong><br>
-            I do not own the music, films, animation, or any copyrighted materials used in this video. All rights belong to their respective owners. I have only edited and synchronized the clips with the music for educational and informational purposes only.<br><br>
-            This video is created strictly for educational use, commentary, and transformative content, with the intention of providing analysis, learning value, and creative editing practice.<br><br>
-            <strong>Copyright Disclaimer Under Section 107 of the Copyright Act 1976:</strong><br>
-            Allowance is made for “fair use” for purposes such as criticism, comment, news reporting, teaching, scholarship, and research. Fair use is a use permitted by copyright statute that might otherwise be infringing.<br><br>
-            This content is non-profit, educational, and transformative in nature, which tips the balance in favor of fair use.
+          <div class="disclaimer-split disclaimer--top">
+            <div class="disclaimer">
+              <strong>DISCLAIMER:</strong><br>
+              I do not own the music, live-action source footage, or any copyrighted materials used in this video. All rights belong to their respective owners. I have only edited and synchronized the clips with the music for educational and informational purposes only.<br><br>
+              This video is created strictly for educational use, commentary, and transformative content, with the intention of providing analysis, learning value, and creative editing practice.<br><br>
+              <strong>Copyright Disclaimer Under Section 107 of the Copyright Act 1976:</strong><br>
+              Allowance is made for “fair use” for purposes such as criticism, comment, news reporting, teaching, scholarship, and research. Fair use is a use permitted by copyright statute that might otherwise be infringing.<br><br>
+              This content is non-profit, educational, and transformative in nature, which tips the balance in favor of fair use.
+            </div>
+
+            <div class="disclaimer disclaimer--credits">
+              <strong>CREDITS:</strong>
+              <div class="credits-list">
+                <div class="credits-item">
+                  <span class="credits-label">Original Video</span>
+                  <span class="credits-value">NewJeans (뉴진스) 'Ditto' Lisa Rhee Dance Cover</span>
+                </div>
+                <div class="credits-item">
+                  <span class="credits-label">Creator / Channel</span>
+                  <span class="credits-value">Lisa Rhee</span>
+                </div>
+                <div class="credits-item">
+                  <span class="credits-label">Source Platform</span>
+                  <span class="credits-value">YouTube</span>
+                </div>
+                <div class="credits-item">
+                  <span class="credits-label">Original URL</span>
+                  <a class="credits-value" href="https://youtu.be/hhu5YMzAZFQ?si=5u8FQ_0J2vuqGzHN" target="_blank" rel="noopener noreferrer">https://youtu.be/hhu5YMzAZFQ?si=5u8FQ_0J2vuqGzHN</a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
