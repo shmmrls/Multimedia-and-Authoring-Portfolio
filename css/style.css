@@ -104,15 +104,15 @@ p { color: var(--text); }
    LAYOUT UTILITIES
    ============================================================ */
 .container {
-  max-width: 1100px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 clamp(1rem, 1.8vw, 2rem);
 }
 
 .container--narrow {
-  max-width: 720px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 clamp(1rem, 1.8vw, 2rem);
 }
 
 .section {

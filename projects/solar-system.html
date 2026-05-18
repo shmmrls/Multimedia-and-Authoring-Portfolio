@@ -847,22 +847,85 @@
     var pre = document.getElementById('final-script-code');
     if(!pre) return;
 
-    fetch('./scripts/final')
-      .then(function(r){ return r.text(); })
-      .then(function(code){
-        pre.textContent = code;
-      })
-      .catch(function(){
-        pre.textContent = '# Could not load script file.';
-      });
+    var scriptText = '';
 
     var copyBtn = document.getElementById('script-copy-btn');
     if(copyBtn){
+      copyBtn.disabled = true;
+      copyBtn.setAttribute('aria-busy', 'true');
+    }
+
+    function setCopyState(text, resetDelay) {
+      if(!copyBtn) return;
+      copyBtn.textContent = text;
+      if (resetDelay) {
+        window.setTimeout(function(){
+          copyBtn.textContent = 'Copy';
+        }, resetDelay);
+      }
+    }
+
+    function copyTextToClipboard(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text);
+      }
+
+      return new Promise(function(resolve, reject){
+        var textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        var copied = false;
+        try {
+          copied = document.execCommand('copy');
+        } catch (error) {
+          copied = false;
+        }
+
+        document.body.removeChild(textarea);
+
+        if (copied) {
+          resolve();
+        } else {
+          reject(new Error('Copy failed'));
+        }
+      });
+    }
+
+    fetch('./scripts/final')
+      .then(function(r){ return r.text(); })
+      .then(function(code){
+        scriptText = code;
+        pre.textContent = code;
+
+        if(copyBtn){
+          copyBtn.disabled = false;
+          copyBtn.removeAttribute('aria-busy');
+        }
+      })
+      .catch(function(){
+        scriptText = '# Could not load script file.';
+        pre.textContent = scriptText;
+
+        if(copyBtn){
+          copyBtn.disabled = false;
+          copyBtn.removeAttribute('aria-busy');
+        }
+      });
+
+    if(copyBtn){
       copyBtn.addEventListener('click', function(){
-        var text = pre.textContent || pre.innerText;
-        navigator.clipboard.writeText(text).then(function(){
-          copyBtn.textContent = 'Copied!';
-          setTimeout(function(){ copyBtn.textContent = 'Copy'; }, 2000);
+        var text = scriptText || pre.textContent || pre.innerText || '';
+        if (!text) return;
+
+        copyTextToClipboard(text).then(function(){
+          setCopyState('Copied!', 2000);
+        }).catch(function(){
+          setCopyState('Copy failed', 2000);
         });
       });
     }

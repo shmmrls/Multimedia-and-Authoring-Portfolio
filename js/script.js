@@ -805,13 +805,12 @@ function initRotoFinalControls() {
   const seek = stage.querySelector('[data-roto-final-seek]');
   const currentTimeEl = stage.querySelector('[data-roto-final-current]');
   const durationEl = stage.querySelector('[data-roto-final-duration]');
-  const outputEndEl = stage.querySelector('[data-roto-final-output-end]');
   const playLabel = stage.querySelector('[data-roto-final-play-label]');
   const playIcon = stage.querySelector('[data-roto-final-play-icon]');
   const pauseIcon = stage.querySelector('[data-roto-final-pause-icon]');
   const fullscreenLabel = stage.querySelector('[data-roto-final-fullscreen-label]');
 
-  if (!outputVideo || !outputWrap || !referenceVideo || !controls || !playBtn || !fullscreenBtn || !seek || !currentTimeEl || !durationEl || !playLabel || !playIcon || !pauseIcon || !fullscreenLabel || !outputEndEl) {
+  if (!outputVideo || !outputWrap || !referenceVideo || !controls || !playBtn || !fullscreenBtn || !seek || !currentTimeEl || !durationEl || !playLabel || !playIcon || !pauseIcon || !fullscreenLabel) {
     return;
   }
 
@@ -911,9 +910,6 @@ function initRotoFinalControls() {
     if (sharedDuration > 0) {
       seek.max = String(sharedDuration);
       durationEl.textContent = formatTime(sharedDuration);
-    }
-    if (Number.isFinite(outputVideo.duration) && outputVideo.duration > 0) {
-      outputEndEl.textContent = `OUT: ${formatTime(outputVideo.duration)}`;
     }
     updateProgress();
   }
