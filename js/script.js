@@ -791,6 +791,41 @@ function initPlanetModal() {
 }
 
 // ── Rotoscoping Final Controls ─────────────────────────────────
+// ── Mobile video optimization (swap to lower-bitrate sources for mobile/slow networks)
+function isMobileOrLowBandwidth() {
+  try {
+    const ua = navigator.userAgent || '';
+    const isMobileUA = /Mobi|Android|iPhone|iPad|iPod/i.test(ua) || window.innerWidth <= 800;
+    const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const effective = conn && conn.effectiveType ? conn.effectiveType : '4g';
+    const isSlow = ['slow-2g', '2g', '3g'].includes(effective);
+    return isMobileUA || isSlow;
+  } catch (e) {
+    return window.innerWidth <= 800;
+  }
+}
+
+function applyMobileVideoOptimization() {
+  if (!isMobileOrLowBandwidth()) return;
+
+  document.querySelectorAll('video').forEach((video) => {
+    const source = video.querySelector('source');
+    if (!source) return;
+    const mobileSrc = source.getAttribute('data-mobile-src');
+    if (!mobileSrc) return;
+
+    const current = source.getAttribute('src');
+    if (current === mobileSrc) return;
+
+    // remember original for debugging/restore
+    source.setAttribute('data-original-src', current || '');
+    source.setAttribute('src', mobileSrc);
+    // avoid aggressive preloading on mobile
+    try { video.preload = 'metadata'; } catch (e) {}
+    try { video.load(); } catch (e) {}
+  });
+}
+
 function initRotoFinalControls() {
   const stage = document.querySelector('[data-roto-final-stage]');
   if (!stage) return;
@@ -990,6 +1025,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initStars();
   initAgeCalculator();
   initPlanetModal();
+  // Swap in mobile-friendly video sources when appropriate before final controls attach
+  applyMobileVideoOptimization();
   initRotoFinalControls();
 
   // Theme toggle button
