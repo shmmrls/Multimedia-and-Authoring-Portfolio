@@ -152,11 +152,11 @@
           <div class="script-collapsible__body">
             <div class="code-block code-block--relative">
               <div class="code-block__head">
-                <span class="code-block__file">scripts/final — solar_system_cinematic.py</span>
+                <span class="code-block__file">scripts/new_solar.py</span>
                 <div class="code-block__actions">
                   <button id="script-copy-btn" type="button" class="code-block__action">Copy</button>
                   <a href="./textures.zip" download="solar-system-textures.zip" class="code-block__action code-block__action-link">Download Textures (.zip)</a>
-                  <a href="./scripts/final" download="solar_system_cinematic.py" class="code-block__action code-block__action-link">Download .py</a>
+                  <a href="./scripts/new_solar.py" download="new_solar.py" class="code-block__action code-block__action-link">Download .py</a>
                 </div>
               </div>
               <pre id="final-script-code" class="code-block__pre"># Loading script...</pre>
@@ -174,69 +174,65 @@
           <p class="section-label section-label--tight">Timeline</p>
           <h2 class="solar-h2 solar-h2--mb-20">Scene Breakdown</h2>
           <p class="solar-lead solar-lead--mb-15">
-            The final animation sequence as scripted in the Blender Python file. Total runtime: ~2 minutes at 24 FPS (2,941 frames).
+            The final animation sequence follows the camera rig in <span>new_solar.py</span>: an opening overview,
+            nine planet showcases with short transition windows, and a long closing pullback. Total runtime: 2,941 frames at 24 FPS (~2:03).
           </p>
 
           <div class="timeline">
             <div class="timeline__item">
-              <p class="timeline__date">Frame 1 – 240 &nbsp;|&nbsp; 0:00 – 0:10</p>
+              <p class="timeline__date">Frame 1 – 300 &nbsp;|&nbsp; 0:00 – 0:13</p>
               <h4 class="timeline__title">Opening — Deep Space Approach</h4>
-              <p class="timeline__desc">Camera starts at a distant vantage point and slowly approaches the solar system, establishing the HDRI star field and spatial scale.</p>
+              <p class="timeline__desc">The camera glides in from a distant view, eases toward the Sun, and fades the orbit lines out before the first planet showcase begins.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Frame 241 – 410 &nbsp;|&nbsp; 0:10 – 0:17</p>
-              <h4 class="timeline__title">Focus — The Sun</h4>
-              <p class="timeline__desc">Camera orbits the Sun with a dedicated focus camera and two-point lighting, showcasing the emission shader, corona glow, and surface texture. Fading name label overlay.</p>
+              <p class="timeline__date">Frame 300 – 420 &nbsp;|&nbsp; 0:13 – 0:18</p>
+              <h4 class="timeline__title">Mercury — First Showcase</h4>
+              <p class="timeline__desc">Mercury becomes the focus target while its orbit and self-rotation continue in a clean, close framing.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Frame 411 – 580 &nbsp;|&nbsp; 0:17 – 0:24</p>
-              <h4 class="timeline__title">Focus — Mercury</h4>
-              <p class="timeline__desc">Close-up of Mercury's heavily cratered surface with bump-mapped textures. The smallest and innermost planet.</p>
+              <p class="timeline__date">Frame 460 – 540 &nbsp;|&nbsp; 0:19 – 0:23</p>
+              <h4 class="timeline__title">Venus — Retrograde Close-Up</h4>
+              <p class="timeline__desc">Venus enters with its cloud layer visible and continues its slower, retrograde spin during the showcase.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Frame 581 – 750 &nbsp;|&nbsp; 0:24 – 0:31</p>
-              <h4 class="timeline__title">Focus — Venus</h4>
-              <p class="timeline__desc">Venus shown with its thick sulfuric cloud layer texture, rotating slowly in its retrograde direction.</p>
+              <p class="timeline__date">Frame 580 – 660 &nbsp;|&nbsp; 0:24 – 0:28</p>
+              <h4 class="timeline__title">Earth — Planet and Clouds</h4>
+              <p class="timeline__desc">Earth is shown with its day texture and cloud layer while the motion slows for the camera transition.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Frame 751 – 920 &nbsp;|&nbsp; 0:31 – 0:38</p>
-              <h4 class="timeline__title">Focus — Earth</h4>
-              <p class="timeline__desc">Earth with day map, cloud layer, and orbiting Moon. Axial tilt of 23.4° visible with atmospheric detail.</p>
+              <p class="timeline__date">Frame 700 – 780 &nbsp;|&nbsp; 0:29 – 0:33</p>
+              <h4 class="timeline__title">Mars — Red Planet and Moons</h4>
+              <p class="timeline__desc">Mars is framed with its thin atmosphere and the two moon companions used in the build.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Frame 921 – 1090 &nbsp;|&nbsp; 0:38 – 0:45</p>
-              <h4 class="timeline__title">Focus — Mars</h4>
-              <p class="timeline__desc">Mars with surface and bump textures, accompanied by its two small moons Phobos and Deimos in orbit.</p>
+              <p class="timeline__date">Frame 820 – 900 &nbsp;|&nbsp; 0:34 – 0:38</p>
+              <h4 class="timeline__title">Jupiter — Gas Giant Pass</h4>
+              <p class="timeline__desc">Jupiter fills the frame with a stronger showcase distance so the banded atmosphere and scale read clearly.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Frame 1091 – 1260 &nbsp;|&nbsp; 0:45 – 0:52</p>
-              <h4 class="timeline__title">Focus — Jupiter</h4>
-              <p class="timeline__desc">The gas giant with banded atmosphere, orbited by the four Galilean moons: Io, Europa, Ganymede, and Callisto.</p>
+              <p class="timeline__date">Frame 940 – 1020 &nbsp;|&nbsp; 0:39 – 0:43</p>
+              <h4 class="timeline__title">Saturn — Rings in Frame</h4>
+              <p class="timeline__desc">Saturn is pulled back farther than the other planets so the ring system fits cleanly in the camera view.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Frame 1261 – 1430 &nbsp;|&nbsp; 0:53 – 1:00</p>
-              <h4 class="timeline__title">Focus — Saturn</h4>
-              <p class="timeline__desc">Saturn and its textured ring system with moons Titan, Enceladus, Iapetus, Hyperion, and Phoebe.</p>
+              <p class="timeline__date">Frame 1060 – 1140 &nbsp;|&nbsp; 0:44 – 0:48</p>
+              <h4 class="timeline__title">Uranus — Sideways Ice Giant</h4>
+              <p class="timeline__desc">Uranus is shown with its extreme axial tilt and a softer, cooler framing before the outer-system run.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Frame 1431 – 1600 &nbsp;|&nbsp; 1:00 – 1:07</p>
-              <h4 class="timeline__title">Focus — Uranus</h4>
-              <p class="timeline__desc">The sideways ice giant (98° tilt) with four faint ring bands and moons Titania, Oberon, and Ariel.</p>
+              <p class="timeline__date">Frame 1180 – 1260 &nbsp;|&nbsp; 0:49 – 0:53</p>
+              <h4 class="timeline__title">Neptune — Outer Ice Giant</h4>
+              <p class="timeline__desc">Neptune closes the major-planet sequence with a deep-blue pass and the same orbit-driven motion style.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Frame 1601 – 1770 &nbsp;|&nbsp; 1:07 – 1:14</p>
-              <h4 class="timeline__title">Focus — Neptune</h4>
-              <p class="timeline__desc">Deep blue methane-rich atmosphere with three ring bands, and moons Triton and Nereid.</p>
+              <p class="timeline__date">Frame 1300 – 1380 &nbsp;|&nbsp; 0:54 – 0:58</p>
+              <h4 class="timeline__title">Pluto — Dwarf Planet Finale</h4>
+              <p class="timeline__desc">Pluto receives the last close-up before the camera begins the long pullback into the system-wide ending.</p>
             </div>
             <div class="timeline__item">
-              <p class="timeline__date">Frame 1771 – 1940 &nbsp;|&nbsp; 1:14 – 1:21</p>
-              <h4 class="timeline__title">Focus — Pluto</h4>
-              <p class="timeline__desc">Kuiper Belt dwarf planet with its binary companion Charon and four small moons: Nix, Hydra, Kerberos, and Styx.</p>
-            </div>
-            <div class="timeline__item">
-              <p class="timeline__date">Frame 1941 – 2941 &nbsp;|&nbsp; 1:21 – 2:02</p>
-              <h4 class="timeline__title">Closing — Full System Wide Shot</h4>
-              <p class="timeline__desc">Camera pulls back to reveal the entire solar system in motion. Orbital speed ramps up so Pluto completes one full revolution. All visible orbit paths and bodies animate simultaneously.</p>
+              <p class="timeline__date">Frame 1380 – 2941 &nbsp;|&nbsp; 0:58 – 2:03</p>
+              <h4 class="timeline__title">Closing — Full System Pullback</h4>
+              <p class="timeline__desc">The camera eases back to a wide solar-system view, orbit lines return, and the orbital motion ramps so Pluto completes one final revolution.</p>
             </div>
           </div>
         </div>
@@ -896,7 +892,7 @@
       });
     }
 
-    fetch('./scripts/final')
+    fetch('./scripts/new_solar.py')
       .then(function(r){ return r.text(); })
       .then(function(code){
         scriptText = code;
