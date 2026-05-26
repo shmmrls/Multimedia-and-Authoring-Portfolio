@@ -207,6 +207,58 @@ function computePlanetAges(earthYears) {
   return result;
 }
 
+function formatEarthYearsInput(value) {
+  const numberValue = Number(value);
+  if (!Number.isFinite(numberValue)) return '';
+  return Number.isInteger(numberValue) ? String(numberValue) : numberValue.toFixed(2).replace(/\.00$/, '');
+}
+
+function formatOrbitalPeriod(period) {
+  const formatted = Number(period).toFixed(4).replace(/0+$/, '').replace(/\.$/, '');
+  return formatted.includes('.') ? formatted : `${formatted}.0`;
+}
+
+function buildPlanetAgeBreakdown(earthYears, planetName, mode, sourceValue) {
+  const period = ORBITAL_PERIODS[planetName];
+  if (!period || !Number.isFinite(earthYears)) return '';
+
+  const planetaryYears = earthYears / period;
+  let wholeYears = Math.floor(planetaryYears);
+  const fractionalYears = planetaryYears - wholeYears;
+  let months = Math.floor(fractionalYears * 12);
+  let days = Math.round((((fractionalYears * 12) - months) * 365.25) / 12);
+
+  if (days >= 30) {
+    days -= 30;
+    months += 1;
+  }
+  if (months >= 12) {
+    months -= 12;
+    wholeYears += 1;
+  }
+
+  const sourceLabel = mode === 'bday'
+    ? `${formatEarthYearsInput(earthYears)} Earth years`
+    : `${formatEarthYearsInput(sourceValue)} Earth years`;
+  const periodLabel = `${formatOrbitalPeriod(period)} Earth years (${planetName}'s orbital period)`;
+
+  return [
+    '<div class="planet-modal__age-result-top">',
+    `  <p class="planet-modal__age-result-kicker">Your age on ${planetName}</p>`,
+    '  <div class="planet-modal__age-result-primary">',
+    `    <span class="planet-modal__age-result-value">${wholeYears}</span>`,
+    `    <span class="planet-modal__age-result-unit">${planetName} years</span>`,
+    '  </div>',
+    '</div>',
+    '<div class="planet-modal__age-result-breakdown">',
+    `  <div><strong>${wholeYears}</strong><span>Years</span></div>`,
+    `  <div><strong>${months}</strong><span>Months</span></div>`,
+    `  <div><strong>${days}</strong><span>Days</span></div>`,
+    '</div>',
+    `<p class="planet-modal__age-result-formula">${sourceLabel} ÷ ${periodLabel} = ${wholeYears} yrs, ${months} mo, ${days} days</p>`,
+  ].join('');
+}
+
 function initAgeCalculator() {
   const form = document.getElementById('age-calc-form');
   if (!form) return;
@@ -350,6 +402,7 @@ function initAgeCalculator() {
 
     const ages = computePlanetAges(earthYears);
     updatePlanetCards(ages, earthYears);
+    window.lastCalcEarthYears = earthYears;
 
     const planetDataSection = document.getElementById('planet-data');
     if (planetDataSection) {
@@ -657,17 +710,12 @@ function initPlanetModal() {
 
     const ageResultEl = document.getElementById('planet-modal-age-result');
     if (ageResultEl) {
-      const _ageEl = card.querySelector('.planet-card__age');
-      const ageVal = (_ageEl && _ageEl.textContent) ? _ageEl.textContent.trim() : '';
-      if (ageVal && ageVal !== '—' && window.lastCalcMode) {
-        if (window.lastCalcMode === 'bday') {
-          const d = new Date(window.lastCalcValue).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
-          ageResultEl.innerHTML = `If you were born on ${d}, your age on ${planetName} is <strong>${ageVal} years</strong>.`;
-        } else {
-          ageResultEl.innerHTML = `If you are ${window.lastCalcValue} in Earth years, your age on ${planetName} is <strong>${ageVal} years</strong>.`;
-        }
+      const earthYears = Number(window.lastCalcEarthYears);
+      if (Number.isFinite(earthYears) && window.lastCalcMode) {
+        ageResultEl.innerHTML = buildPlanetAgeBreakdown(earthYears, planetName, window.lastCalcMode, window.lastCalcValue);
         ageResultEl.style.display = 'block';
       } else {
+        ageResultEl.innerHTML = '';
         ageResultEl.style.display = 'none';
       }
     }

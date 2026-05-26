@@ -2774,11 +2774,89 @@ footer {
       background: rgba(212,168,83,0.08);
       border: 1px solid rgba(212,168,83,0.3);
       border-radius: var(--radius);
-      padding: 1rem 1.25rem;
-      margin: 1.25rem 0;
-      font-size: 0.95rem;
+      padding: 0.7rem 0.85rem;
+      margin: 0.85rem 0;
+      font-size: 0.9rem;
       color: var(--text);
-      line-height: 1.6;
+      line-height: 1.35;
+    }
+
+    .planet-modal__age-result-top {
+      display: grid;
+      gap: 0.15rem;
+      margin-bottom: 0.55rem;
+    }
+
+    .planet-modal__age-result-kicker {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .planet-modal__age-result-primary {
+      display: flex;
+      align-items: baseline;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .planet-modal__age-result-value {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      line-height: 1;
+      color: var(--gold);
+    }
+
+    .planet-modal__age-result-unit {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--text);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .planet-modal__age-result-breakdown {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .planet-modal__age-result-breakdown div {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(212,168,83,0.14);
+      border-radius: calc(var(--radius) - 2px);
+      padding: 0.45rem 0.45rem;
+      text-align: center;
+    }
+
+    .planet-modal__age-result-breakdown strong {
+      display: block;
+      font-size: clamp(1.1rem, 2vw, 1.5rem);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+      color: var(--gold);
+      font-family: var(--serif);
+    }
+
+    .planet-modal__age-result-breakdown span {
+      display: block;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    .planet-modal__age-result-formula {
+      margin: 0;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      line-height: 1.3;
     }
     
     .planet-modal__age-result strong {
@@ -2913,6 +2991,11 @@ footer {
     .code-block__actions {
       display: flex;
       gap: 0.5rem;
+    }
+
+    .code-block__actions--centered {
+      justify-content: center;
+      margin-top: 1rem;
     }
 
     .code-block__action {
