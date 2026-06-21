@@ -494,7 +494,7 @@ main {
   cursor: pointer;
   touch-action: manipulation;
   opacity: 0;
-  animation: fadeUp 1s var(--ease) 1.2s forwards;
+  animation: fadeUpScroll 1s var(--ease) 1.2s forwards;
 }
 
 .hero__scroll:focus-visible {
@@ -1559,6 +1559,17 @@ footer {
   }
 }
 
+@keyframes fadeUpScroll {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 24px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
 @keyframes scrollPulse {
   0%, 100% { opacity: 1; transform: scaleY(1); transform-origin: top; }
   50% { opacity: 0.4; transform: scaleY(0.7); transform-origin: top; }
@@ -1823,6 +1834,8 @@ footer {
     bottom: auto;
     transform: none;
     margin: 0.5rem auto 0;
+    animation: none;
+    opacity: 1;
   }
 }
 
@@ -3247,6 +3260,109 @@ footer {
       .roto-hero-video-wrap {
         max-width: 600px;
         margin: 0 auto;
+      }
+    }
+
+    /* Even step card grid layout */
+    .steps-grid--even > .step-card:last-child {
+      grid-column: auto;
+    }
+
+    /* Floating Quick Navigation */
+    .floating-nav {
+      position: fixed;
+      right: 2rem;
+      top: 55%;
+      transform: translateY(-50%) translateX(30px);
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition), transform var(--transition);
+    }
+
+    .floating-nav.active {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(-50%) translateX(0);
+    }
+
+    .floating-nav__btn {
+      position: relative;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(20, 20, 20, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #e8e4dc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: background var(--transition), border-color var(--transition), transform var(--transition), color var(--transition), box-shadow var(--transition);
+    }
+
+    [data-theme="light"] .floating-nav__btn {
+      background: rgba(237, 234, 228, 0.85);
+      border-color: rgba(0, 0, 0, 0.1);
+      color: #1a1714;
+    }
+
+    [data-theme="light"] .floating-nav__btn:hover {
+      background: rgba(237, 234, 228, 0.95);
+    }
+
+    .floating-nav__btn svg {
+      width: 18px;
+      height: 18px;
+      stroke-width: 1.8;
+      fill: none;
+    }
+
+    .floating-nav__btn:hover {
+      border-color: rgba(212, 168, 83, 0.45);
+      color: var(--gold);
+      transform: scale(1.08);
+      box-shadow: 
+        0 0 15px rgba(212, 168, 83, 0.12),
+        0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .floating-nav__tooltip {
+      position: absolute;
+      right: 3.5rem;
+      top: 50%;
+      transform: translateY(-50%) translateX(8px);
+      background: var(--bg2);
+      border: 1px solid rgba(212, 168, 83, 0.22);
+      border-radius: var(--radius);
+      padding: 0.4rem 0.8rem;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--gold-lt);
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      transition: opacity var(--transition), transform var(--transition);
+    }
+
+    .floating-nav__btn:hover .floating-nav__tooltip {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+    }
+
+    /* Adjust position for mobile screens */
+    @media (max-width: 768px) {
+      .floating-nav {
+        right: 1.25rem;
+      }
+      .floating-nav__tooltip {
+        display: none;
       }
     }
 

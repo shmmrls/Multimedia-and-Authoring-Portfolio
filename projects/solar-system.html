@@ -110,8 +110,104 @@
       </div>
     </section>
 
-    <!-- ── 3. FINAL VIDEO ───────────────────────────────────── -->
+    <!-- ── PROJECT DETAILS ───────────────────────────────── -->
     <section class="section--sm">
+      <div class="container">
+        <details class="script-collapsible fade-in">
+          <summary class="script-collapsible__summary">
+            <div>
+              <p class="section-label section-label--tight">Overview</p>
+              <h2 class="solar-h2 solar-h2--mb-15">Project Details</h2>
+              <p class="solar-note">
+                Review software tools, render specifications, key system features, PBR texture mappings, and references.
+              </p>
+            </div>
+            <span class="script-collapsible__toggle">Show Details</span>
+          </summary>
+
+          <div class="script-collapsible__body">
+            <div class="grid-2">
+
+              <div class="detail-section">
+                <p class="detail-section__title">Tools Used</p>
+                <ul class="detail-list">
+                  <li>Blender 3.6 LTS — primary 3D modeling and animation software</li>
+                  <li>Python 3.11 — scripting orbital mechanics and automation</li>
+                  <li>NASA texture maps — surface material references</li>
+                  <li>EEVEE renderer — real-time rendering engine with bloom</li>
+                </ul>
+              </div>
+
+              <div class="detail-section">
+                <p class="detail-section__title">Render Info</p>
+                <ul class="detail-list">
+                  <li>Renderer: EEVEE (GPU accelerated)</li>
+                  <li>Resolution: 1920 &times; 1080 (1080p)</li>
+                  <li>Frame rate: 24 FPS</li>
+                  <li>Total frames: 2,941</li>
+                  <li>Total render time: ~1 hour 15 minutes</li>
+                  <li>Average per frame: ~1.55 sec</li>
+                  <li>Output format: MP4 (H.264)</li>
+                </ul>
+              </div>
+
+              <div class="detail-section">
+                <p class="detail-section__title">Key Features</p>
+                <ul class="detail-list">
+                  <li>All 8 planets + Pluto + Sun modeled and textured</li>
+                  <li>Orbital motion automated via Python script</li>
+                  <li>Axial tilt applied to each planet</li>
+                  <li>Sun emission shader with volumetric glow</li>
+                  <li>Saturn ring system with transparency texture</li>
+                  <li>HDRI space environment background</li>
+                </ul>
+              </div>
+
+              <div class="detail-section">
+                <p class="detail-section__title">Texture Materials</p>
+                <ul class="detail-list">
+                  <li>Sun — emission shader, noise-based surface texture</li>
+                  <li>Earth — diffuse map, cloud layer, specular water map</li>
+                  <li>Gas giants — procedural band textures (Jupiter, Saturn)</li>
+                  <li>Ice giants — tinted emission + diffuse blend (Uranus, Neptune)</li>
+                  <li>Rocky planets — bump-mapped crater surface textures</li>
+                  <li>Saturn rings — alpha-mapped ring plane geometry</li>
+                </ul>
+              </div>
+
+              <div class="detail-section">
+                <p class="detail-section__title">Texture Credits</p>
+                <ul class="detail-list">
+                  <li><a href="https://www.solarsystemscope.com/" target="_blank" rel="noopener noreferrer">Solar System Scope</a> — primary planet surface maps</li>
+                  <li><a href="https://planetpixelemporium.com/earth.html" target="_blank" rel="noopener noreferrer">Planet Pixel Emporium</a> — Earth surface, clouds, and bump maps</li>
+                  <li><a href="https://www.deviantart.com/search?q=europa+moon+texture+jupiter" target="_blank" rel="noopener noreferrer">DeviantArt</a> — community-created Europa and moon textures</li>
+                </ul>
+              </div>
+
+              <div class="detail-section">
+                <p class="detail-section__title">Facts Credits</p>
+                <ul class="detail-list">
+                  <li><a href="https://science.nasa.gov/sun/facts/" target="_blank" rel="noopener noreferrer">NASA Sun Facts</a></li>
+                  <li><a href="https://science.nasa.gov/mercury/facts/" target="_blank" rel="noopener noreferrer">NASA Mercury Facts</a></li>
+                  <li><a href="https://science.nasa.gov/venus/facts/" target="_blank" rel="noopener noreferrer">NASA Venus Facts</a></li>
+                  <li><a href="https://science.nasa.gov/earth/facts/" target="_blank" rel="noopener noreferrer">NASA Earth Facts</a></li>
+                  <li><a href="https://science.nasa.gov/mars/facts/" target="_blank" rel="noopener noreferrer">NASA Mars Facts</a></li>
+                  <li><a href="https://science.nasa.gov/jupiter/jupiter-facts/" target="_blank" rel="noopener noreferrer">NASA Jupiter Facts</a></li>
+                  <li><a href="https://science.nasa.gov/saturn/facts/" target="_blank" rel="noopener noreferrer">NASA Saturn Facts</a></li>
+                  <li><a href="https://science.nasa.gov/uranus/facts/" target="_blank" rel="noopener noreferrer">NASA Uranus Facts</a></li>
+                  <li><a href="https://science.nasa.gov/neptune/neptune-facts/" target="_blank" rel="noopener noreferrer">NASA Neptune Facts</a></li>
+                  <li><a href="https://science.nasa.gov/dwarf-planets/pluto/facts/" target="_blank" rel="noopener noreferrer">NASA Pluto Facts</a></li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ── 3. FINAL VIDEO ───────────────────────────────────── -->
+    <section class="section--sm" id="final-video">
       <div class="container">
         <div class="space-divider"><span>Final Output</span></div>
         <div class="fade-in">
@@ -120,7 +216,7 @@
 
           <div class="planet-media planet-media--final-output">
             <video class="final-output-video" controls autoplay muted loop playsinline>
-              <source src="./videos/planets/new_solar.mp4" type="video/mp4" />
+              <source src="./videos/planets/solar_system.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
@@ -133,6 +229,105 @@
             Disclaimer: The reference video materials used in this project are for educational purposes only.
             All rights remain with their respective owners.
           </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── STEP-BY-STEP TUTORIAL ─────────────────────────── -->
+    <section class="section">
+      <div class="container">
+        <div class="fade-in">
+          <div class="space-divider"><span>Step-by-Step Tutorial</span></div>
+          <p class="section-label section-label--tight">How I Did It</p>
+          <h2 class="solar-h2 solar-h2--mb-20">Process &amp; Method</h2>
+
+          <div class="steps-grid steps-grid--even">
+
+            <!-- Step 1 -->
+            <div class="step-card fade-in">
+              <div class="step-card__img">
+                <img src="pictures/solar/step_1.png" alt="Step 1 Gather facts and scale down" />
+              </div>
+              <div class="step-card__body">
+                <p class="step-card__num">Step 01</p>
+                <h4 class="step-card__title">Research &amp; Fact Scaling</h4>
+                <p class="step-card__desc">
+                  Gather real-world celestial data (radii, orbits, rotations, tilts) and mathematically scale them down to preserve relative proportions within the Blender scene limits.
+                </p>
+              </div>
+            </div>
+
+            <!-- Step-card 2 -->
+            <div class="step-card fade-in">
+              <div class="step-card__img">
+                <img src="pictures/solar/step_2.png" alt="Step 2 Collect texture assets" />
+              </div>
+              <div class="step-card__body">
+                <p class="step-card__num">Step 02</p>
+                <h4 class="step-card__title">Collect Texture Assets</h4>
+                <p class="step-card__desc">
+                  Download high-resolution surface maps, bump maps, and cloud overlays from Solar System Scope and Planet Pixel Emporium to assign to each planet.
+                </p>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step-card fade-in">
+              <div class="step-card__img">
+                <img src="pictures/solar/step_3.png" alt="Step 3 Prompt scripts for individual bodies" />
+              </div>
+              <div class="step-card__body">
+                <p class="step-card__num">Step 03</p>
+                <h4 class="step-card__title">Prompt Script for Individual Bodies</h4>
+                <p class="step-card__desc">
+                  Prompt script to write custom Python scripts that automate the generation of meshes, shaders, tilts, and rotation timelines for each planet individually.
+                </p>
+              </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="step-card fade-in">
+              <div class="step-card__img">
+                <img src="pictures/solar/step_4.png" alt="Step 4 Generate individual planet files" />
+              </div>
+              <div class="step-card__body">
+                <p class="step-card__num">Step 04</p>
+                <h4 class="step-card__title">Build Individual Planets</h4>
+                <p class="step-card__desc">
+                  Execute the scripts inside Blender to programmatically build and animate the Sun, 8 planets, and Pluto in their own dedicated .blend files to finalize their structures first.
+                </p>
+              </div>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="step-card fade-in">
+              <div class="step-card__img">
+                <img src="pictures/solar/step_5.png" alt="Step 5 Rig camera via script" />
+              </div>
+              <div class="step-card__body">
+                <p class="step-card__num">Step 05</p>
+                <h4 class="step-card__title">Rig Camera Tracking via Script</h4>
+                <p class="step-card__desc">
+                  Execute the camera setup script to construct a camera rig and keyframe its focal points, automatically tracking and gliding between individual planet showcases.
+                </p>
+              </div>
+            </div>
+
+            <!-- Step 6 -->
+            <div class="step-card fade-in">
+              <div class="step-card__img">
+                <img src="pictures/solar/step_6.png" alt="Step 6 Assemble and render whole solar system" />
+              </div>
+              <div class="step-card__body">
+                <p class="step-card__num">Step 06</p>
+                <h4 class="step-card__title">Compile &amp; Render Whole Solar System</h4>
+                <p class="step-card__desc">
+                  Merge all completed planet files into a master scene (new_final_solar.blend), run the orbit automation, configure the EEVEE renderer, and compile the final 1080p video.
+                </p>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </section>
@@ -156,17 +351,91 @@
           <div class="script-collapsible__body">
             <div class="code-block code-block--relative">
               <div class="code-block__head">
-                <span class="code-block__file">scripts/new_solar.py</span>
+                <span class="code-block__file">scripts/solar_system.py</span>
                 <div class="code-block__actions">
                   <button id="script-copy-btn" type="button" class="code-block__action">Copy</button>
                   <a href="./textures.zip" download="solar-system-textures.zip" class="code-block__action code-block__action-link">Download Textures (.zip)</a>
-                  <a href="./scripts/new_solar.py" download="new_solar.py" class="code-block__action code-block__action-link">Download .py</a>
+                  <a href="./scripts/solar_system.py" download="solar_system.py" class="code-block__action code-block__action-link">Download .py</a>
                 </div>
               </div>
               <pre id="final-script-code" class="code-block__pre"># Loading script...</pre>
             </div>
           </div>
         </details>
+      </div>
+    </section>
+
+    <!-- ── 7. TEXTURES ──────────────────────────────────────── -->
+    <section class="section--sm" id="textures">
+      <div class="container">
+        <div class="space-divider"><span>Texture Assets</span></div>
+        <div class="fade-in">
+          <p class="section-label section-label--tight">PBR Materials</p>
+          <h2 class="solar-h2 solar-h2--mb-05">Planet Textures</h2>
+          <p class="solar-note">
+            High-resolution texture maps used for each celestial body in the Blender scene.
+            Click a thumbnail to preview, or use the download button to save individual files.
+          </p>
+
+          <button id="tex-toggle-btn" class="tex-toggle" type="button" aria-expanded="false" aria-controls="tex-content">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            Show Textures
+          </button>
+
+          <div id="tex-content" class="tex-collapsible" aria-hidden="true">
+            <div class="tex-collapsible__inner">
+
+              <!-- Sun -->
+              <p class="tex-group__title">☀ Sun</p>
+              <div class="tex-grid" id="tex-sun"></div>
+
+              <!-- Mercury -->
+              <p class="tex-group__title">☿ Mercury</p>
+              <div class="tex-grid" id="tex-mercury"></div>
+
+              <!-- Venus -->
+              <p class="tex-group__title">♀ Venus</p>
+              <div class="tex-grid" id="tex-venus"></div>
+
+              <!-- Earth -->
+              <p class="tex-group__title">🜨 Earth</p>
+              <div class="tex-grid" id="tex-earth"></div>
+
+              <!-- Mars -->
+              <p class="tex-group__title">♂ Mars</p>
+              <div class="tex-grid" id="tex-mars"></div>
+
+              <!-- Jupiter -->
+              <p class="tex-group__title">♃ Jupiter</p>
+              <div class="tex-grid" id="tex-jupiter"></div>
+
+              <!-- Saturn -->
+              <p class="tex-group__title">♄ Saturn</p>
+              <div class="tex-grid" id="tex-saturn"></div>
+
+              <!-- Uranus -->
+              <p class="tex-group__title">♅ Uranus</p>
+              <div class="tex-grid" id="tex-uranus"></div>
+
+              <!-- Neptune -->
+              <p class="tex-group__title">♆ Neptune</p>
+              <div class="tex-grid" id="tex-neptune"></div>
+
+              <!-- Pluto -->
+              <p class="tex-group__title">♇ Pluto &amp; Charon</p>
+              <div class="tex-grid" id="tex-pluto"></div>
+
+              <!-- Moon -->
+              <p class="tex-group__title">☽ Moon &amp; Moons</p>
+              <div class="tex-grid" id="tex-moon"></div>
+
+              <!-- Other -->
+              <p class="tex-group__title">✦ Environment</p>
+              <div class="tex-grid" id="tex-other"></div>
+
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -178,7 +447,7 @@
           <p class="section-label section-label--tight">Timeline</p>
           <h2 class="solar-h2 solar-h2--mb-20">Scene Breakdown</h2>
           <p class="solar-lead solar-lead--mb-15">
-            The final animation sequence follows the camera rig in <span>new_solar.py</span>: an opening overview,
+            The final animation sequence follows the camera rig in <span>solar_system.py</span>: an opening overview,
             nine planet showcases with short transition windows, and a long closing pullback. Total runtime: 2,941 frames at 24 FPS (~2:03).
           </p>
 
@@ -244,7 +513,7 @@
     </section>
 
     <!-- ── 5. AGE CALCULATOR ─────────────────────────────────── -->
-    <section class="section">
+    <section class="section" id="interactive-tool">
       <div class="container">
         <div class="space-divider"><span>Interactive Tool</span></div>
         <div class="fade-in">
@@ -532,162 +801,6 @@
       </div>
     </section>
 
-    <!-- ── 7. TEXTURES ──────────────────────────────────────── -->
-    <section class="section--sm" id="textures">
-      <div class="container">
-        <div class="space-divider"><span>Texture Assets</span></div>
-        <div class="fade-in">
-          <p class="section-label section-label--tight">PBR Materials</p>
-          <h2 class="solar-h2 solar-h2--mb-05">Planet Textures</h2>
-          <p class="solar-note">
-            High-resolution texture maps used for each celestial body in the Blender scene.
-            Click a thumbnail to preview, or use the download button to save individual files.
-          </p>
-
-          <button id="tex-toggle-btn" class="tex-toggle" type="button" aria-expanded="false" aria-controls="tex-content">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
-            Show Textures
-          </button>
-
-          <div id="tex-content" class="tex-collapsible" aria-hidden="true">
-            <div class="tex-collapsible__inner">
-
-              <!-- Sun -->
-              <p class="tex-group__title">☀ Sun</p>
-              <div class="tex-grid" id="tex-sun"></div>
-
-              <!-- Mercury -->
-              <p class="tex-group__title">☿ Mercury</p>
-              <div class="tex-grid" id="tex-mercury"></div>
-
-              <!-- Venus -->
-              <p class="tex-group__title">♀ Venus</p>
-              <div class="tex-grid" id="tex-venus"></div>
-
-              <!-- Earth -->
-              <p class="tex-group__title">🜨 Earth</p>
-              <div class="tex-grid" id="tex-earth"></div>
-
-              <!-- Mars -->
-              <p class="tex-group__title">♂ Mars</p>
-              <div class="tex-grid" id="tex-mars"></div>
-
-              <!-- Jupiter -->
-              <p class="tex-group__title">♃ Jupiter</p>
-              <div class="tex-grid" id="tex-jupiter"></div>
-
-              <!-- Saturn -->
-              <p class="tex-group__title">♄ Saturn</p>
-              <div class="tex-grid" id="tex-saturn"></div>
-
-              <!-- Uranus -->
-              <p class="tex-group__title">♅ Uranus</p>
-              <div class="tex-grid" id="tex-uranus"></div>
-
-              <!-- Neptune -->
-              <p class="tex-group__title">♆ Neptune</p>
-              <div class="tex-grid" id="tex-neptune"></div>
-
-              <!-- Pluto -->
-              <p class="tex-group__title">♇ Pluto &amp; Charon</p>
-              <div class="tex-grid" id="tex-pluto"></div>
-
-              <!-- Moon -->
-              <p class="tex-group__title">☽ Moon &amp; Moons</p>
-              <div class="tex-grid" id="tex-moon"></div>
-
-              <!-- Other -->
-              <p class="tex-group__title">✦ Environment</p>
-              <div class="tex-grid" id="tex-other"></div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── 9. PROJECT DETAILS ───────────────────────────────── -->
-    <section class="section--sm">
-      <div class="container">
-        <div class="space-divider"><span>Project Details</span></div>
-
-        <div class="grid-2 fade-in">
-
-          <div class="detail-section">
-            <p class="detail-section__title">Tools Used</p>
-            <ul class="detail-list">
-              <li>Blender 3.6 LTS — primary 3D modeling and animation software</li>
-              <li>Python 3.11 — scripting orbital mechanics and automation</li>
-              <li>NASA texture maps — surface material references</li>
-              <li>EEVEE renderer — real-time rendering engine with bloom</li>
-            </ul>
-          </div>
-
-          <div class="detail-section">
-            <p class="detail-section__title">Render Info</p>
-            <ul class="detail-list">
-              <li>Renderer: EEVEE (GPU accelerated)</li>
-              <li>Resolution: 1920 &times; 1080 (1080p)</li>
-              <li>Frame rate: 24 FPS</li>
-              <li>Total frames: 2,941</li>
-              <li>Total render time: ~1 hour 15 minutes</li>
-              <li>Average per frame: ~1.55 sec</li>
-              <li>Output format: MP4 (H.264)</li>
-            </ul>
-          </div>
-
-          <div class="detail-section">
-            <p class="detail-section__title">Key Features</p>
-            <ul class="detail-list">
-              <li>All 8 planets + Pluto + Sun modeled and textured</li>
-              <li>Orbital motion automated via Python script</li>
-              <li>Axial tilt applied to each planet</li>
-              <li>Sun emission shader with volumetric glow</li>
-              <li>Saturn ring system with transparency texture</li>
-              <li>HDRI space environment background</li>
-            </ul>
-          </div>
-
-          <div class="detail-section">
-            <p class="detail-section__title">Texture Materials</p>
-            <ul class="detail-list">
-              <li>Sun — emission shader, noise-based surface texture</li>
-              <li>Earth — diffuse map, cloud layer, specular water map</li>
-              <li>Gas giants — procedural band textures (Jupiter, Saturn)</li>
-              <li>Ice giants — tinted emission + diffuse blend (Uranus, Neptune)</li>
-              <li>Rocky planets — bump-mapped crater surface textures</li>
-              <li>Saturn rings — alpha-mapped ring plane geometry</li>
-            </ul>
-          </div>
-
-          <div class="detail-section">
-            <p class="detail-section__title">Texture Credits</p>
-            <ul class="detail-list">
-              <li><a href="https://www.solarsystemscope.com/" target="_blank" rel="noopener noreferrer">Solar System Scope</a> — primary planet surface maps</li>
-              <li><a href="https://planetpixelemporium.com/earth.html" target="_blank" rel="noopener noreferrer">Planet Pixel Emporium</a> — Earth surface, clouds, and bump maps</li>
-              <li><a href="https://www.deviantart.com/search?q=europa+moon+texture+jupiter" target="_blank" rel="noopener noreferrer">DeviantArt</a> — community-created Europa and moon textures</li>
-            </ul>
-          </div>
-
-          <div class="detail-section">
-            <p class="detail-section__title">Facts Credits</p>
-            <ul class="detail-list">
-              <li><a href="https://science.nasa.gov/sun/facts/" target="_blank" rel="noopener noreferrer">NASA Sun Facts</a></li>
-              <li><a href="https://science.nasa.gov/mercury/facts/" target="_blank" rel="noopener noreferrer">NASA Mercury Facts</a></li>
-              <li><a href="https://science.nasa.gov/venus/facts/" target="_blank" rel="noopener noreferrer">NASA Venus Facts</a></li>
-              <li><a href="https://science.nasa.gov/earth/facts/" target="_blank" rel="noopener noreferrer">NASA Earth Facts</a></li>
-              <li><a href="https://science.nasa.gov/mars/facts/" target="_blank" rel="noopener noreferrer">NASA Mars Facts</a></li>
-              <li><a href="https://science.nasa.gov/jupiter/jupiter-facts/" target="_blank" rel="noopener noreferrer">NASA Jupiter Facts</a></li>
-              <li><a href="https://science.nasa.gov/saturn/facts/" target="_blank" rel="noopener noreferrer">NASA Saturn Facts</a></li>
-              <li><a href="https://science.nasa.gov/uranus/facts/" target="_blank" rel="noopener noreferrer">NASA Uranus Facts</a></li>
-              <li><a href="https://science.nasa.gov/neptune/neptune-facts/" target="_blank" rel="noopener noreferrer">NASA Neptune Facts</a></li>
-              <li><a href="https://science.nasa.gov/dwarf-planets/pluto/facts/" target="_blank" rel="noopener noreferrer">NASA Pluto Facts</a></li>
-            </ul>
-          </div>
-
-        </div>
-      </div>
-    </section>
 
   </main>
 
@@ -896,7 +1009,7 @@
       });
     }
 
-    fetch('./scripts/new_solar.py')
+    fetch('./scripts/solar_system.py')
       .then(function(r){ return r.text(); })
       .then(function(code){
         scriptText = code;
@@ -980,6 +1093,62 @@
       <p id="tex-lightbox-name" class="tex-lightbox__name"></p>
     </div>
   </div>
+
+  <!-- Floating Quick Navigation -->
+  <div class="floating-nav" id="floating-quick-nav">
+    <a href="#final-video" class="floating-nav__btn" aria-label="Jump to Final Video">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polygon points="23 7 16 12 23 17 23 7"/>
+        <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+      </svg>
+      <span class="floating-nav__tooltip">Final Video</span>
+    </a>
+    <a href="#interactive-tool" class="floating-nav__btn" aria-label="Jump to Interactive Tool">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+        <line x1="9" y1="9" x2="15" y2="9"/>
+        <line x1="9" y1="13" x2="15" y2="13"/>
+        <line x1="9" y1="17" x2="15" y2="17"/>
+      </svg>
+      <span class="floating-nav__tooltip">Age Calculator</span>
+    </a>
+  </div>
+
+  <script>
+  (function(){
+    var nav = document.getElementById('floating-quick-nav');
+    if (!nav) return;
+
+    // Show/hide on scroll
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 300) {
+        nav.classList.add('active');
+      } else {
+        nav.classList.remove('active');
+      }
+    });
+
+    // Smooth scroll handling
+    nav.querySelectorAll('.floating-nav__btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var targetId = btn.getAttribute('href');
+        var target = document.querySelector(targetId);
+        if (!target) return;
+
+        var header = document.querySelector('.nav');
+        var headerHeight = header ? header.offsetHeight : 0;
+        var top = target.getBoundingClientRect().top + window.scrollY - headerHeight - 16;
+        var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        window.scrollTo({
+          top: top,
+          behavior: prefersReducedMotion ? 'auto' : 'smooth'
+        });
+      });
+    });
+  })();
+  </script>
 
 </body>
 </html>
