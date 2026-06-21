@@ -237,9 +237,9 @@ function buildPlanetAgeBreakdown(earthYears, planetName, mode, sourceValue) {
     wholeYears += 1;
   }
 
-  const sourceLabel = mode === 'bday'
-    ? `${formatEarthYearsInput(earthYears)} Earth years`
-    : `${formatEarthYearsInput(sourceValue)} Earth years`;
+  const sourceLabel = mode === 'bday' ?
+    `${formatEarthYearsInput(earthYears)} Earth years` :
+    `${formatEarthYearsInput(sourceValue)} Earth years`;
   const periodLabel = `${formatOrbitalPeriod(period)} Earth years (${planetName}'s orbital period)`;
 
   return [
