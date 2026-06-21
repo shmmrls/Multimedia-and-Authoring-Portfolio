@@ -1928,31 +1928,32 @@ footer {
       background: radial-gradient(circle at 50% 0%, rgba(212,168,83,0.08), rgba(255,255,255,0.01) 56%);
     }
 
-    .final-output-video {
+    .final-output-video,
+    .roto-hero-video {
       filter: contrast(1.05) saturate(1.08);
     }
 
-    .final-output-video::-webkit-media-controls-play-button,
-    .final-output-video::-webkit-media-controls-mute-button,
-    .final-output-video::-webkit-media-controls-fullscreen-button,
-    .final-output-video::-webkit-media-controls-picture-in-picture-button {
-      filter: drop-shadow(0 0 6px rgba(212,168,83,0.32));
+    video::-webkit-media-controls-play-button,
+    video::-webkit-media-controls-mute-button,
+    video::-webkit-media-controls-fullscreen-button,
+    video::-webkit-media-controls-picture-in-picture-button {
+      filter: sepia(1) saturate(3) hue-rotate(-10deg) drop-shadow(0 0 6px rgba(212,168,83,0.32));
     }
 
-    .final-output-video::-webkit-media-controls-current-time-display,
-    .final-output-video::-webkit-media-controls-time-remaining-display {
+    video::-webkit-media-controls-current-time-display,
+    video::-webkit-media-controls-time-remaining-display {
       color: #f4e2b8;
       font-family: var(--mono);
       font-size: 0.72rem;
       text-shadow: 0 0 6px rgba(212,168,83,0.22);
     }
 
-    .final-output-video::-webkit-media-controls-timeline {
+    video::-webkit-media-controls-timeline {
       margin: 0 0.45rem;
       border-radius: 999px;
     }
 
-    .final-output-video::-webkit-media-controls-volume-slider {
+    video::-webkit-media-controls-volume-slider {
       border-radius: 999px;
     }
 
@@ -3189,6 +3190,64 @@ footer {
       font-family: var(--mono);
       letter-spacing: 0.04em;
       text-align: center;
+    }
+
+    /* Rotoscoping Hero Grid Layout */
+    .roto-hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    .roto-hero-left {
+      min-width: 0;
+    }
+
+    .roto-hero-right {
+      width: 100%;
+    }
+
+    /* Hero Video Container */
+    .roto-hero-video-wrap {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.4), 
+        0 0 20px rgba(212, 168, 83, 0.03);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+
+    .roto-hero-video-wrap:hover {
+      border-color: rgba(212, 168, 83, 0.35);
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.5), 
+        0 0 30px rgba(212, 168, 83, 0.08);
+    }
+
+    .roto-hero-video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Responsive overrides for smaller viewports */
+    @media (max-width: 900px) {
+      .roto-hero-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .roto-hero-video-wrap {
+        max-width: 600px;
+        margin: 0 auto;
+      }
     }
 
 
