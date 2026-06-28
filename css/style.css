@@ -3205,8 +3205,9 @@ footer {
       text-align: center;
     }
 
-    /* Rotoscoping Hero Grid Layout */
-    .roto-hero-grid {
+    /* Hero Grid Layout (Rotoscoping & Solar System) */
+    .roto-hero-grid,
+    .solar-hero-grid {
       display: grid;
       grid-template-columns: 1.2fr 1fr;
       gap: 3rem;
@@ -3214,16 +3215,19 @@ footer {
       margin-top: 1rem;
     }
 
-    .roto-hero-left {
+    .roto-hero-left,
+    .solar-hero-left {
       min-width: 0;
     }
 
-    .roto-hero-right {
+    .roto-hero-right,
+    .solar-hero-right {
       width: 100%;
     }
 
     /* Hero Video Container */
-    .roto-hero-video-wrap {
+    .roto-hero-video-wrap,
+    .solar-hero-video-wrap {
       position: relative;
       aspect-ratio: 16 / 9;
       width: 100%;
@@ -3237,14 +3241,16 @@ footer {
       transition: border-color var(--transition), box-shadow var(--transition);
     }
 
-    .roto-hero-video-wrap:hover {
+    .roto-hero-video-wrap:hover,
+    .solar-hero-video-wrap:hover {
       border-color: rgba(212, 168, 83, 0.35);
       box-shadow: 
         0 20px 40px rgba(0, 0, 0, 0.5), 
         0 0 30px rgba(212, 168, 83, 0.08);
     }
 
-    .roto-hero-video {
+    .roto-hero-video,
+    .solar-hero-video {
       width: 100%;
       height: 100%;
       object-fit: contain;
@@ -3253,11 +3259,13 @@ footer {
 
     /* Responsive overrides for smaller viewports */
     @media (max-width: 900px) {
-      .roto-hero-grid {
+      .roto-hero-grid,
+      .solar-hero-grid {
         grid-template-columns: 1fr;
         gap: 2rem;
       }
-      .roto-hero-video-wrap {
+      .roto-hero-video-wrap,
+      .solar-hero-video-wrap {
         max-width: 600px;
         margin: 0 auto;
       }
