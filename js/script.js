@@ -745,6 +745,11 @@ function initPlanetModal() {
     });
 
     if (src) {
+      if (typeof setupVideoLoader === 'function') setupVideoLoader(videoEl);
+      if (videoWrap) {
+        videoWrap.classList.remove('is-media-loaded');
+        videoWrap.classList.add('is-media-loading');
+      }
       videoSourceEl.setAttribute('src', src);
       videoEl.load();
       videoEl.play().catch(() => {});
@@ -1061,6 +1066,59 @@ function initRotoFinalControls() {
   setFullscreenState();
 }
 
+// ── Universal Media Loader Shenanigan ───────────────────────
+function setupVideoLoader(video) {
+  if (!video || video.dataset.loaderInitialized) return;
+  video.dataset.loaderInitialized = 'true';
+
+  let wrap = video.closest('.roto-hero-video-wrap, .solar-hero-video-wrap, .planet-modal__video, .planet-media, .video-wrap');
+  if (!wrap) {
+    wrap = video.parentElement;
+  }
+  if (!wrap) return;
+
+  wrap.classList.add('media-loader-wrap');
+
+  let overlay = wrap.querySelector('.media-loader-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.className = 'media-loader-overlay';
+    overlay.innerHTML = `
+      <div class="media-loader-spinner"></div>
+      <span class="media-loader-text">Loading media</span>
+    `;
+    wrap.appendChild(overlay);
+  }
+
+  function markLoaded() {
+    wrap.classList.add('is-media-loaded');
+    wrap.classList.remove('is-media-loading');
+  }
+
+  function markLoading() {
+    wrap.classList.remove('is-media-loaded');
+    wrap.classList.add('is-media-loading');
+  }
+
+  if (video.readyState >= 3 || (!video.paused && video.currentTime > 0)) {
+    markLoaded();
+  } else {
+    markLoading();
+  }
+
+  video.addEventListener('loadeddata', markLoaded);
+  video.addEventListener('canplay', markLoaded);
+  video.addEventListener('playing', markLoaded);
+  video.addEventListener('waiting', markLoading);
+  video.addEventListener('loadstart', markLoading);
+  video.addEventListener('seeking', markLoading);
+  video.addEventListener('error', markLoaded);
+}
+
+function initMediaLoaders() {
+  document.querySelectorAll('video').forEach(setupVideoLoader);
+}
+
 // ── Init ──────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   const theme = localStorage.getItem('theme') || 'dark';
@@ -1076,6 +1134,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Swap in mobile-friendly video sources when appropriate before final controls attach
   applyMobileVideoOptimization();
   initRotoFinalControls();
+  initMediaLoaders();
 
   // Theme toggle button
   const toggleBtn = document.getElementById('theme-toggle');
