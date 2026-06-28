@@ -1645,7 +1645,7 @@ footer {
 
 .disclaimer--credits {
   line-height: 1.6;
-  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .credits-list {
