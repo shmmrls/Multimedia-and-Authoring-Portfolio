@@ -3258,7 +3258,7 @@ footer {
       object-fit: contain;
       display: block;
       border: none;
-      pointer-events: none;
+      pointer-events: auto;
     }
 
     /* Responsive overrides for smaller viewports */
