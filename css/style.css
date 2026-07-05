@@ -1926,11 +1926,13 @@ footer {
       background: rgba(255,255,255,0.01);
     }
 
-    .planet-media video {
+    .planet-media video,
+    .planet-media iframe {
       display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
+      border: none;
     }
 
     .planet-media--final-output {
@@ -3255,6 +3257,8 @@ footer {
       height: 100%;
       object-fit: contain;
       display: block;
+      border: none;
+      pointer-events: none;
     }
 
     /* Responsive overrides for smaller viewports */
